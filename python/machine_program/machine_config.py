@@ -12,7 +12,7 @@ from ConfigParser import NoSectionError, RawConfigParser
 #设置配置文件路径
 CONFIG_FILE_PATH = os.getcwd() + os.sep + 'machineConfig' + os.sep + 'machine.conf'
 
-class Machineconfig():
+class MachineConfig():
     def __init__(self, config_file_path=CONFIG_FILE_PATH):
         self.config_file_path = config_file_path
 
@@ -41,6 +41,6 @@ class Machineconfig():
         return child_node_format
 
 if __name__ == '__main__':
-    m = Machineconfig()
+    m = MachineConfig()
     info = m.get_node_info('logFormat','time_format')
     print info

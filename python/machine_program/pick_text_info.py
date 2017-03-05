@@ -403,6 +403,8 @@ def remove_func(line_list, **kwargs):
 
 
 if __name__ == '__main__':
-    fetchDataMain()
+    # fetchDataMain()
     object = objectHtmlDataList()
-    object.generateTable()
+    # object.generateTable()
+    print object.__class__
+    print object

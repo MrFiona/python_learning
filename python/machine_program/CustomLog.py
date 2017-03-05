@@ -10,9 +10,9 @@ import time
 import os.path
 import logging
 from logging import NOTSET, DEBUG, INFO, WARNING, ERROR, CRITICAL
-from machine_config import Machineconfig
+from machine_config import MachineConfig
 
-class Worklogger():
+class WorkLogger():
     def __init__(self, log_filename=None, log_level=logging.INFO):
         self.log_filename = log_filename
         self.log_level = log_level
@@ -23,7 +23,7 @@ class Worklogger():
         '''
     def print_message(self, msg=''):
         #读取配置文件日志、时间设置
-        conf = Machineconfig()
+        conf = MachineConfig()
         time_format = conf.get_node_info('logFormat', 'time_format')
         log_format = conf.get_node_info('logFormat', 'log_format')
 
@@ -81,5 +81,5 @@ class Worklogger():
         self.logger.removeHandler(console_handler)
 
 if __name__ == '__main__':
-    _logger =  Worklogger('Test Log', DEBUG)
+    _logger =  WorkLogger('Test Log', DEBUG)
     _logger.print_message('Hello！This is a test message！')
