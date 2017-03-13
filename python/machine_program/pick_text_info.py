@@ -184,6 +184,7 @@ def removeSignalContinueData(filename, pre_regex_word, head_regex_word,
                     pass
 
             temp = []
+            continue_line_list_list.sort()
             temp = mix_index_list(continue_line_list_list)
 
         #判断是否将标记行包含在内
