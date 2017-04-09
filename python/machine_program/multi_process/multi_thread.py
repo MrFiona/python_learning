@@ -5,6 +5,7 @@
 # Author  : MrFiona 一枚程序员
 # Time     : 2017-03-19 22:40
 
+
 import Queue
 import sys
 import requests
@@ -23,6 +24,7 @@ class Worker(threading.Thread):  # 处理工作请求
   def run(self):
     while 1:
       try:
+        print self.workQueue.get(False)
         callable, args, kwds = self.workQueue.get(False)  # get task
         res = callable(*args, **kwds)
         self.resultQueue.put(res)  # put result
