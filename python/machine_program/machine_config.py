@@ -10,10 +10,10 @@ from exceptions import AttributeError, UserWarning
 from ConfigParser import NoSectionError, RawConfigParser
 
 #设置配置文件路径
-CONFIG_FILE_PATH = os.getcwd() + os.sep + 'machineConfig' + os.sep + 'machine.conf'
+# CONFIG_FILE_PATH = os.getcwd() + os.sep + 'machineConfig' + os.sep + 'machine.conf'
 
 class MachineConfig():
-    def __init__(self, config_file_path=CONFIG_FILE_PATH):
+    def __init__(self, config_file_path):
         self.config_file_path = config_file_path
 
     def get_node_info(self, master_node=None, child_node=None):

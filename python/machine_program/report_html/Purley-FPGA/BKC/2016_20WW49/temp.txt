@@ -1,0 +1,252 @@
+                <span class="sh2">  Existing Sightings </span>
+                <div class="FoldIcon">
+                    <div class="CollapseBtn not-collapsed collapsed" data-toggle="collapse" href="#collapseExistingSightings"></div>
+                </div>
+            </div>
+            <div id="collapseExistingSightings" class="panel-collapse collapse ">
+                <div class="panel-body">
+                
+                <table class="MsoNormalTable" width="100%">
+                    <tbody><tr>
+                         <th width="5%">ID</th>
+                        <th width="45%">Title</th>
+                        <th width="7%">Priority</th>
+                        <th width="7%">Severity</th>
+                        <th width="7%">Owner</th>
+                        <th width="7%">Status</th>
+                        <th width="10%">Subsystem</th>
+                        <th width="12%">Promoted ID</th>
+                    </tr>
+                      
+                        
+                            <tr style="background-color:#ff6633">
+                        
+                        
+                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345474">5345474</a></td>
+                        
+                         <td style="text-align:left;">[2016_WW43 BKC][BIOS:105_D11][Neon city FPGA] There would be a caterr and then reset when running the reboot stress test.</td>
+                         <td>P1</td>
+                         <td>2 High</td>
+                         <td>erikamor</td>
+                         <td>Assigned</td>
+                         <td></td>
+                         <td>
+                                    
+                                
+                                            <p>N/A</p>
+                                        
+                                    
+                        </td>
+                     </tr>
+                     
+                        
+                            <tr style="background-color:#ff6633">
+                        
+                        
+                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345509">5345509</a></td>
+                        
+                         <td style="text-align:left;">[2016_WW44 BKC][BIOS:106_D11][Neon city FPGA]Occasionally cat error and hang at code 'A9' during warmboot cycling tests</td>
+                         <td>P2</td>
+                         <td>2 High</td>
+                         <td>pdle1</td>
+                         <td>Assigned</td>
+                         <td></td>
+                         <td>
+                                    
+                                
+                                            <p>N/A</p>
+                                        
+                                    
+                        </td>
+                     </tr>
+                     
+                        
+                            <tr style="background-color:#ff6633">
+                        
+                        
+                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345514">5345514</a></td>
+                        
+                         <td style="text-align:left;">[2016_WW44 BKC][BIOS:106_D11][Neon city FPGA]PTT support option is gray and can't be enable in BIOS setup.</td>
+                         <td>P2</td>
+                         <td>3 Medium</td>
+                         <td>mdelgado</td>
+                         <td>Assigned</td>
+                         <td></td>
+                         <td>
+                                    
+                                
+                                            <p>N/A</p>
+                                        
+                                    
+                        </td>
+                     </tr>
+                     
+                        
+                            <tr>
+                        
+                        
+                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345552">5345552</a></td>
+                        
+                         <td style="text-align:left;">[2016_WW46 BKC][BIOS 108.D11][P&P][Neon City FPGA] Mlc Local all read memory peak Bandwidth decreased 13.74% (from 182.9 GB/s to 157.6 GB/s )</td>
+                         <td>P2</td>
+                         <td>3 Medium</td>
+                         <td>jvoelz7</td>
+                         <td>Assigned</td>
+                         <td></td>
+                         <td>
+                                    
+                                
+                                            <p>N/A</p>
+                                        
+                                    
+                        </td>
+                     </tr>
+                     
+                        
+                            <tr>
+                        
+                        
+                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345465">5345465</a></td>
+                        
+                         <td style="text-align:left;">[2016_WW42 BKC][BIOS:104_D12][Neon city FPGA]The consumption can’t rise when set T state from maxmum to minimum.</td>
+                         <td>P3</td>
+                         <td>3 Medium</td>
+                         <td>xuewenxi</td>
+                         <td>Assigned</td>
+                         <td></td>
+                         <td>
+                                    
+                                
+                                    
+                                                
+                                                    <p> <a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345197">5345197</a></p>
+                                                
+                                            
+                                        
+                                    
+                        </td>
+                     </tr>
+                     
+                        
+                            <tr>
+                        
+                        
+                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345530">5345530</a></td>
+                        
+                         <td style="text-align:left;">[2016_WW45 BKC][BIOS:107_D07][Neon city FPGA]Can't ping SUT BMC IP from a RHEL server  .</td>
+                         <td>P3</td>
+                         <td>3 Medium</td>
+                         <td>avico</td>
+                         <td>Assigned</td>
+                         <td></td>
+                         <td>
+                                    
+                                
+                                    
+                                                
+                                                    <p> <a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345399">5345399</a></p>
+                                                
+                                            
+                                        
+                                    
+                        </td>
+                     </tr>
+                     
+                        
+                            <tr>
+                        
+                        
+                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345546">5345546</a></td>
+                        
+                         <td style="text-align:left;">[2016_WW45 BKC][BIOS:107_D07][Neon city FPGA]WOL function is still working when disabled in BIOS.</td>
+                         <td>P3</td>
+                         <td>3 Medium</td>
+                         <td>yanghe1</td>
+                         <td>Assigned</td>
+                         <td></td>
+                         <td>
+                                    
+                                
+                                    
+                                                
+                                                    <p> <a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345499">5345499</a></p>
+                                                
+                                            
+                                        
+                                    
+                        </td>
+                     </tr>
+                     
+                        
+                            <tr>
+                        
+                        
+                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345608">5345608</a></td>
+                        
+                         <td style="text-align:left;">[2016_WW47 BKC][BIOS:109_D12][Neon city FPGA]SUT will hang when add new boot option.</td>
+                         <td>P3</td>
+                         <td>3 Medium</td>
+                         <td>junyuton</td>
+                         <td>Assigned</td>
+                         <td></td>
+                         <td>
+                                    
+                                
+                                    
+                                                
+                                                    <p> <a href="https://vthsd.png.intel.com/hsd/bios_purley/sighting/default.aspx?sighting_id=5372828">bios_purley_5372828</a></p>
+                                                
+                                            
+                                        
+                                    
+                        </td>
+                     </tr>
+                     
+                        
+                            <tr>
+                        
+                        
+                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345420">5345420</a></td>
+                        
+                         <td style="text-align:left;">[2016_WW40 BKC][BIOS:102_D12][Neon city FPGA]CPLD 1 version show‘F.F’ after flash CPLD 0x11_0x22</td>
+                         <td>P3</td>
+                         <td>4 Low</td>
+                         <td>jdbolano</td>
+                         <td>Assigned</td>
+                         <td></td>
+                         <td>
+                                    
+                                
+                                            <p>N/A</p>
+                                        
+                                    
+                        </td>
+                     </tr>
+                     
+                        
+                            <tr>
+                        
+                        
+                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345493">5345493</a></td>
+                        
+                         <td style="text-align:left;">[2016_WW43 BKC][BIOS:105_D11][Neon city FPGA] Entering "Platform Configuration -> PCH Configuration" resets other saved change.</td>
+                         <td>P3</td>
+                         <td>4 Low</td>
+                         <td>xuewenxi</td>
+                         <td>Assigned</td>
+                         <td></td>
+                         <td>
+                                    
+                                
+                                            <p>N/A</p>
+                                        
+                                    
+                        </td>
+                     </tr>
+                     
+                 
+                </tbody></table><br>
+                </div>
+            </div>
+        </div>
+        <div class="panel collapse-report-panel">

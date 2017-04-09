@@ -5,349 +5,739 @@
 # File    : insert_excel.py
 # Software: PyCharm Community Edition
 
+import os
+import re
 import sys
-reload(sys)
+import copy
 import time
-import xlwt
-sys.setdefaultencoding('utf-8')
 import xlrd
-from xlutils.copy import copy
-import xlwt
-# import get_word
+import get_word
+import openpyxl
 import xlsxwriter
-
-# url = 'https://dcg-oss.intel.com/ossreport/auto/Purley-FPGA/Silver/2017%20WW11/5691_Silver.html'
-# data_type = 'HW Configuration'
-# #插入excel表格中的HW工作表
-# num = 1
-# start = time.time()
-#
-#
-# def return_label_num_list(label_num_list=None):
-#     if not label_num_list:
-#         label_num_list = []
-#     # 写入多个周的数据
-#     for i in range(50):
-#         # i为偶数
-#         if i & 1 == 0:
-#             if i < 2:
-#                 x = ['D', 'Q']
-#             elif i >= 2:
-#                 prefix = chr(ord('A') + (i - 2) / 2)
-#                 x = [prefix + 'D', prefix + 'Q']
-#         elif i & 1 == 1:
-#             if i < 3:
-#                 x = ['Q', 'AD']
-#             elif i > 3:
-#                 prefix_font = chr(ord('A') + (i - 3) / 2)
-#                 prefix_behind = chr(ord('A') + (i - 3) / 2 + 1)
-#                 x = [prefix_font + 'Q', prefix_behind + 'D']
-#             elif i == 3:
-#                 x = ['AQ', 'BD']
-#         # if i & 1 == 0:
-#         print 'i = %d, x = %s' % (i, x)
-#
-# #创建一个新的excel工作簿  文件对象
-# workbook = xlsxwriter.Workbook('report_result.xlsx')
-# #在excel工作簿中增加工作表单
-# worksheet = workbook.add_worksheet('HW')
-#
-# label_num_list = return_label_num_list()
-#
-# for j in range(2):
-#     #为excel对象设定显示格式
-#     bold = workbook.add_format({'bold': 1, 'align':'center', 'font_size': 12})
-#     bold_merge = workbook.add_format({'bold': 2, 'align':'justify', 'valign':'vcenter' ,'bg_color': '#C6EFCE'})
-#     #获取提取的待插入excel表的数据
-#     obj = get_word.GetAnalysisData(url, data_type)
-#     row_coordinates_list, column_coordinates_list, cell_data_list, header_cell_data_info = obj.get_hw_data()
-#     # print row_coordinates_list
-#     # print column_coordinates_list
-#     # print cell_data_list, len(cell_data_list)
-#     # print header_cell_data_info, len(header_cell_data_info)
-#     #设置第一行单元格的宽度为20，字体为bold格式
-#     # worksheet.set_row(0, 40, bold)
-#     # for num in range(1,10):
-#     #     worksheet.set_row(num, 40)
-#     #写入工作表的第一行,现在只支持system 1 到system 10，截取10行数据
-#     #为当前workbook添加一个样式名为titleformat
-#     titleformat = workbook.add_format()
-#     titleformat_header = workbook.add_format()
-#     titleformat_header.set_bold() # 设置粗体字
-#     titleformat.set_font_size(12) # 设置字体大小为10
-#     titleformat_header.set_font_size(12) # 设置字体大小为10
-#     titleformat.set_font_name('Microsoft yahei') # 设置字体样式为雅黑
-#     titleformat.set_align('center') # 设置水平居中对齐
-#     titleformat_header.set_align('center') # 设置水平居中对齐
-#     titleformat.set_align('vcenter')  # 设置垂直居中对齐
-#     titleformat_header.set_align('vcenter')  # 设置垂直居中对齐
-#     # def fun(worksheet, label):
-#     #     def convert_chr(asc,num):
-#     #         return chr( ord(asc) + num )
-#
-#     worksheet.write('{0}1' .format( chr(ord('A')+13*j) ), 'HW')
-#     worksheet.write_row('{0}1' .format( chr(ord('A')+ 3 + 13*j) ), row_coordinates_list[:10])
-#     #写入工作表的第二行
-#     if j == 0:
-#         common_formula_lable_list = [['D', 'Q'], ['E', 'R'], ['F', 'S'], ['G', 'T'], ['H', 'U'],
-#                                  ['I', 'V'], ['J', 'W'], ['K', 'X'], ['L', 'Y'], ['M', 'Z']]
-#     if j == 1:
-#         common_formula_lable_list = [['Q', 'AD'], ['R', 'AE'], ['S', 'AF'], ['T', 'AG'], ['U', 'AH'],
-#                                  ['V', 'AI'], ['W', 'AJ'], ['X', 'AL'], ['Y', 'AM'], ['Z', 'AN']]
-#     insert_row_formula_list = []
-#     for i in range(len(common_formula_lable_list)):
-#         if j == 0:
-#             row_formula = '=OR(IF(OR(ISBLANK({0}3),ISBLANK({1}3)),FALSE,NOT(EXACT({0}3,{1}3))),IF(OR(ISBLANK({0}4),ISBLANK({1}4)),FALSE,NOT(EXACT({0}4,{1}4))),IF(OR(ISBLANK({0}5),ISBLANK({1}5)),FALSE,NOT(EXACT({0}5,{1}5))),IF(OR(ISBLANK({0}6),ISBLANK({1}6)),FALSE,NOT(EXACT({0}6,{1}6))),IF(OR(ISBLANK({0}7),ISBLANK({1}7)),FALSE,NOT(EXACT({0}7,{1}7))),IF(OR(ISBLANK({0}8),ISBLANK({1}8)),FALSE,NOT(EXACT({0}8,{1}8))),IF(OR(ISBLANK({0}9),ISBLANK({1}9)),FALSE,NOT(EXACT({0}9,{1}9))))'.format(common_formula_lable_list[i][0], common_formula_lable_list[i][1])
-#         if j == 1:
-#             row_formula = '=OR(IF(OR(ISBLANK(Q3),ISBLANK({1}3)),FALSE,NOT(EXACT({0}3,{1}3))),IF(OR(ISBLANK({0}4),ISBLANK({1}4)),FALSE,NOT(EXACT({0}4,{1}4))),IF(OR(ISBLANK({0}5),ISBLANK({1}5)),FALSE,NOT(EXACT({0}5,{1}5))),IF(OR(ISBLANK({0}6),ISBLANK({1}6)),FALSE,NOT(EXACT({0}6,{1}6))),IF(OR(ISBLANK({0}7),ISBLANK({1}7)),FALSE,NOT(EXACT({0}7,{1}7))),IF(OR(ISBLANK({0}8),ISBLANK({1}8)),FALSE,NOT(EXACT({0}8,{1}8))),IF(OR(ISBLANK({0}9),ISBLANK({1}9)),FALSE,NOT(EXACT({0}9,{1}9))))'.format(common_formula_lable_list[i][0], common_formula_lable_list[i][1])
-#
-#         # print row_formula
-#         insert_row_formula_list.append(row_formula)
-#     worksheet.write_row('{0}2' .format( chr(ord('A')+ 2 + 13*j) ), ['Changed from previous configuration?'] + insert_row_formula_list)
-#     #按列插入数据
-#     insert_col_formula_list = []
-#     worksheet.write_column('{0}3' .format( chr(ord('A')+ 1 + 13*j) ), column_coordinates_list[2:])
-#     #设置D-M列的每一个单元格的宽度为60
-#     # worksheet.set_column('D:M', 65)
-#     # worksheet.set_column('C:C', 40)
-#     # worksheet.set_column('B:B', 20)
-#     for col in range(3, 10):
-#         if j == 0:
-#             column_formula = '=OR(IF(OR(ISBLANK(D{0}),ISBLANK(Q{0})),FALSE,NOT(EXACT(D{0},Q{0}))),IF(OR(ISBLANK(E{0}),ISBLANK(R{0})),FALSE,NOT(EXACT(E{0},R{0}))),IF(OR(ISBLANK(F{0}),ISBLANK(S{0})),FALSE,NOT(EXACT(F{0},S{0}))),IF(OR(ISBLANK(G{0}),ISBLANK(T{0})),FALSE,NOT(EXACT(G{0},T{0}))),IF(OR(ISBLANK(H{0}),ISBLANK(U{0})),FALSE,NOT(EXACT(G{0},T{0}))),IF(OR(ISBLANK(H{0}),ISBLANK(U{0})),FALSE,NOT(EXACT(H{0},U{0}))),IF(OR(ISBLANK(I{0}),ISBLANK(V{0})),FALSE,NOT(EXACT(I{0},V{0}))),IF(OR(ISBLANK(J{0}),ISBLANK(W{0})),FALSE,NOT(EXACT(J{0},W{0}))),IF(OR(ISBLANK(K{0}),ISBLANK(X{0})),FALSE,NOT(EXACT(K{0},X{0}))))' .format(col)
-#         if j == 1:
-#             column_formula = '=OR(IF(OR(ISBLANK(Q{0}),ISBLANK(AD{0})),FALSE,NOT(EXACT(Q{0},AD{0}))),IF(OR(ISBLANK(R{0}),ISBLANK(AE{0})),FALSE,NOT(EXACT(R{0},AE{0}))),IF(OR(ISBLANK(S{0}),ISBLANK(AF{0})),FALSE,NOT(EXACT(S{0},AF{0}))),IF(OR(ISBLANK(T{0}),ISBLANK(AG{0})),FALSE,NOT(EXACT(T{0},AG{0}))),IF(OR(ISBLANK(U{0}),ISBLANK(AH{0})),FALSE,NOT(EXACT(T{0},AG{0}))),IF(OR(ISBLANK(U{0}),ISBLANK(AH{0})),FALSE,NOT(EXACT(U{0},AH{0}))),IF(OR(ISBLANK(V{0}),ISBLANK(AI{0})),FALSE,NOT(EXACT(V{0},AI{0}))),IF(OR(ISBLANK(W{0}),ISBLANK(AJ{0})),FALSE,NOT(EXACT(W{0},AJ{0}))),IF(OR(ISBLANK(X{0}),ISBLANK(AK{0})),FALSE,NOT(EXACT(X{0},AK{0}))))' .format(col)
-#         # print column_formula
-#         insert_col_formula_list.append(column_formula)
-#     worksheet.write_column('{0}3' .format( chr(ord('A')+ 2 + 13*j) ), insert_col_formula_list)
-#     #按行插入数据
-#     for row_num in range(3,10):
-#         #每个元素限制为10列 [:10]
-#         worksheet.write_row('{1}{0}'.format(row_num, chr(ord('A')+ 3 + 13*j)), cell_data_list[row_num-1][:10])
-#     #合并单元格
-#     worksheet.merge_range('{0}3:{0}9' .format( chr(ord('A')+ 13*j) ), "")
-#     # Set up some formats to use.
-#     red = workbook.add_format({'color': 'red'})
-#     worksheet.write_rich_string('{0}3' .format( chr(ord('A')+ 13*j) ), red, 'WW11', titleformat)
-#
-#     first_column_label_list = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M']
-#     num -= 1
-#
-# workbook.close()
-# print time.time() - start
-#
-# #读取excel表格
-# data = xlrd.open_workbook('report_result11.xls', formatting_info=True)
-# table = data.sheet_by_name('HW')
-# nrows = table.nrows
-# ncols = table.ncols
-# print nrows, ncols
-#
-# wtable = copy(data)
-# wtable.add_sheet('gggg')
-# wtable.sheet_index('HW')
-#
-# wtable.save('hhhw.xlsx')
-#
-#
-#
-# import xlwt
-# workbook = xlwt.Workbook()
-# worksheet = workbook.add_sheet('My Sheet')
-# pattern = xlwt.Pattern() # Create the Pattern
-# pattern.pattern = xlwt.Pattern.SOLID_PATTERN # May be: NO_PATTERN, SOLID_PATTERN, or 0x00 through 0x12
-# pattern.pattern_fore_colour = 5 # May be: 8 through 63. 0 = Black, 1 = White, 2 = Red, 3 = Green, 4 = Blue, 5 = Yellow, 6 = Magenta, 7 = Cyan, 16 = Maroon, 17 = Dark Green, 18 = Dark Blue, 19 = Dark Yellow , almost brown), 20 = Dark Magenta, 21 = Teal, 22 = Light Gray, 23 = Dark Gray, the list goes on...
-# style = xlwt.XFStyle() # Create the Pattern
-# style.pattern = pattern # Add Pattern to Style
-# worksheet.write(0, 0, 'Cell Contents', style)
-# workbook.save('Excel_Workbook.xls')
-
-import xlrd
-import xlutils.copy
-
-newwb = xlrd.open_workbook('dd.xls', formatting_info=True)  # formatting_info 带格式导入
-outwb = xlutils.copy.copy(newwb)  # 建立一个副本来用xlwt来写
-
-# 修改值
-
-def setOutCell(outSheet, col, row, value):
-    """ Change cell value without changing formatting. """
-
-    def _getOutCell(outSheet, colIndex, rowIndex):
-        """ HACK: Extract the internal xlwt cell representation. """
-        row = outSheet._Worksheet__rows.get(rowIndex)
-        if not row: return None
-
-        cell = row._Row__cells.get(colIndex)
-        return cell
-
-    # HACK to retain cell style.
-    previousCell = _getOutCell(outSheet, col, row)
-    # END HACK, PART I
-
-    outSheet.write(row, col, value)
-
-    # HACK, PART II
-    if previousCell:
-        newCell = _getOutCell(outSheet, col, row)
-        if newCell:
-            newCell.xf_idx = previousCell.xf_idx
-            # END HACK
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 
-outSheet = outwb.get_sheet(0)
-setOutCell(outSheet, 5, 5, 'Test')
-outwb.save('output.xls')
+class InsertDataIntoExcel():
+    def __init__(self):
+        self.alp_label_list = []
+        self.effective_alp_list = []
+        #url列表初始化
+        self.return_label_num_list()
+        self.generate_column_alp_list()
+        self.FPGA_Silver_url_list = self.get_url_list_by_keyword('Purley-FPGA', 'Silver')
 
+        # 创建一个新的excel工作簿  文件对象
+        self.workbook = xlsxwriter.Workbook('report_result_2.xlsx', options={'strings_to_urls': False})
+        #获取原始公式数据
+        self.rb = openpyxl.load_workbook('C:\Users\pengzh5x\Desktop\ITF_Skylake_FPGA_BKC_TestCase_WW13_v1.5.8.xlsx', data_only=False)
 
+        # 在excel工作簿中增加工作表单
+        self.worksheet_change = self.workbook.add_worksheet('Change History')
+        self.worksheet_newsi = self.workbook.add_worksheet('NewSi')
+        self.worksheet_existing = self.workbook.add_worksheet('ExistingSi')
+        self.worksheet_closesi = self.workbook.add_worksheet('ClosedSi')
+        self.worksheet_rework = self.workbook.add_worksheet('Rework')
+        self.worksheet_hw = self.workbook.add_worksheet('HW')
+        self.worksheet_sw_orignal = self.workbook.add_worksheet('SW_Original')
+        self.worksheet_sw = self.workbook.add_worksheet('SW')
+        self.worksheet_ifwi_orignal = self.workbook.add_worksheet('IFWI_Original')
+        self.worksheet_ifwi = self.workbook.add_worksheet('IFWI')
+        self.worksheet_platform = self.workbook.add_worksheet('ValidationResult')
+        self.worksheet_mapping = self.workbook.add_worksheet('Mapping')
+        self.worksheet_caseresult = self.workbook.add_worksheet('CaseResult')
+        self.worksheet_save_miss = self.workbook.add_worksheet('Save-Miss')
+        self.worksheet_test_time = self.workbook.add_worksheet('TestTime')
 
+        #读取样板excel
+        self.read_workbook = xlrd.open_workbook('copy.xlsx')
 
-import xlrd, xlwt
+        # 为excel对象设定显示格式
+        self.bold = self.workbook.add_format({'bold': 1, 'align': 'center', 'font_size': 12})
+        self.bold_merge = self.workbook.add_format({'bold': 2, 'align': 'justify', 'valign': 'vcenter', 'bg_color': '#C6EFCE'})
+        # 为当前workbook添加一个样式名为titleformat
+        self.titleformat = self.workbook.add_format()
+        self.titleformat_header = self.workbook.add_format()
+        self.titleformat_header.set_bold()  # 设置粗体字
+        self.titleformat.set_font_size(12)  # 设置字体大小为10
+        self.titleformat_header.set_font_size(12)  # 设置字体大小为10
+        self.titleformat.set_font_name('Microsoft yahei')  # 设置字体样式为雅黑
+        self.titleformat.set_align('center')  # 设置水平居中对齐
+        self.titleformat_header.set_align('center')  # 设置水平居中对齐
+        self.titleformat.set_align('vcenter')  # 设置垂直居中对齐
+        self.titleformat_header.set_align('vcenter')  # 设置垂直居中对齐
+        self.format1 = self.workbook.add_format({'bg_color': '#FFC7CE', 'font_color': '#9C0006'})
+        self.mapping_format = self.workbook.add_format({'bg_color': '#EAC100'})
+        self.mapping_blue_format = self.workbook.add_format({'bg_color': '#ECF5FF'})
+        self.url_format = self.workbook.add_format({'font_color': 'blue', 'underline': 1, 'align':'center', 'valign':'vcenter'})
 
-# Demonstration of copy2 patch for xlutils 1.4.1
+        self.titleformat_merage = self.workbook.add_format()
+        self.titleformat_merage.set_font_size(12)  # 设置字体大小为10
+        self.titleformat_merage.set_align('center')  # 设置水平居中对齐
+        self.titleformat_merage.set_align('vcenter')  # 设置垂直居中对齐
+        # Add a format for the header cells.
+        self.header_format = self.workbook.add_format({
+            'border': 1,
+            'bg_color': '#C6EFCE',
+            'bold': True,
+            # 'text_wrap': True,
+            # 'valign': 'vcenter',
+            # 'indent': 1,
+        })
 
-# Context:
-# xlutils.copy.copy(xlrd_workbook) -> xlwt_workbook
-# copy2(xlrd_workbook) -> (xlwt_workbook, style_list)
-# style_list is a conversion of xlrd_workbook.xf_list to xlwt-compatible styles
+    def get_url_list_by_keyword(self, pre_keyword, back_keyword, key_url_list=None):
+        if not key_url_list:
+            key_url_list = []
+            
+        f = open(os.getcwd() + os.sep + 'report_html' + os.sep + 'url_info.txt')
+        for line in f:
+            if pre_keyword in line and back_keyword in line:
+                key_url_list.append(line.strip('\n'))
+        # print key_url_list, len(key_url_list)
+        return key_url_list
 
-# Step 1: Create an input file for the demo
-def create_input_file():
-    wtbook = xlwt.Workbook()
-    wtsheet = wtbook.add_sheet(u'First')
-    colours = 'white black red green blue pink turquoise yellow'.split()
-    fancy_styles = [xlwt.easyxf(
-        'font: name Times New Roman, italic on;'
-        'pattern: pattern solid, fore_colour %s;'
-         % colour) for colour in colours]
-    for rowx in xrange(8):
-        wtsheet.write(rowx, 0, rowx)
-        wtsheet.write(rowx, 1, colours[rowx], fancy_styles[rowx])
-    wtbook.save('demo_copy2_in.xls')
+    def return_label_num_list(self):
+        # 写入多个周的数据
+        for i in range(24):
+            # i为偶数
+            if i & 1 == 0:
+                if i < 2:
+                    x = ['D', 'Q']
+                elif i >= 2:
+                    prefix = chr(ord('A') + (i - 2) / 2)
+                    x = [prefix + 'D', prefix + 'Q']
+            elif i & 1 == 1:
+                if i < 3:
+                    x = ['Q', 'AD']
+                elif i > 3:
+                    prefix_font = chr(ord('A') + (i - 3) / 2)
+                    prefix_behind = chr(ord('A') + (i - 3) / 2 + 1)
+                    x = [prefix_font + 'Q', prefix_behind + 'D']
+                elif i == 3:
+                    x = ['AQ', 'BD']
+            self.alp_label_list.append(x)
 
-# Step 2: Copy the file, changing data content
-# ('pink' -> 'MAGENTA', 'turquoise' -> 'CYAN')
-# without changing the formatting
+    def generate_column_alp_list(self):
+        big_list = []
+        # 将首字母对转化为字母对列表,此处要用深拷贝，不然会导致两个同时变化
+        first_alp = copy.deepcopy(self.alp_label_list)
+        alp_pair_list = copy.deepcopy(self.alp_label_list)
+        big_list.append(first_alp)
+        # 循环执行10次，生成10个列对应的字母标记
+        for nu in range(9):
+            for label in range(len(alp_pair_list)):
+                for i in range(len(alp_pair_list[label])):
+                    ele = alp_pair_list[label][i]
+                    if len(ele) == 1:
+                        alp_pair_list[label][i] = chr(ord(alp_pair_list[label][i]) + 1)
+                    elif len(ele) == 2:
+                        alp_pair_list[label][i] = alp_pair_list[label][i][0] + chr(ord(alp_pair_list[label][i][1]) + 1)
+            # 这里需要深拷贝
+            k = copy.deepcopy(alp_pair_list)
+            big_list.append(k)
 
-from xlutils.filter import process,XLRDReader,XLWTWriter
+        # 每次新增空列表从后插值
+        for i in range(24):
+            self.effective_alp_list.append([])
+            for alp in big_list:
+                self.effective_alp_list[-1].append(alp[i])
+        # for j in self.effective_alp_list:
+        #     print 'ggg', j
 
-# Patch: add this function to the end of xlutils/copy.py
-def copy2(wb):
-    w = XLWTWriter()
-    process(
-        XLRDReader(wb,'unknown.xls'),
-        w
-        )
-    return w.output[0][1], w.style_list
+    def translate_test(self, num_total):
+        # print 'num_total: ', num_total
+        integer_num_alp = num_total - 65
+        if integer_num_alp >= 0:
+            # print 'integer_num_alp: ', integer_num_alp
+            thousand_bit_num = integer_num_alp / (26 ** 4)
+            remainder_thousand_bit_num = integer_num_alp % (26 ** 4)
+            hundred_bit_num = remainder_thousand_bit_num / (26 ** 3)
+            remainder_hundred_bit_num = remainder_thousand_bit_num % (26 ** 3)
+            ten_bit_num = remainder_hundred_bit_num / (26 ** 2)
+            remainder_ten_bit_num = remainder_hundred_bit_num % (26 ** 2)
+            bit_num = remainder_ten_bit_num / 26
+            remainder_bit_num = remainder_ten_bit_num % 26
+            if thousand_bit_num > 26:
+                raise UserWarning('只支持在456976列范围内!!!')
 
-def update_content():
-    rdbook = xlrd.open_workbook('22222.xls', formatting_info=True)
-    sheetx = 0
-    rdsheet = rdbook.sheet_by_index(sheetx)
-    wtbook, style_list = copy2(rdbook)
-    wtsheet = wtbook.get_sheet(sheetx)
-    fixups = [(5, 1, 'MAGENTA'), (6, 1, 'CYAN')]
-    for rowx, colx, value in fixups:
-        xf_index = rdsheet.cell_xf_index(rowx, colx)
-        wtsheet.write(rowx, colx, value, style_list[xf_index])
-    wtbook.save('demo_copy2_out.xls')
+            object_alp = (chr(ord('A') + thousand_bit_num - 1) if thousand_bit_num else '') + (
+            chr(ord('A') + hundred_bit_num - 1) if hundred_bit_num else '') + \
+                         (chr(ord('A') + ten_bit_num - 1) if ten_bit_num else '') + (
+                         chr(ord('A') + bit_num - 1) if bit_num else '') + \
+                         (chr(ord('A') + remainder_bit_num))
+            return object_alp
 
-# create_input_file()
-update_content()
+    def canculate_head_num(self, multiple, num, add_num=0):
+        return multiple*num + add_num
 
-# workbook = xlwt.Workbook()
-# worksheet = workbook.add_sheet('ee')
-# # print 'ww', xlrd.empty_cell.value
-# insert_col_formula_list = []
-# worksheet.write(1,2,'=OR(IF(OR(ISBLANK(D{0}),ISBLANK(Q{0})),FALSE,NOT(EXACT(D{0},Q{0}))),IF(OR(ISBLANK(E{0}),ISBLANK(R{0})),FALSE,NOT(EXACT(E{0},R{0}))),IF(OR(ISBLANK(F{0}),ISBLANK(S{0})),FALSE,NOT(EXACT(F{0},S{0}))),IF(OR(ISBLANK(G{0}),ISBLANK(T{0})),FALSE,NOT(EXACT(G{0},T{0}))),IF(OR(ISBLANK(H{0}),ISBLANK(U{0})),FALSE,NOT(EXACT(G{0},T{0}))),IF(OR(ISBLANK(H{0}),ISBLANK(U{0})),FALSE,NOT(EXACT(H{0},U{0}))),IF(OR(ISBLANK(I{0}),ISBLANK(V{0})),FALSE,NOT(EXACT(I{0},V{0}))),IF(OR(ISBLANK(J{0}),ISBLANK(W{0})),FALSE,NOT(EXACT(J{0},W{0}))),IF(OR(ISBLANK(K{0}),ISBLANK(X{0})),FALSE,NOT(EXACT(K{0},X{0}))))' .format(3))
-# workbook.save('dd.xls')
+    def get_formula_data(self, data_type, wb_sheet_name):
+        rb_sheet = self.rb.get_sheet_by_name(data_type)
+        row, col = 1, 1
+        for rs in rb_sheet.rows:
+            col = 1
+            for cell in rs:
+                data = rb_sheet.cell(row=row, column=col).value
+                # print data, type(data)
+                if isinstance(data, (str, long, unicode, bool, float)):
+                    wb_sheet_name.write(row - 1, col - 1, data)
+                col += 1
+            row += 1
 
-#A2, B2, C2, D2, E2, F2, G2, H2, I2, J2, K2, L2, M2
-#N2, O2, P2, Q2, R2, S2, T2, U2, V2, W2, X2, Y2, Z2
-#AA2, AB2, AC2, AD2, AE2, AF2, AG2, AH2, AI2, AJ2, AK2, AL2, AM2
-#AN2, AO2, AP2, AQ2, AR2, AS2, AT2, AU2, AV2, AW2, AX2, AY2, AZ2
+    def insert_Newsi_data(self):
+        print '开始获取 New Sightings 数据........\n'
+        # 获取公式并插入指定位置
+        self.get_formula_data('NewSi', self.worksheet_newsi)
+        header_fix_list = [u'ID', u'Title', u'Priority', u'Severity', u'Owner', u'Status', u'Subsystem', u'Promoted ID']
+        for j in range(24):
+            print '开始插入第[ %d ]个[ %s ]对应的数据' % (j + 1, self.FPGA_Silver_url_list[j])
+            obj = get_word.GetAnalysisData(self.FPGA_Silver_url_list[j])
+            date_string, effective_url_list, header_list, cell_data_list = obj.get_new_sightings_data('New Sightings')
+            self.worksheet_newsi.conditional_format(1, self.canculate_head_num(13, j, 1), 12, self.canculate_head_num(13, j, 3),
+                                                         {'type': 'cell', 'criteria': '=', 'value': True, 'format': self.format1})
+            insert_data_list_1 = [date_string, 'NOT Reported in next release?', 'NOT Reported in previous release?',
+                                'Purley-FPGA No corresponding test case in test result?']
+            insert_data_stirng = 'IF(ISBLANK(E3),"",IF(D3,"",IF(ISERROR(MATCH(E3,CaseResult!Q:Q,0)),"",INDEX(CaseResult!N:N,MATCH(E3,CaseResult!Q:Q,0)))))'
+            self.worksheet_newsi.write(0, self.canculate_head_num(13, j), insert_data_stirng)
+            self.worksheet_newsi.write(0, self.canculate_head_num(13, j, 2), 'BKC', self.format1)
+            self.worksheet_newsi.write(0, self.canculate_head_num(13, j, 3), 'ISERROR(MATCH(E3,CaseResult!$P:$P,0)),')
+            self.worksheet_newsi.write_row(0, self.canculate_head_num(13, j, 4), header_list, self.header_format)
+            #数据为空时插入默认的表列名
+            if not header_list:
+                self.worksheet_newsi.write_row(0, self.canculate_head_num(13, j, 4), header_fix_list, self.header_format)
+            self.worksheet_newsi.write_row(1, self.canculate_head_num(13, j, 0), insert_data_list_1)
+            self.worksheet_newsi.write(0, self.canculate_head_num(13, j, 12), 'Comments')
 
+            num_url_list = []
+            for ele in effective_url_list:
+                num_url_list.append(len(ele))
 
-# -*- coding: cp936 -*-
-import xlrd
-import xlwt
+            for i in range(len(cell_data_list)):
+                #插入非url部分数据
+                self.worksheet_newsi.write_row(2 + i, self.canculate_head_num(13, j, 5), cell_data_list[i][1:-1])
+                #插入url数据部分
+                self.worksheet_newsi.write_url(2 + i, self.canculate_head_num(13, j, 4), effective_url_list[i][0], self.url_format, cell_data_list[i][0])
+                if num_url_list[i] > 1:
+                    self.worksheet_newsi.write_url(2 + i, self.canculate_head_num(13, j, 11), effective_url_list[i][1], self.url_format, cell_data_list[i][-1])
+                elif num_url_list[i] == 1:
+                    self.worksheet_newsi.write(2 + i, self.canculate_head_num(13, j, 11), cell_data_list[i][-1])
 
-xls1 = xlrd.open_workbook("22222.xls")
-mysheet1 = xls1.sheet_by_name("HW")  # 找到名为Sheet1的工作表。区分大小写
-print("表1共有 %d 行， %d 列。" % (mysheet1.nrows, mysheet1.ncols))
+    def insert_ExistingSi_data(self):
+        prompt_statement_list = ['NOT Reported in next release?', 'NOT Reported in previous release?',
+                                 'Purley-FPGA No corresponding test case in test result?']
+        # Add the standard url link format.
+        fail_url_list = []
+        print '开始获取  Existing Sightings 数据........\n'
+        # 获取公式并插入指定位置
+        self.get_formula_data('ExistingSi', self.worksheet_existing)
+        for j in range(24):
+            print '开始插入第[ %d ]个[ %s ]对应的数据' % (j + 1, self.FPGA_Silver_url_list[j])
+            obj = get_word.GetAnalysisData(self.FPGA_Silver_url_list[j])
+            url_list, header_list, cell_data_list, date_string = obj.get_existing_sighting_data('Existing Sightings')
+            #增加一列comments
+            header_list.append('comments')
+            try:
+                #标记True为红色
+                self.worksheet_existing.conditional_format(2, self.canculate_head_num(13, j, 1), 20, self.canculate_head_num(13, j, 3),
+                                                     {'type': 'cell', 'criteria': '=', 'value': True, 'format': self.format1})
+                red = self.workbook.add_format({'color': 'red'})
+                self.worksheet_existing.write_rich_string(1, self.canculate_head_num(13, j), red, date_string, self.titleformat)
+                self.worksheet_existing.write(0, self.canculate_head_num(13, j, 2), 'BKC', self.header_format)
 
-xls2 = xlwt.Workbook()
-mysheet2 = xls2.add_sheet('SheetB')  # 建立2号xls，并往sheetB里面写入数据
+                # 写入工作表的第二行,提示语
+                self.worksheet_existing.write_row(1, self.canculate_head_num(13, j, 1), prompt_statement_list)
+                #写入表头行
+                self.worksheet_existing.write_row(0, self.canculate_head_num(13, j, 4), header_list, self.titleformat_header)
 
-# 获取表1的表头
-titlelist = mysheet1.row_values(0)
+                # 最后一列可能会出现多值多行的情况，计算每行数据占有的行数
+                line_num_list = []
+                for ele in cell_data_list:
+                    num = len(ele[7:])
+                    line_num_list.append(num)
+                print line_num_list
 
-# 每行的操作.生成110个分表
-title0 = 'xxxxx事项分表'
-titlex = 'xxxx流程图（xxxx）'
-mysheet2.write(0, 0, title0.decode('utf-8'))
-mysheet2.write(0, 8, titlex.decode('utf-8'))
-for x in range(0, 8):  # 表1 共有110行数据
-    titlelist1 = mysheet1.row_values(x + 1)  # 每一次循环都得到第x+1行数据。
-    x = x * 9
-    print x
-    for row in range(x + 1, x + 9):  # 每9行为一组 所以上一行的x乘以了9。
-        if row == x + 1:  # 如果是 每组 的第一行
-            for i in range(0, 3):  # 【此处填写第 x+1行(也就是每组的第一行) 的实际列数】
-                mysheet2.write(row, i * 2, titlelist[i])  # 偶数列写入表头数据
-                mysheet2.write(row, i * 2 + 1, titlelist1[i])  # 奇数列写入表1的第x+1行的数据
-        else:
-            if row == x + 2:  # 如果是 每组 的第二行
-                mysheet2.write(row, 0, titlelist[3])  # 因为第二行只有两个格子，不用循环，只写第0列和第1列
-                mysheet2.write(row, 1, titlelist1[3])
-            else:
-                if row == x + 3:  # 如果是 每组 的第三行
-                    mysheet2.write(row, 0, titlelist[4])  # 第三行也只有两个空，不用循环，只写第0列和第1列
-                    mysheet2.write(row, 1, titlelist1[4])
+                nu = 2
+                # 插入数据第一列到第三列
+                for line in range(len(cell_data_list)):
+                    if line_num_list[line] <= 1:
+                        self.worksheet_existing.write_row(nu, self.canculate_head_num(13, j, 5), cell_data_list[line][1:7])
+                        if line_num_list[line] == 0:
+                            self.worksheet_existing.write_url(nu, self.canculate_head_num(13, j, 4), url_list[line][0], self.url_format, str(cell_data_list[line][0]))
+                            self.worksheet_existing.write(nu, self.canculate_head_num(13, j, 11), ' ')
+                        elif line_num_list[line] == 1:
+                            self.worksheet_existing.write_url(nu, self.canculate_head_num(13, j, 4), url_list[line][0], self.url_format, str(cell_data_list[line][0]))
+                            self.worksheet_existing.write_url(nu, self.canculate_head_num(13, j, 11), url_list[line][1], self.url_format, str(cell_data_list[line][7]))
+                        nu += 1
 
-                else:
-                    if row == x + 4:
-                        for i in range(0, 4):
-                            mysheet2.write(row, i * 2, titlelist[i + 5])
-                            mysheet2.write(row, i * 2 + 1, titlelist1[i + 5])
-                    else:
-                        if row == x + 5:
-                            for i in range(0, 4):
-                                mysheet2.write(row, i * 2, titlelist[i + 9])  # 每写一次，列数向后推4。如5,9,13,17,21…
-                                mysheet2.write(row, i * 2 + 1, titlelist1[i + 9])  # 因为“for i in range(0,4):”，一次写4个列
+                    elif line_num_list[line] >= 2:
+                        length_merge = line_num_list[line]
+                        self.worksheet_existing.write_url(nu, self.canculate_head_num(13, j, 4), url_list[line][0], self.url_format, str(cell_data_list[line][0]))
+                        self.worksheet_existing.write_row(nu, self.canculate_head_num(13, j, 5), cell_data_list[line][1:7],self.titleformat_merage)
+                        for i in range(4, 11):
+                            self.worksheet_existing.merge_range(nu, self.canculate_head_num(13, j, i),nu + line_num_list[line] - 1, self.canculate_head_num(13, j, i), '')
+                        for m in range(length_merge):
+                            self.worksheet_existing.write_url(nu + m, self.canculate_head_num(13, j, 11), url_list[line][m+1], self.url_format,str(cell_data_list[line][7 + m]))
+                        nu += line_num_list[line]
+            except:
+                print '爬取第[ %d ]个[ %s ]对应的数据失败' % (j + 1, self.FPGA_Silver_url_list[j])
+                fail_url_list.append(self.FPGA_Silver_url_list[j])
+        print '失败的url列表:\t', fail_url_list
+        print '结束获取  Existing Sightings 数据........\n'
+
+    def insert_ClosedSi_data(self):
+        print '开始获取 New Sightings 数据........\n'
+        # 获取公式并插入指定位置
+        self.get_formula_data('ClosedSi', self.worksheet_closesi)
+        for j in range(24):
+            print '开始插入第[ %d ]个[ %s ]对应的数据' % (j + 1, self.FPGA_Silver_url_list[j])
+            obj = get_word.GetAnalysisData(self.FPGA_Silver_url_list[j])
+            date_string, effective_url_list, header_list, cell_data_list = obj.get_closed_sightings_data('Closed Sightings')
+            self.worksheet_closesi.conditional_format(1, self.canculate_head_num(13, j, 1), 12, self.canculate_head_num(13, j, 3),
+                                                         {'type': 'cell', 'criteria': '=', 'value': True, 'format': self.format1})
+            insert_data_list_1 = [date_string, 'NOT Reported in next release?', 'NOT Reported in previous release?',
+                                'Purley-FPGA No corresponding test case in test result?']
+            insert_data_stirng = 'IF(ISBLANK(E3),"",IF(D3,"",IF(ISERROR(MATCH(E3,CaseResult!Q:Q,0)),"",INDEX(CaseResult!N:N,MATCH(E3,CaseResult!Q:Q,0)))))'
+            self.worksheet_closesi.write(0, self.canculate_head_num(13, j), insert_data_stirng)
+            self.worksheet_closesi.write(0, self.canculate_head_num(13, j, 2), 'BKC', self.format1)
+            self.worksheet_closesi.write(0, self.canculate_head_num(13, j, 3), 'ISERROR(MATCH(E3,CaseResult!$P:$P,0)),')
+            self.worksheet_closesi.write_row(0, self.canculate_head_num(13, j, 4), header_list, self.header_format)
+            self.worksheet_closesi.write_row(1, self.canculate_head_num(13, j, 0), insert_data_list_1)
+
+            num_url_list = []
+            for ele in effective_url_list:
+                num_url_list.append(len(ele))
+
+            for i in range(len(cell_data_list)):
+                #插入非url部分数据
+                self.worksheet_closesi.write_row(2 + i, self.canculate_head_num(13, j, 5), cell_data_list[i][1:-1])
+                #插入url数据部分
+                self.worksheet_closesi.write_url(2 + i, self.canculate_head_num(13, j, 4), effective_url_list[i][0], self.url_format, cell_data_list[i][0])
+                if num_url_list[i] > 1:
+                    self.worksheet_closesi.write_url(2 + i, self.canculate_head_num(13, j, 11), effective_url_list[i][1], self.url_format, cell_data_list[i][-1])
+                elif num_url_list[i] == 1:
+                    self.worksheet_closesi.write(2 + i, self.canculate_head_num(13, j, 11), cell_data_list[i][-1])
+
+    def insert_Rework_data(self):
+        fail_url_list = []
+        print '开始获取 HW Rework 数据........\n'
+        # 获取公式并插入指定位置
+        self.get_formula_data('Rework', self.worksheet_rework)
+        for j in range(24):
+            try:
+                print '开始插入第[ %d ]个[ %s ]对应的数据' % (j + 1, self.FPGA_Silver_url_list[j])
+                obj = get_word.GetAnalysisData(self.FPGA_Silver_url_list[j])
+                object_string_list, date_string = obj.get_rework_data('HW Rework')
+                # 标记True为红色
+                self.worksheet_rework.conditional_format(1, self.canculate_head_num(3, j, 1), 12, self.canculate_head_num(3, j, 1),
+                                                           {'type': 'cell', 'criteria': '=', 'value': True, 'format': self.format1})
+                self.worksheet_rework.write_row(0, self.canculate_head_num(3, j), ['HW Rework', 'Changed from previous configuration?'])
+                self.worksheet_rework.write_column(1, self.canculate_head_num(3, j, 2), object_string_list)
+                self.worksheet_rework.merge_range(1, self.canculate_head_num(3, j), 11, self.canculate_head_num(3, j), "")
+                # Set up some formats to use.
+                red = self.workbook.add_format({'color': 'red'})
+                self.worksheet_rework.write_rich_string(1,self.canculate_head_num(3, j), red, date_string, self.titleformat)
+            except:
+                print '爬取第[ %d ]个[ %s ]对应的数据失败' % (j + 1, self.FPGA_Silver_url_list[j])
+                fail_url_list.append(self.FPGA_Silver_url_list[j])
+        print '失败的url列表:\t', fail_url_list
+        print '结束获取 HW Rework 数据........\n'
+
+    def insert_HW_data(self):
+        insert_row_formula_list = []
+        fail_url_list = []
+        print '开始获取 HW Configuration 数据........\n'
+        # 获取公式并插入指定位置
+        self.get_formula_data('HW', self.worksheet_hw)
+        for j in range(24):
+            print '开始插入第[ %d ]个[ %s ]对应的数据' % (j + 1, self.FPGA_Silver_url_list[j])
+            # 获取提取的待插入excel表的数据
+            obj = get_word.GetAnalysisData(self.FPGA_Silver_url_list[j])
+            date_string, row_coordinates_list, column_coordinates_list, cell_data_list = obj.get_hw_data('HW Configuration')
+            #判断这周有无数据， 例如：第40周的数据为空
+            if not cell_data_list:
+                print '本周数据为空!!!'
+                fail_url_list.append(self.FPGA_Silver_url_list[j])
+                continue
+            try:
+                self.worksheet_hw.write('{0}1'.format( self.translate_test(ord('A') + 13*j) ), 'HW')
+                # 写入工作表的第一行,现在只支持system 1 到HWsystem 10，截取10行数据
+                self.worksheet_hw.write_row('{0}1' .format( self.translate_test(ord('A') + 3 + 13 * j) ), row_coordinates_list[:10])
+                #写入工作表的第二行
+                common_formula_lable_list = self.effective_alp_list[j]
+                for i in range(len(common_formula_lable_list)):
+                    row_formula = '=OR(IF(OR(ISBLANK({0}3),ISBLANK({1}3)),FALSE,NOT(EXACT({0}3,{1}3))),IF(OR(ISBLANK({0}4),ISBLANK({1}4)),FALSE,NOT(EXACT({0}4,{1}4))),IF(OR(ISBLANK({0}5),ISBLANK({1}5)),FALSE,NOT(EXACT({0}5,{1}5))),IF(OR(ISBLANK({0}6),ISBLANK({1}6)),FALSE,NOT(EXACT({0}6,{1}6))),IF(OR(ISBLANK({0}7),ISBLANK({1}7)),FALSE,NOT(EXACT({0}7,{1}7))),IF(OR(ISBLANK({0}8),ISBLANK({1}8)),FALSE,NOT(EXACT({0}8,{1}8))),IF(OR(ISBLANK({0}9),ISBLANK({1}9)),FALSE,NOT(EXACT({0}9,{1}9))))' .format(common_formula_lable_list[i][0], common_formula_lable_list[i][1])
+                    insert_row_formula_list.append(row_formula)
+                self.worksheet_hw.write_row('{0}2' .format( self.translate_test(ord('A') + 2 + 13 * j) ), ['Changed from previous configuration?'] + insert_row_formula_list)
+                #按列插入数据
+                insert_col_formula_list = []
+                self.worksheet_hw.write_column('{0}3' .format( self.translate_test(ord('A') + 1 + 13 * j) ), column_coordinates_list)
+                for col in range(3, 10):
+                    part_args = self.effective_alp_list[j][0][0], self.effective_alp_list[j][0][1], \
+                                self.effective_alp_list[j][1][0], self.effective_alp_list[j][1][1], \
+                                self.effective_alp_list[j][2][0], self.effective_alp_list[j][2][1], \
+                                self.effective_alp_list[j][3][0], self.effective_alp_list[j][3][1], \
+                                self.effective_alp_list[j][4][0], self.effective_alp_list[j][4][1], \
+                                self.effective_alp_list[j][4][0], self.effective_alp_list[j][4][1], \
+                                self.effective_alp_list[j][5][0], self.effective_alp_list[j][5][1], \
+                                self.effective_alp_list[j][6][0], self.effective_alp_list[j][6][1], \
+                                self.effective_alp_list[j][7][0], self.effective_alp_list[j][7][1], \
+                                self.effective_alp_list[j][8][0], self.effective_alp_list[j][8][1], \
+                                self.effective_alp_list[j][9][0], self.effective_alp_list[j][9][1], col
+                    column_formula = '=OR(IF(AND(ISBLANK({0}{22}),ISBLANK({1}{22})),FALSE,NOT(EXACT({0}{22},{1}{22}))),IF(AND(ISBLANK({2}{22}),ISBLANK({3}{22})),FALSE,NOT(EXACT({2}{22},{3}{22}))),IF(AND(ISBLANK({4}{22}),ISBLANK({5}{22})),FALSE,NOT(EXACT({4}{22},{5}{22}))),IF(AND(ISBLANK({6}{22}),ISBLANK({7}{22})),FALSE,NOT(EXACT({6}{22},{7}{22}))),IF(AND(ISBLANK({8}{22}),ISBLANK({9}{22})),FALSE,NOT(EXACT({8}{22},{9}{22}))),IF(AND(ISBLANK({10}{22}),ISBLANK({11}{22})),FALSE,NOT(EXACT({10}{22},{11}{22}))),IF(AND(ISBLANK({12}{22}),ISBLANK({13}{22})),FALSE,NOT(EXACT({12}{22},{13}{22}))),IF(AND(ISBLANK({14}{22}),ISBLANK({15}{22})),FALSE,NOT(EXACT({14}{22},{15}{22}))),IF(AND(ISBLANK({16}{22}),ISBLANK({17}{22})),FALSE,NOT(EXACT({16}{22},{17}{22}))),IF(AND(ISBLANK({18}{22}),ISBLANK({19}{22})),FALSE,NOT(EXACT({18}{22},{19}{22}))),IF(AND(ISBLANK({20}{22}),ISBLANK({21}{22})),FALSE,NOT(EXACT({20}{22},{21}{22}))))'.format( *part_args )
+                    insert_col_formula_list.append(column_formula)
+                self.worksheet_hw.write_column('{0}3' .format( self.translate_test(ord('A') + 2 + 13 * j) ), insert_col_formula_list)
+                #按行插入数据
+                for row_num in range(3,len(cell_data_list)):
+                    #每个元素限制为10列 [:10]
+                    self.worksheet_hw.write_row('{1}{0}'.format( row_num, self.translate_test(ord('A') + 3 + 13 * j) ), cell_data_list[row_num-1][:10])
+                #合并单元格
+                self.worksheet_hw.merge_range('{0}3:{0}9' .format( self.translate_test(ord('A') + 13 * j) ), "")
+                # Set up some formats to use.
+                red = self.workbook.add_format({'color': 'red'})
+                self.worksheet_hw.write_rich_string('{0}3' .format( self.translate_test(ord('A') + 13 * j) ), red, '{0}' .format( date_string ), self.titleformat)
+                self.worksheet_hw.conditional_format('{0}2:{1}2' .format( self.translate_test(ord('A') + 2 + 13 * j), self.translate_test(ord('A') + 12 + 13 * j) ),{'type':'cell', 'criteria':'=', 'value':True, 'format':self.format1})
+                self.worksheet_hw.conditional_format('{0}3:{0}9' .format( self.translate_test(ord('A') + 2 + 13 * j) ),{'type':'cell', 'criteria':'=', 'value':True, 'format':self.format1})
+            except:
+                clear_row_data_list = []
+                for k in range(13):
+                    clear_row_data_list.append(' ')
+                for row in range(1,10):
+                    self.worksheet_hw.write_row('{0}{2}:{1}{2}' .format( self.translate_test(ord('A') + 13*j), self.translate_test(ord('A') + 12 + 13*j), row), clear_row_data_list)
+                self.worksheet_hw.write(9, 1 , '=' + 'OR(IF(OR(ISBLANK(E3),ISBLANK(R3)),FALSE,NOT(EXACT(E3,R3))),IF(OR(ISBLANK(E4),ISBLANK(R4)),FALSE,NOT(EXACT(E4,R4))),IF(OR(ISBLANK(E5),ISBLANK(R5)),FALSE,NOT(EXACT(E5,R5))),IF(OR(ISBLANK(E6),ISBLANK(R6)),FALSE,NOT(EXACT(E6,R6))),IF(OR(ISBLANK(E7),ISBLANK(R7)),FALSE,NOT(EXACT(E7,R7))),IF(OR(ISBLANK(E8),ISBLANK(R8)),FALSE,NOT(EXACT(E8,R8))),IF(OR(ISBLANK(E9),ISBLANK(R9)),FALSE,NOT(EXACT(E9,R9))))')
+                print '爬取第[ %d ]个[ %s ]对应的数据失败' % (j + 1, self.FPGA_Silver_url_list[j])
+                fail_url_list.append(self.FPGA_Silver_url_list[j])
+        print '失败的url列表:\t', fail_url_list
+        print '结束获取 HW Configuration 数据........\n'
+
+    def insert_SW_Original_data(self):
+        fail_url_list = []
+        print '开始获取 SW_Original Configuration 数据........\n'
+        # 获取公式并插入指定位置
+        self.get_formula_data('SW_Original', self.worksheet_sw_orignal)
+        for j in range(24):
+            try:
+                print '开始插入第[ %d ]个[ %s ]对应的数据' %(j+1, self.FPGA_Silver_url_list[j])
+                obj = get_word.GetAnalysisData(self.FPGA_Silver_url_list[j])
+                date_string, url_list, header_list, cell_data_list, left_col_list_1, left_col_list_2 = obj.get_sw_data('SW Configuration')
+                # Set up some formats to use.
+                # 标记True为红色
+                self.worksheet_sw_orignal.conditional_format(1, self.canculate_head_num(9, j), 40, self.canculate_head_num(9, j, 1),
+                                                         {'type': 'cell', 'criteria': '=', 'value': True, 'format': self.format1})
+                red = self.workbook.add_format({'color': 'red'})
+                blue = self.workbook.add_format({'color': 'blue'})
+                # self.worksheet_sw_orignal.write_rich_string(0, self.canculate_head_num(9, j), red, date_string,
+                #                                           blue, ' Ingredient list Changed comparing to Next Release?',  self.header_format)
+                # self.worksheet_sw_orignal.write_rich_string(0, self.canculate_head_num(9, j, 1), blue,
+                #                                             'Ingredient list Changed comparing to Previous?', self.header_format)
+                self.worksheet_sw_orignal.write_row(0, self.canculate_head_num(9, j, 5), header_list, self.header_format)
+                #插入数据
+                #最后一列可能会出现多值多行的情况，计算每行数据占有的行数
+                line_num_list = []
+                for ele in cell_data_list:
+                    num = len(ele[3:])
+                    line_num_list.append(num)
+                nu = 1
+                first_insert_data = [cell_data_list[k][0] for k in range(len(cell_data_list))]
+                second_insert_data = [cell_data_list[k][2] for k in range(len(cell_data_list))]
+                #插入数据第一列到第三列
+                for line in range(len(cell_data_list)):
+                    if line_num_list[line] == 1:
+                        self.worksheet_sw_orignal.write(nu, self.canculate_head_num(9, j, 5), first_insert_data[line])
+                        self.worksheet_sw_orignal.write_url(nu, self.canculate_head_num(9, j, 6), url_list[line][0], self.url_format, cell_data_list[line][1])
+                        self.worksheet_sw_orignal.write(nu, self.canculate_head_num(9, j, 7), second_insert_data[line])
+
+                        if (len(url_list[line]) >= 2) and cell_data_list[line][3]:
+                            self.worksheet_sw_orignal.write_url(nu, self.canculate_head_num(9, j, 8), url_list[line][1], self.url_format, cell_data_list[line][3])
                         else:
-                            if row == x + 6:
-                                for i in range(0, 4):
-                                    mysheet2.write(row, i * 2, titlelist[i + 13])
-                                    mysheet2.write(row, i * 2 + 1, titlelist1[i + 13])
-                            else:
-                                if row == x + 7:
-                                    for i in range(0, 4):
-                                        mysheet2.write(row, i * 2, titlelist[i + 17])
-                                        mysheet2.write(row, i * 2 + 1, titlelist1[i + 17])
-                                else:
-                                    if row == x + 8:
-                                        for i in range(0, 4):  # 如果是 每组 的第八行
-                                            mysheet2.write(row, i * 2, titlelist[i + 21])  # 每写一次，列数向后推4。如5,9,13,17,21…
-                                            mysheet2.write(row, i * 2 + 1, titlelist1[i + 21])
+                            self.worksheet_sw_orignal.write(nu, self.canculate_head_num(9, j, 8), cell_data_list[line][3])
+                        nu += 1
 
-xls2.save('auto.xls')  # 将填充后的结果保存为auto.xls
+                    elif line_num_list[line] > 1:
+                        length_merge = len(url_list[line][1:])
+                        self.worksheet_sw_orignal.merge_range(nu, self.canculate_head_num(9, j, 5), nu + line_num_list[line] -1, self.canculate_head_num(9, j, 5), first_insert_data[line], self.titleformat_merage)
+                        self.worksheet_sw_orignal.merge_range(nu, self.canculate_head_num(9, j, 6), nu + line_num_list[line] - 1, self.canculate_head_num(9, j, 6), '')
+                        self.worksheet_sw_orignal.write_url(nu, self.canculate_head_num(9, j, 6), url_list[line][0], self.url_format, cell_data_list[line][1])
+                        self.worksheet_sw_orignal.merge_range(nu, self.canculate_head_num(9, j, 7), nu + line_num_list[line] -1, self.canculate_head_num(9, j, 7), second_insert_data[line], self.titleformat_merage)
+
+                        for i in range(nu, length_merge + nu):
+                            self.worksheet_sw_orignal.write_url(i, self.canculate_head_num(9, j, 8), url_list[line][1 + i - nu], self.url_format, cell_data_list[line][3:][i - nu])
+                        self.worksheet_sw_orignal.write(line_num_list[line] + nu - 1, self.canculate_head_num(9, j, 8), cell_data_list[line][3:][-1])
+                        nu += line_num_list[line]
+            except:
+                print '爬取第[ %d ]个[ %s ]对应的数据失败' % (j + 1, self.FPGA_Silver_url_list[j])
+                fail_url_list.append(self.FPGA_Silver_url_list[j])
+        print '失败的url列表:\t', fail_url_list
+        print '结束获取 SW_Original Configuration 数据........\n'
+
+    def insert_IFWI_Orignal_data(self):
+        print '开始获取 IFWI_Orignal Configuration 数据........\n'
+        fail_url_list = []
+        # 获取公式并插入指定位置
+        self.get_formula_data('IFWI_Original', self.worksheet_ifwi_orignal)
+        for j in range(24):
+            try:
+                print '开始插入第[ %d ]个[ %s ]对应的数据' % (j + 1, self.FPGA_Silver_url_list[j])
+                obj = get_word.GetAnalysisData(self.FPGA_Silver_url_list[j])
+                date_string, header_list, cell_data_list = obj.get_ifwi_data('IFWI Configuration')
+                # Set up some formats to use.
+                self.worksheet_ifwi_orignal.conditional_format(3, self.canculate_head_num(6, j), 50, self.canculate_head_num(6, j, 1),
+                                                             {'type': 'cell', 'criteria': '=', 'value': True, 'format': self.format1})
+                red = self.workbook.add_format({'color': 'red'})
+                blue = self.workbook.add_format({'color': 'blue'})
+                self.worksheet_ifwi_orignal.write_rich_string(0, self.canculate_head_num(6, j, 1), blue, 'Ingredient list Changed?', self.header_format)
+                self.worksheet_ifwi_orignal.write_rich_string(0, self.canculate_head_num(6, j), red, date_string, self.header_format)
+                self.worksheet_ifwi_orignal.write_rich_string(1, self.canculate_head_num(6, j, 3), blue, 'IFWI Configuration ', self.header_format)
+                insert_rich_string_list = ['Ingredient list Changed comparing to Next Release?', 'Ingredient list Changed comparing to Previous?',
+                                           'Ingredient is not in Mapping table?']
+                for i in range(3):
+                    self.worksheet_ifwi_orignal.write_rich_string(2, self.canculate_head_num(6, j, i), blue, insert_rich_string_list[i], self.header_format)
+                self.worksheet_ifwi_orignal.write_row(2, self.canculate_head_num(6, j, 3), header_list, self.header_format)
+                #插入数据,需要考虑有数字的情况，前面加Nic字母
+                for ele in range(len(cell_data_list)):
+                    #以数字开头的元素前面加Nic
+                    match_obj = re.match('\s+\d+', str(cell_data_list[ele][0]))
+                    if match_obj:
+                        cell_data_list[ele][0] = 'Nic' + cell_data_list[ele][0]
+                    cell_data_list[ele][0] = cell_data_list[ele][0].lstrip(' ')
+
+                for begain in range(len(cell_data_list)):
+                    self.worksheet_ifwi_orignal.write_row(begain + 3,  self.canculate_head_num(6, j, 3), cell_data_list[begain])
+            except ValueError:
+                print '爬取第[ %d ]个[ %s ]对应的数据失败' % (j + 1, self.FPGA_Silver_url_list[j])
+                fail_url_list.append(self.FPGA_Silver_url_list[j])
+        print '失败的url列表:\t', fail_url_list
+        print '结束获取 IFWI_Orignal Configuration 数据........\n'
+
+    def insert_SW_data(self):
+        print '开始获取 SW Configuration 数据........\n'
+        fail_url_list = []
+        #获取公式并插入指定位置
+        self.get_formula_data('SW', self.worksheet_sw)
+        for j in range(24):
+            try:
+                print '开始插入第[ %d ]个[ %s ]对应的数据' % (j + 1, self.FPGA_Silver_url_list[j])
+                obj = get_word.GetAnalysisData(self.FPGA_Silver_url_list[j])
+                date_string, url_list, header_list, cell_data_list, left_col_list_1, left_col_list_2 = obj.get_sw_data('SW Configuration')
+                # Set up some formats to use.
+                self.worksheet_sw.conditional_format(1, self.canculate_head_num(9, j), 40, self.canculate_head_num(9, j, 1),
+                                                             {'type': 'cell', 'criteria': '=', 'value': True, 'format': self.format1})
+                red = self.workbook.add_format({'color': 'red'})
+                blue = self.workbook.add_format({'color': 'blue'})
+                self.worksheet_sw.write_rich_string(14, self.canculate_head_num(9, j), red, date_string,
+                                                            blue, ' Ingredient list Changed comparing to Next Release?', self.header_format)
+                self.worksheet_sw.write_rich_string(14, self.canculate_head_num(9, j, 1), blue,
+                                                            'Ingredient list Changed comparing to Previous?', self.header_format)
+                self.worksheet_sw.write_row(14, self.canculate_head_num(9, j, 5), header_list, self.header_format)
+                #处理并插入数据
+                insert_data = zip( cell_data_list, url_list )
+                insert_data.sort(key=lambda x: x[0][0].upper())
+                # insert_data.sort(cmp=lambda x,y : cmp(x[0][0].upper(), y[0][0].upper()))
+                # 插入数据
+                first_insert_data = [insert_data[k][0][0] for k in range(len(insert_data))]
+                second_insert_data = [insert_data[k][0][2] for k in range(len(insert_data))]
+                #注意中间插入了一行标头分隔了数据
+                self.worksheet_sw.write_column(0, self.canculate_head_num(9, j, 5), first_insert_data[:14])
+                self.worksheet_sw.write_column(0, self.canculate_head_num(9, j, 7), second_insert_data[:14])
+                self.worksheet_sw.write_column(15, self.canculate_head_num(9, j, 5), first_insert_data[14:])
+                self.worksheet_sw.write_column(15, self.canculate_head_num(9, j, 7), second_insert_data[14:])
+                # 插入url部分
+                for nu in range(len(insert_data)):
+                    if nu == 14:
+                        continue
+                    self.worksheet_sw.write_url(nu, self.canculate_head_num(9, j, 6), insert_data[nu][1][0], self.url_format, insert_data[nu][0][1])
+                    if insert_data[nu][0][3] == 'Release Notes':
+                        self.worksheet_sw.write_url(nu  , self.canculate_head_num(9, j, 8), insert_data[nu][1][1], self.url_format, insert_data[nu][0][3])
+                    else:
+                        self.worksheet_sw.write(nu, self.canculate_head_num(9, j, 8), insert_data[nu][0][3])
+            except EOFError:
+                print '爬取第[ %d ]个[ %s ]对应的数据失败' % (j + 1, self.FPGA_Silver_url_list[j])
+                fail_url_list.append(self.FPGA_Silver_url_list[j])
+        print '失败的url列表:\t', fail_url_list
+        print '结束获取 SW Configuration 数据........\n'
+
+    def insert_IFWI_data(self):
+        print '开始获取 IFWI Configuration 数据........\n'
+        fail_url_list = []
+        # 获取公式并插入指定位置
+        self.get_formula_data('IFWI', self.worksheet_ifwi)
+        for j in range(24):
+            try:
+                print '开始插入第[ %d ]个[ %s ]对应的数据' % (j + 1, self.FPGA_Silver_url_list[j])
+                obj = get_word.GetAnalysisData(self.FPGA_Silver_url_list[j])
+                date_string, header_list, cell_data_list = obj.get_ifwi_data('IFWI Configuration')
+                # Set up some formats to use.
+                self.worksheet_ifwi.conditional_format(3, self.canculate_head_num(6, j), 50, self.canculate_head_num(6, j, 1),
+                                                             {'type': 'cell', 'criteria': '=', 'value': True, 'format': self.format1})
+                red = self.workbook.add_format({'color': 'red'})
+                blue = self.workbook.add_format({'color': 'blue'})
+                self.worksheet_ifwi.write_rich_string(0, self.canculate_head_num(6, j, 1), blue, 'Ingredient list Changed?', self.header_format)
+                self.worksheet_ifwi.write_rich_string(0, self.canculate_head_num(6, j), red, date_string, self.header_format)
+                self.worksheet_ifwi.write_rich_string(1, self.canculate_head_num(6, j, 3), blue, 'IFWI Configuration ', self.header_format)
+                insert_rich_string_list = ['Ingredient list Changed comparing to Next Release?', 'Ingredient list Changed comparing to Previous?',
+                                           'Ingredient is not in Mapping table?']
+                for i in range(3):
+                    self.worksheet_ifwi.write_rich_string(2, self.canculate_head_num(6, j, i), blue, insert_rich_string_list[i], self.header_format)
+                self.worksheet_ifwi.write_row(2, self.canculate_head_num(6, j, 3), header_list, self.header_format)
+                #插入数据,需要考虑有数字的情况，前面加Nic字母
+                for ele in range(len(cell_data_list)):
+                    #以数字开头的元素前面加Nic
+                    match_obj = re.match('\s+\d+', str(cell_data_list[ele][0]))
+                    if match_obj:
+                        cell_data_list[ele][0] = 'Nic' + cell_data_list[ele][0]
+                    cell_data_list[ele][0] = cell_data_list[ele][0].lstrip(' ')
+
+                cell_data_list.sort(key=lambda x: x[0].upper())
+                for begain in range(len(cell_data_list)):
+                    self.worksheet_ifwi.write_row(begain + 3,  self.canculate_head_num(6, j, 3), cell_data_list[begain])
+            except ValueError:
+                print '爬取第[ %d ]个[ %s ]对应的数据失败' % (j + 1, self.FPGA_Silver_url_list[j])
+                fail_url_list.append(self.FPGA_Silver_url_list[j])
+        print '失败的url列表:\t', fail_url_list
+        print '结束获取 IFWI Configuration 数据........\n'
+
+    def insert_Mapping(self):
+        width = len(self.FPGA_Silver_url_list)
+        # 获取公式并插入指定位置
+        self.get_formula_data('Mapping', self.worksheet_mapping)
+        first_value_list = ['Considering SW Ingredient adding as change?'] + ['TRUE']*25
+        second_value_list = first_value_list
+        third_value_list = ['Considering SW Ingredient adding as change?'] + ['FALSE']*25
+        fourth_value_list = third_value_list
+        # 标记True为红色
+        self.worksheet_mapping.conditional_format(5+width, 5, 153, 30, {'type': 'cell', 'criteria': '=', 'value': True, 'format': self.format1})
+        self.worksheet_mapping.conditional_format(5+width, 31, 153, 64, {'type': 'cell', 'criteria': '=', 'value': 1, 'format': self.format1})
+        self.worksheet_mapping.write_row(0, 4, first_value_list, self.mapping_format)
+        self.worksheet_mapping.write_row(1, 4, second_value_list, self.mapping_format)
+        self.worksheet_mapping.write_row(2, 4, third_value_list, self.mapping_format)
+        self.worksheet_mapping.write_row(3, 4, fourth_value_list, self.mapping_format)
+        # for i in range(4, width+8):
+        #     self.worksheet_mapping.write_row(i, 0, [' ']*30, self.mapping_blue_format)
+        insert_date_list = []
+        for url in self.FPGA_Silver_url_list:
+            split_string_list = str(url).split('/')
+            object_string = split_string_list[-2][-4:]
+            insert_date_list.append(object_string + ' Mapped?')
+        # insert_date_list_column = insert_date_list + ['Total case', 'basic case', 'optionnal case', 'Selected case', 'Covered Issue',
+        #                          'Covered Issue Delta', 'Missed Issue', 'Missed Issue Delta']
+        # self.worksheet_mapping.write_column(5, 30, insert_date_list_column, self.header_format)
+        self.worksheet_mapping.write_row(5+width, 5, insert_date_list + ['EXX_WW49', 'changed?\Test?'], self.header_format)
+        red = self.workbook.add_format({'color': 'red'})
+        self.worksheet_mapping.write_rich_string(5+width, 29, red, 'EXX_WW49', self.header_format)
+
+        row_header_list = []
+        row_value_list = ['Power Management', 'Networking', 'USB', 'FPGA', 'Video', 'Storage', 'PCIe', 'Manageability',
+                           'Virtualization', 'Memory', 'Stress & Stability', 'Security', 'Processor', 'DPDK', 'DPDK_FVL_10G',
+                           'QAT', 'RAS', 'Summary']
+        for head in row_value_list:
+            row_header_list.append(head)
+            row_header_list.append(' ')
+        self.worksheet_mapping.write_row(4, 32, row_header_list, self.header_format)
+
+    def insert_CaseResult(self):
+        print '开始获取 CaseResult 数据........\n'
+        fail_url_list = []
+        # 获取公式并插入指定位置
+        self.get_formula_data('CaseResult', self.worksheet_caseresult)
+        for j in range(1):
+            try:
+                print '开始插入第[ %d ]个[ %s ]对应的数据' % (j + 1, self.FPGA_Silver_url_list[j])
+                obj = get_word.GetAnalysisData(self.FPGA_Silver_url_list[j])
+                tip_string, header_list, cell_data_list = obj.get_caseresult_data('Platform Integration Validation Result')
+                # 标记True为红色
+                self.worksheet_caseresult.conditional_format(0, 0, 5000, 1000, {'type': 'cell', 'criteria': '=', 'value': True, 'format': self.format1})
+            except:
+                print '爬取第[ %d ]个[ %s ]对应的数据失败' % (j + 1, self.FPGA_Silver_url_list[j])
+                fail_url_list.append(self.FPGA_Silver_url_list[j])
+        print '失败的url列表:\t', fail_url_list
+        print '结束获取 CaseResult 数据........\n'
+
+    def insert_Platform_data(self):
+        print '开始获取 Platform Integration Validation Result 数据........\n'
+        fail_url_list = []
+        for j in range(24):
+            try:
+                print '开始插入第[ %d ]个[ %s ]对应的数据' % (j + 1, self.FPGA_Silver_url_list[j])
+                obj = get_word.GetAnalysisData(self.FPGA_Silver_url_list[j])
+                date_string, url_list, header_list, cell_data_list = obj.get_platform_data('Platform Integration Validation Result')
+                # Set up some formats to use.
+                # 标记True为红色
+                self.worksheet_platform.conditional_format(2, self.canculate_head_num(12, j, 5), 20, self.canculate_head_num(12, j, 5),
+                                                         {'type': 'cell', 'criteria': '>', 'value': 0, 'format': self.format1})
+                # 最后一列可能会出现多值多行的情况，计算每行数据占有的行数
+                line_num_list = []
+                for ele in cell_data_list:
+                    num = len(ele[10:])
+                    line_num_list.append(num)
+
+                nu = 2
+                # 插入数据第一列到第三列
+                for line in range(len(cell_data_list)):
+                    #将数字字符转化为数字
+                    temp_list = copy.deepcopy(cell_data_list[line])
+                    for ele in range(len(temp_list)):
+                        if temp_list[ele].isdigit():
+                            temp_list[ele] = int(temp_list[ele])
+
+                    if line_num_list[line] == 1:
+                        self.worksheet_platform.write_row(nu, self.canculate_head_num(12, j, 1), temp_list)
+                        if url_list[line]:
+                            self.worksheet_platform.write_url(nu, self.canculate_head_num(12, j, 11), url_list[line][0], self.url_format, str(temp_list[10]))
+                        nu += 1
+
+                    elif line_num_list[line] > 1:
+                        length_merge = line_num_list[line]
+                        for i in range(1, 11):
+                            self.worksheet_platform.merge_range(nu, self.canculate_head_num(12, j, i),nu + line_num_list[line] - 1,self.canculate_head_num(12, j, i), '')
+                        self.worksheet_platform.write_row(nu, self.canculate_head_num(12, j, 1), temp_list[:10], self.titleformat_merage)
+                        for m in range(length_merge):
+                            self.worksheet_platform.write_url(nu+m, self.canculate_head_num(12, j, 11), url_list[line][m], self.url_format, str(temp_list[10+m]))
+                        nu += line_num_list[line]
+
+                red = self.workbook.add_format({'color': 'red'})
+                self.worksheet_platform.write_rich_string(0, self.canculate_head_num(12, j), red, date_string, self.titleformat)
+                self.worksheet_platform.write_row(1, self.canculate_head_num(12, j, 1), header_list, self.header_format)
+
+            except:
+                print '爬取第[ %d ]个[ %s ]对应的数据失败' % (j + 1, self.FPGA_Silver_url_list[j])
+                fail_url_list.append(self.FPGA_Silver_url_list[j])
+        print '失败的url列表:\t', fail_url_list
+        print '结束获取 Platform Integration Validation Result 数据........\n'
+
+    def insert_save_miss_data(self):
+        # 获取公式并插入指定位置
+        self.get_formula_data('Save-Miss', self.worksheet_save_miss)
+        # 标记True为红色
+        self.worksheet_save_miss.conditional_format(0, 0, 5000, 1000, {'type': 'cell', 'criteria': '=', 'value': True, 'format': self.format1})
+
+    def insert_test_time_data(self):
+        # 获取公式并插入指定位置
+        self.get_formula_data('TestTime', self.worksheet_test_time)
+        # 标记True为红色
+        self.worksheet_test_time.conditional_format(0, 0, 5000, 1000, {'type': 'cell', 'criteria': '=', 'value': True,
+                                                                       'format': self.format1})
+
+    def close_workbook(self):
+        self.workbook.close()
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+if __name__ == '__main__':
+    start = time.time()
+    obj = InsertDataIntoExcel()
+    # obj.insert_Newsi_data()
+    obj.insert_ExistingSi_data()
+    # obj.insert_ClosedSi_data()
+    # obj.insert_Rework_data()
+    # obj.insert_HW_data()
+    # obj.insert_SW_Original_data()
+    # obj.insert_IFWI_Orignal_data()
+    # obj.insert_SW_data()
+    # obj.insert_IFWI_data()
+    # obj.insert_Platform_data()
+    # obj.insert_Mapping()
+    # obj.insert_CaseResult()
+    # obj.insert_save_miss_data()
+    # obj.insert_test_time_data()
+    obj.close_workbook()
+    print time.time() - start
 
 
 

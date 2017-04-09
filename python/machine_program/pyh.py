@@ -146,24 +146,24 @@ class PyH(Tag):
     def addCSS(self, *arg):
         for f in arg: self.head += link(rel='stylesheet', type='text/css', href=f)
 
-    def printOut(self, file=''):
-        if file:
-            f = open(file, 'w')
-        else:
-            f = stdout
-        f.write(doctype)
-        f.write(self.render())
-        f.flush()
-        if file: f.close()
-    # def printOut(self, file='', etc='utf-8'):
+    # def printOut(self, file=''):
     #     if file:
-    #         f = open(file, 'wb')
+    #         f = open(file, 'w')
     #     else:
     #         f = stdout
-    #     f.write(doctype.encode(etc))
-    #     f.write(self.render().encode(etc))
+    #     f.write(doctype)
+    #     f.write(self.render())
     #     f.flush()
     #     if file: f.close()
+    def printOut(self, file='', etc='utf-8'):
+        if file:
+            f = open(file, 'wb')
+        else:
+            f = stdout
+        f.write(doctype.encode(etc))
+        f.write(self.render().encode(etc))
+        f.flush()
+        if file: f.close()
 
 
 class TagCounter:

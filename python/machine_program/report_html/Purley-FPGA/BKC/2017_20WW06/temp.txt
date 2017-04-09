@@ -1,0 +1,240 @@
+                <span class="sh2">  Existing Sightings </span>
+                <div class="FoldIcon">
+                    <div class="CollapseBtn not-collapsed collapsed" data-toggle="collapse" href="#collapseExistingSightings"></div>
+                </div>
+            </div>
+            <div id="collapseExistingSightings" class="panel-collapse collapse ">
+                <div class="panel-body">
+                
+                <table class="MsoNormalTable" width="100%">
+                    <tbody><tr>
+                         <th width="5%">ID</th>
+                        <th width="45%">Title</th>
+                        <th width="7%">Priority</th>
+                        <th width="7%">Severity</th>
+                        <th width="7%">Owner</th>
+                        <th width="7%">Status</th>
+                        <th width="10%">Subsystem</th>
+                        <th width="12%">Promoted ID</th>
+                    </tr>
+                      
+                        
+                            <tr style="background-color:#ff6633">
+                        
+                        
+                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345474">5345474</a></td>
+                        
+                         <td style="text-align:left;">[2016_WW43 BKC][BIOS:105_D11][Neon city FPGA] There would be a caterr and then reset when running the reboot stress test.</td>
+                         <td>P2</td>
+                         <td>2 High</td>
+                         <td>xililix</td>
+                         <td>Assigned</td>
+                         <td>PMC FW</td>
+                         <td>
+                                    
+                                
+                                    
+                                                
+                                                    <p> <a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345486">5345486</a></p>
+                                                
+                                            
+                                        
+                                    
+                        </td>
+                     </tr>
+                     
+                        
+                            <tr style="background-color:#ff6633">
+                        
+                        
+                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345509">5345509</a></td>
+                        
+                         <td style="text-align:left;">[2016_WW44 BKC][BIOS:106_D11][Neon city FPGA]Occasionally cat error and hang at code 'A9' during warmboot cycling tests</td>
+                         <td>P2</td>
+                         <td>2 High</td>
+                         <td>taylorke</td>
+                         <td>Assigned</td>
+                         <td></td>
+                         <td>
+                                    
+                                
+                                            <p>N/A</p>
+                                        
+                                    
+                        </td>
+                     </tr>
+                     
+                        
+                            <tr>
+                        
+                        
+                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345719">5345719</a></td>
+                        
+                         <td style="text-align:left;">[2016_WW50 BKC][BIOS:112_D10][Neon city FPGA]After run CPU workload by PTU ,QL66 CPU frequency and consumption are less than normal.</td>
+                         <td>P2</td>
+                         <td>3 Medium</td>
+                         <td>kdakdemi</td>
+                         <td>Assigned</td>
+                         <td>Silicon</td>
+                         <td>
+                                    
+                                
+                                            <p>N/A</p>
+                                        
+                                    
+                        </td>
+                     </tr>
+                     
+                        
+                            <tr>
+                        
+                        
+                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345865">5345865</a></td>
+                        
+                         <td style="text-align:left;">[2017_WW04 BKC][BIOS 119.R05][P&P][Neon City FPGA]After changed the CPU from B0 QL66 to H0 QM39, the system power consumption with NLB loading test increased 5.93% (from 291.1W to 308.4W)</td>
+                         <td>P2</td>
+                         <td>3 Medium</td>
+                         <td>zyang30</td>
+                         <td>Assigned</td>
+                         <td></td>
+                         <td>
+                                    
+                                
+                                            <p>N/A</p>
+                                        
+                                    
+                        </td>
+                     </tr>
+                     
+                        
+                            <tr>
+                        
+                        
+                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345866">5345866</a></td>
+                        
+                         <td style="text-align:left;">[2017_WW04 BKC][BIOS 119.R05][P&P][Neon City FPGA] After changed CPU from B0 QLJ6 to H0 QM38, the MP Linpack score dropped 6.47% (from 1453.7Gflops/s to 1359.6 Gflops/s)</td>
+                         <td>P2</td>
+                         <td>3 Medium</td>
+                         <td>zyang30</td>
+                         <td>Assigned</td>
+                         <td></td>
+                         <td>
+                                    
+                                
+                                            <p>N/A</p>
+                                        
+                                    
+                        </td>
+                     </tr>
+                     
+                        
+                            <tr>
+                        
+                        
+                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345867">5345867</a></td>
+                        
+                         <td style="text-align:left;">[2017_WW04 BKC][BIOS 119.R05][P&P][Neon City FPGA] After changed CPU from B0 QLJ6 to H0 QM38,the MLC memory local idle latency increased 28.57% (from 65.8ns to 84.6ns)</td>
+                         <td>P2</td>
+                         <td>3 Medium</td>
+                         <td>zyang30</td>
+                         <td>Assigned</td>
+                         <td></td>
+                         <td>
+                                    
+                                
+                                            <p>N/A</p>
+                                        
+                                    
+                        </td>
+                     </tr>
+                     
+                        
+                            <tr>
+                        
+                        
+                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345868">5345868</a></td>
+                        
+                         <td style="text-align:left;">[2017_WW04 BKC][BIOS 119.R05][P&P][Neon City FPGA] After changed CPU from B0 QLJ6 to H0 QM38,MLC memory remote idle latency increased 9.25% (from 135.2ns to 147.7ns)</td>
+                         <td>P2</td>
+                         <td>3 Medium</td>
+                         <td>zyang30</td>
+                         <td>Assigned</td>
+                         <td></td>
+                         <td>
+                                    
+                                
+                                            <p>N/A</p>
+                                        
+                                    
+                        </td>
+                     </tr>
+                     
+                        
+                            <tr>
+                        
+                        
+                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345803">5345803</a></td>
+                        
+                         <td style="text-align:left;">[2016_WW52 BKC][BIOS:114_R09][Neon city FPGA]MCE error found after system reboot</td>
+                         <td>P3</td>
+                         <td>3 Medium</td>
+                         <td>yanghe1</td>
+                         <td>Assigned</td>
+                         <td></td>
+                         <td>
+                                    
+                                
+                                            <p>N/A</p>
+                                        
+                                    
+                        </td>
+                     </tr>
+                     
+                        
+                            <tr>
+                        
+                        
+                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345853">5345853</a></td>
+                        
+                         <td style="text-align:left;">[2017_WW04 BKC][BIOS:119_R05][Neon city FPGA]After run CPU workload by PTU , QM39 CPU frequency can’t turbo.</td>
+                         <td>P3</td>
+                         <td>3 Medium</td>
+                         <td>kdakdemi</td>
+                         <td>Assigned</td>
+                         <td>uCode</td>
+                         <td>
+                                    
+                                
+                                            <p>N/A</p>
+                                        
+                                    
+                        </td>
+                     </tr>
+                     
+                        
+                            <tr>
+                        
+                        
+                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345420">5345420</a></td>
+                        
+                         <td style="text-align:left;">[2016_WW40 BKC][BIOS:102_D12][Neon city FPGA]CPLD 1 version show‘F.F’ after flash CPLD 0x11_0x22</td>
+                         <td>P3</td>
+                         <td>4 Low</td>
+                         <td>jdbolano</td>
+                         <td>Assigned</td>
+                         <td>Board</td>
+                         <td>
+                                    
+                                
+                                            <p>N/A</p>
+                                        
+                                    
+                        </td>
+                     </tr>
+                     
+                 
+                </tbody></table><br>
+                </div>
+            </div>
+        </div>
+        <div class="panel collapse-report-panel">

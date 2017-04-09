@@ -1,0 +1,131 @@
+                <span class="sh2">  Existing Sightings </span>
+                <div class="FoldIcon">
+                    <div class="CollapseBtn not-collapsed collapsed" data-toggle="collapse" href="#collapseExistingSightings"></div>
+                </div>
+            </div>
+            <div id="collapseExistingSightings" class="panel-collapse collapse ">
+                <div class="panel-body">
+                
+                <table class="MsoNormalTable" width="100%">
+                    <tbody><tr>
+                         <th width="5%">ID</th>
+                        <th width="45%">Title</th>
+                        <th width="7%">Priority</th>
+                        <th width="7%">Severity</th>
+                        <th width="7%">Owner</th>
+                        <th width="7%">Status</th>
+                        <th width="10%">Subsystem</th>
+                        <th width="12%">Promoted ID</th>
+                    </tr>
+                      
+                        
+                            <tr>
+                        
+                        
+                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345416">5345416</a></td>
+                        
+                         <td style="text-align:left;">[2016_WW40 BKC][BIOS:102_D12][Neon city FPGA] CPLD code stop at 0.6 when SUT shutdown</td>
+                         <td>P2</td>
+                         <td>3 Medium</td>
+                         <td>yanghe1</td>
+                         <td>Assigned</td>
+                         <td></td>
+                         <td>
+                                    
+                                
+                                            <p>N/A</p>
+                                        
+                                    
+                        </td>
+                     </tr>
+                     
+                        
+                            <tr>
+                        
+                        
+                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345419">5345419</a></td>
+                        
+                         <td style="text-align:left;">[2016_WW40 BKC][BIOS:102_D12][Neon city FPGA]Cannot ping BMC IP in RHEL</td>
+                         <td>P2</td>
+                         <td>3 Medium</td>
+                         <td>grwheele</td>
+                         <td>Assigned</td>
+                         <td></td>
+                         <td>
+                                    
+                                
+                                            <p>N/A</p>
+                                        
+                                    
+                        </td>
+                     </tr>
+                     
+                        
+                            <tr>
+                        
+                        
+                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345424">5345424</a></td>
+                        
+                         <td style="text-align:left;">[2016_WW40 BKC][BIOS:102_D12][Neon city FPGA]System  will  Reboot when boot to  tboot  kernel</td>
+                         <td>P2</td>
+                         <td>3 Medium</td>
+                         <td>yanghe1</td>
+                         <td>Assigned</td>
+                         <td></td>
+                         <td>
+                                    
+                                
+                                            <p>N/A</p>
+                                        
+                                    
+                        </td>
+                     </tr>
+                     
+                        
+                            <tr>
+                        
+                        
+                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345465">5345465</a></td>
+                        
+                         <td style="text-align:left;">[2016_WW42 BKC][BIOS:104_D12][Neon city FPGA]The consumption can’t rise when set T state from maxmum to minimum.</td>
+                         <td>P3</td>
+                         <td>3 Medium</td>
+                         <td>jwesteba</td>
+                         <td>Assigned</td>
+                         <td></td>
+                         <td>
+                                    
+                                
+                                            <p>N/A</p>
+                                        
+                                    
+                        </td>
+                     </tr>
+                     
+                        
+                            <tr>
+                        
+                        
+                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345420">5345420</a></td>
+                        
+                         <td style="text-align:left;">[2016_WW40 BKC][BIOS:102_D12][Neon city FPGA]CPLD 1 version show‘F.F’ after flash CPLD 0x11_0x22</td>
+                         <td>P3</td>
+                         <td>4 Low</td>
+                         <td>jdbolano</td>
+                         <td>Assigned</td>
+                         <td></td>
+                         <td>
+                                    
+                                
+                                            <p>N/A</p>
+                                        
+                                    
+                        </td>
+                     </tr>
+                     
+                 
+                </tbody></table><br>
+                </div>
+            </div>
+        </div>
+        <div class="panel collapse-report-panel">
