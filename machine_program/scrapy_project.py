@@ -93,8 +93,8 @@ urllib2.install_opener(opener)
 #发起请求------------------------------
 #设置请求参数
 postdata = {
-    'username':'1160177283@qq.com',
-    'password':'QQ@08061635',
+    'username':'name',
+    'password':'password',
     'type':1
     }
 postdata = urllib.urlencode(postdata)
