@@ -11,17 +11,21 @@ import sys
 import copy
 import time
 import xlrd
-import get_word
+import Queue
+import extract_data
 import openpyxl
+import threading
 import xlsxwriter
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
 
-class InsertDataIntoExcel():
-    def __init__(self):
+class InsertDataIntoExcel(object):
+    def __init__(self, verificate_flag=False):
         self.alp_label_list = []
         self.effective_alp_list = []
+        #验证标志,默认不开启,即预测
+        self.verificate_flag = verificate_flag
         #url列表初始化
         self.return_label_num_list()
         self.generate_column_alp_list()
@@ -84,6 +88,9 @@ class InsertDataIntoExcel():
             # 'valign': 'vcenter',
             # 'indent': 1,
         })
+
+    def get_url_list(self):
+        return self.FPGA_Silver_url_list
 
     def get_url_list_by_keyword(self, pre_keyword, back_keyword, key_url_list=None):
         if not key_url_list:
@@ -177,21 +184,68 @@ class InsertDataIntoExcel():
             col = 1
             for cell in rs:
                 data = rb_sheet.cell(row=row, column=col).value
-                # print data, type(data)
                 if isinstance(data, (str, long, unicode, bool, float)):
                     wb_sheet_name.write(row - 1, col - 1, data)
                 col += 1
             row += 1
+        #清除最新一周数据，防止拷贝多余的数据
+        #NewSi、ExistingSi前四列是公式
+        if data_type == 'NewSi' or data_type == 'ExistingSi':
+            for row in range(2, 50):
+                for col in range(4, 13):
+                    wb_sheet_name.write(row, col, ' ')
+        #ClosedSi前四列是公式
+        elif data_type == 'ClosedSi':
+            for row in range(2, 50):
+                for col in range(4, 14):
+                    wb_sheet_name.write(row, col, ' ')
+        #Rework第二列是公式
+        elif data_type == 'Rework':
+            for row in range(1, 50):
+                for col in range(0, 3):
+                    if col == 1:
+                        continue
+                    wb_sheet_name.write(row, col, ' ')
+        # HW第二行和第3列是公式
+        elif data_type == 'HW':
+            for row in range(1, 50):
+                if row == 1:
+                    continue
+                for col in range(0, 14):
+                    if col == 2:
+                        continue
+                    wb_sheet_name.write(row, col, ' ')
+        # SW_Original第1、2列是公式
+        elif data_type == 'SW_Original':
+            for row in range(1, 50):
+                for col in range(2, 10):
+                    wb_sheet_name.write(row, col, ' ')
+        # SW第1、2列是公式
+        elif data_type == 'SW':
+            for row in range(0, 50):
+                if row == '14':
+                    continue
+                for col in range(2, 10):
+                    wb_sheet_name.write(row, col, ' ')
+        # IFWI_Original和IFWI第1、2列是公式
+        elif data_type == 'IFWI_Original' or data_type == 'IFWI':
+            for row in range(3, 50):
+                for col in range(2, 7):
+                    wb_sheet_name.write(row, col, ' ')
 
     def insert_Newsi_data(self):
         print '开始获取 New Sightings 数据........\n'
         # 获取公式并插入指定位置
-        self.get_formula_data('NewSi', self.worksheet_newsi)
+        self.get_formula_data(u'NewSi', self.worksheet_newsi)
         header_fix_list = [u'ID', u'Title', u'Priority', u'Severity', u'Owner', u'Status', u'Subsystem', u'Promoted ID']
-        for j in range(24):
+        for j in range(25):
             print '开始插入第[ %d ]个[ %s ]对应的数据' % (j + 1, self.FPGA_Silver_url_list[j])
-            obj = get_word.GetAnalysisData(self.FPGA_Silver_url_list[j])
-            date_string, effective_url_list, header_list, cell_data_list = obj.get_new_sightings_data('New Sightings')
+            obj = extract_data.GetAnalysisData(self.FPGA_Silver_url_list[j])
+            if j == 0:
+                date_string, effective_url_list, header_list, cell_data_list = obj.get_new_sightings_data('New Sightings', self.verificate_flag)
+            else:
+                date_string, effective_url_list, header_list, cell_data_list = obj.get_new_sightings_data('New Sightings', True)
+
             self.worksheet_newsi.conditional_format(1, self.canculate_head_num(13, j, 1), 12, self.canculate_head_num(13, j, 3),
                                                          {'type': 'cell', 'criteria': '=', 'value': True, 'format': self.format1})
             insert_data_list_1 = [date_string, 'NOT Reported in next release?', 'NOT Reported in previous release?',
@@ -230,9 +284,12 @@ class InsertDataIntoExcel():
         # 获取公式并插入指定位置
         self.get_formula_data('ExistingSi', self.worksheet_existing)
         for j in range(24):
-            print '开始插入第[ %d ]个[ %s ]对应的数据' % (j + 1, self.FPGA_Silver_url_list[j])
-            obj = get_word.GetAnalysisData(self.FPGA_Silver_url_list[j])
-            url_list, header_list, cell_data_list, date_string = obj.get_existing_sighting_data('Existing Sightings')
+            # print '开始插入第[ %d ]个[ %s ]对应的数据' % (j + 1, self.FPGA_Silver_url_list[j])
+            obj = extract_data.GetAnalysisData(self.FPGA_Silver_url_list[j])
+            if j == 0:
+                url_list, header_list, cell_data_list, date_string = obj.get_existing_sighting_data('Existing Sightings', self.verificate_flag)
+            else:
+                url_list, header_list, cell_data_list, date_string = obj.get_existing_sighting_data('Existing Sightings', True)
             #增加一列comments
             header_list.append('comments')
             try:
@@ -253,7 +310,7 @@ class InsertDataIntoExcel():
                 for ele in cell_data_list:
                     num = len(ele[7:])
                     line_num_list.append(num)
-                print line_num_list
+                # print line_num_list
 
                 nu = 2
                 # 插入数据第一列到第三列
@@ -280,17 +337,21 @@ class InsertDataIntoExcel():
             except:
                 print '爬取第[ %d ]个[ %s ]对应的数据失败' % (j + 1, self.FPGA_Silver_url_list[j])
                 fail_url_list.append(self.FPGA_Silver_url_list[j])
-        print '失败的url列表:\t', fail_url_list
-        print '结束获取  Existing Sightings 数据........\n'
+        # print '失败的url列表:\t', fail_url_list
+        # print '结束获取  Existing Sightings 数据........\n'
 
     def insert_ClosedSi_data(self):
         print '开始获取 New Sightings 数据........\n'
         # 获取公式并插入指定位置
         self.get_formula_data('ClosedSi', self.worksheet_closesi)
         for j in range(24):
-            print '开始插入第[ %d ]个[ %s ]对应的数据' % (j + 1, self.FPGA_Silver_url_list[j])
-            obj = get_word.GetAnalysisData(self.FPGA_Silver_url_list[j])
-            date_string, effective_url_list, header_list, cell_data_list = obj.get_closed_sightings_data('Closed Sightings')
+            # print '开始插入第[ %d ]个[ %s ]对应的数据' % (j + 1, self.FPGA_Silver_url_list[j])
+            obj = extract_data.GetAnalysisData(self.FPGA_Silver_url_list[j])
+            if j == 0:
+                date_string, effective_url_list, header_list, cell_data_list = obj.get_closed_sightings_data('Closed Sightings', self.verificate_flag)
+            else:
+                date_string, effective_url_list, header_list, cell_data_list = obj.get_closed_sightings_data('Closed Sightings', True)
+
             self.worksheet_closesi.conditional_format(1, self.canculate_head_num(13, j, 1), 12, self.canculate_head_num(13, j, 3),
                                                          {'type': 'cell', 'criteria': '=', 'value': True, 'format': self.format1})
             insert_data_list_1 = [date_string, 'NOT Reported in next release?', 'NOT Reported in previous release?',
@@ -321,13 +382,17 @@ class InsertDataIntoExcel():
         print '开始获取 HW Rework 数据........\n'
         # 获取公式并插入指定位置
         self.get_formula_data('Rework', self.worksheet_rework)
-        for j in range(24):
+        for j in range(25):
             try:
-                print '开始插入第[ %d ]个[ %s ]对应的数据' % (j + 1, self.FPGA_Silver_url_list[j])
-                obj = get_word.GetAnalysisData(self.FPGA_Silver_url_list[j])
-                object_string_list, date_string = obj.get_rework_data('HW Rework')
+                # print '开始插入第[ %d ]个[ %s ]对应的数据' % (j + 1, self.FPGA_Silver_url_list[j])
+                obj = extract_data.GetAnalysisData(self.FPGA_Silver_url_list[j])
+                #最新的一周在验证标志未开启的情况下取Silver数据,否则取BKC数据
+                if j == 0:
+                    object_string_list, date_string = obj.get_rework_data('HW Rework', self.verificate_flag)
+                else:
+                    object_string_list, date_string = obj.get_rework_data('HW Rework', True)
                 # 标记True为红色
-                self.worksheet_rework.conditional_format(1, self.canculate_head_num(3, j, 1), 12, self.canculate_head_num(3, j, 1),
+                self.worksheet_rework.conditional_format(1, self.canculate_head_num(3, j, 1), 100, self.canculate_head_num(3, j, 1),
                                                            {'type': 'cell', 'criteria': '=', 'value': True, 'format': self.format1})
                 self.worksheet_rework.write_row(0, self.canculate_head_num(3, j), ['HW Rework', 'Changed from previous configuration?'])
                 self.worksheet_rework.write_column(1, self.canculate_head_num(3, j, 2), object_string_list)
@@ -338,8 +403,8 @@ class InsertDataIntoExcel():
             except:
                 print '爬取第[ %d ]个[ %s ]对应的数据失败' % (j + 1, self.FPGA_Silver_url_list[j])
                 fail_url_list.append(self.FPGA_Silver_url_list[j])
-        print '失败的url列表:\t', fail_url_list
-        print '结束获取 HW Rework 数据........\n'
+        # print '失败的url列表:\t', fail_url_list
+        # print '结束获取 HW Rework 数据........\n'
 
     def insert_HW_data(self):
         insert_row_formula_list = []
@@ -347,11 +412,14 @@ class InsertDataIntoExcel():
         print '开始获取 HW Configuration 数据........\n'
         # 获取公式并插入指定位置
         self.get_formula_data('HW', self.worksheet_hw)
-        for j in range(24):
-            print '开始插入第[ %d ]个[ %s ]对应的数据' % (j + 1, self.FPGA_Silver_url_list[j])
+        for j in range(len(self.FPGA_Silver_url_list)):
+            # print '开始插入第[ %d ]个[ %s ]对应的数据' % (j + 1, self.FPGA_Silver_url_list[j])
             # 获取提取的待插入excel表的数据
-            obj = get_word.GetAnalysisData(self.FPGA_Silver_url_list[j])
-            date_string, row_coordinates_list, column_coordinates_list, cell_data_list = obj.get_hw_data('HW Configuration')
+            obj = extract_data.GetAnalysisData(self.FPGA_Silver_url_list[j])
+            if j == 0:
+                date_string, row_coordinates_list, column_coordinates_list, cell_data_list = obj.get_hw_data('HW Configuration', self.verificate_flag)
+            else:
+                date_string, row_coordinates_list, column_coordinates_list, cell_data_list = obj.get_hw_data('HW Configuration', True)
             #判断这周有无数据， 例如：第40周的数据为空
             if not cell_data_list:
                 print '本周数据为空!!!'
@@ -405,8 +473,8 @@ class InsertDataIntoExcel():
                 self.worksheet_hw.write(9, 1 , '=' + 'OR(IF(OR(ISBLANK(E3),ISBLANK(R3)),FALSE,NOT(EXACT(E3,R3))),IF(OR(ISBLANK(E4),ISBLANK(R4)),FALSE,NOT(EXACT(E4,R4))),IF(OR(ISBLANK(E5),ISBLANK(R5)),FALSE,NOT(EXACT(E5,R5))),IF(OR(ISBLANK(E6),ISBLANK(R6)),FALSE,NOT(EXACT(E6,R6))),IF(OR(ISBLANK(E7),ISBLANK(R7)),FALSE,NOT(EXACT(E7,R7))),IF(OR(ISBLANK(E8),ISBLANK(R8)),FALSE,NOT(EXACT(E8,R8))),IF(OR(ISBLANK(E9),ISBLANK(R9)),FALSE,NOT(EXACT(E9,R9))))')
                 print '爬取第[ %d ]个[ %s ]对应的数据失败' % (j + 1, self.FPGA_Silver_url_list[j])
                 fail_url_list.append(self.FPGA_Silver_url_list[j])
-        print '失败的url列表:\t', fail_url_list
-        print '结束获取 HW Configuration 数据........\n'
+        # print '失败的url列表:\t', fail_url_list
+        # print '结束获取 HW Configuration 数据........\n'
 
     def insert_SW_Original_data(self):
         fail_url_list = []
@@ -415,9 +483,13 @@ class InsertDataIntoExcel():
         self.get_formula_data('SW_Original', self.worksheet_sw_orignal)
         for j in range(24):
             try:
-                print '开始插入第[ %d ]个[ %s ]对应的数据' %(j+1, self.FPGA_Silver_url_list[j])
-                obj = get_word.GetAnalysisData(self.FPGA_Silver_url_list[j])
-                date_string, url_list, header_list, cell_data_list, left_col_list_1, left_col_list_2 = obj.get_sw_data('SW Configuration')
+                # print '开始插入第[ %d ]个[ %s ]对应的数据' %(j+1, self.FPGA_Silver_url_list[j])
+                obj = extract_data.GetAnalysisData(self.FPGA_Silver_url_list[j])
+                if j == 0:
+                    date_string, url_list, header_list, cell_data_list, left_col_list_1, left_col_list_2 = obj.get_sw_data('SW Configuration', self.verificate_flag)
+                else:
+                    date_string, url_list, header_list, cell_data_list, left_col_list_1, left_col_list_2 = obj.get_sw_data('SW Configuration', True)
+
                 # Set up some formats to use.
                 # 标记True为红色
                 self.worksheet_sw_orignal.conditional_format(1, self.canculate_head_num(9, j), 40, self.canculate_head_num(9, j, 1),
@@ -462,11 +534,11 @@ class InsertDataIntoExcel():
                             self.worksheet_sw_orignal.write_url(i, self.canculate_head_num(9, j, 8), url_list[line][1 + i - nu], self.url_format, cell_data_list[line][3:][i - nu])
                         self.worksheet_sw_orignal.write(line_num_list[line] + nu - 1, self.canculate_head_num(9, j, 8), cell_data_list[line][3:][-1])
                         nu += line_num_list[line]
-            except:
+            except Ellipsis:
                 print '爬取第[ %d ]个[ %s ]对应的数据失败' % (j + 1, self.FPGA_Silver_url_list[j])
                 fail_url_list.append(self.FPGA_Silver_url_list[j])
-        print '失败的url列表:\t', fail_url_list
-        print '结束获取 SW_Original Configuration 数据........\n'
+        # print '失败的url列表:\t', fail_url_list
+        # print '结束获取 SW_Original Configuration 数据........\n'
 
     def insert_IFWI_Orignal_data(self):
         print '开始获取 IFWI_Orignal Configuration 数据........\n'
@@ -475,9 +547,13 @@ class InsertDataIntoExcel():
         self.get_formula_data('IFWI_Original', self.worksheet_ifwi_orignal)
         for j in range(24):
             try:
-                print '开始插入第[ %d ]个[ %s ]对应的数据' % (j + 1, self.FPGA_Silver_url_list[j])
-                obj = get_word.GetAnalysisData(self.FPGA_Silver_url_list[j])
-                date_string, header_list, cell_data_list = obj.get_ifwi_data('IFWI Configuration')
+                # print '开始插入第[ %d ]个[ %s ]对应的数据' % (j + 1, self.FPGA_Silver_url_list[j])
+                obj = extract_data.GetAnalysisData(self.FPGA_Silver_url_list[j])
+                if j == 0:
+                    date_string, header_list, cell_data_list = obj.get_ifwi_data('IFWI Configuration', self.verificate_flag)
+                else:
+                    date_string, header_list, cell_data_list = obj.get_ifwi_data('IFWI Configuration', True)
+
                 # Set up some formats to use.
                 self.worksheet_ifwi_orignal.conditional_format(3, self.canculate_head_num(6, j), 50, self.canculate_head_num(6, j, 1),
                                                              {'type': 'cell', 'criteria': '=', 'value': True, 'format': self.format1})
@@ -504,8 +580,8 @@ class InsertDataIntoExcel():
             except ValueError:
                 print '爬取第[ %d ]个[ %s ]对应的数据失败' % (j + 1, self.FPGA_Silver_url_list[j])
                 fail_url_list.append(self.FPGA_Silver_url_list[j])
-        print '失败的url列表:\t', fail_url_list
-        print '结束获取 IFWI_Orignal Configuration 数据........\n'
+        # print '失败的url列表:\t', fail_url_list
+        # print '结束获取 IFWI_Orignal Configuration 数据........\n'
 
     def insert_SW_data(self):
         print '开始获取 SW Configuration 数据........\n'
@@ -514,9 +590,12 @@ class InsertDataIntoExcel():
         self.get_formula_data('SW', self.worksheet_sw)
         for j in range(24):
             try:
-                print '开始插入第[ %d ]个[ %s ]对应的数据' % (j + 1, self.FPGA_Silver_url_list[j])
-                obj = get_word.GetAnalysisData(self.FPGA_Silver_url_list[j])
-                date_string, url_list, header_list, cell_data_list, left_col_list_1, left_col_list_2 = obj.get_sw_data('SW Configuration')
+                # print '开始插入第[ %d ]个[ %s ]对应的数据' % (j + 1, self.FPGA_Silver_url_list[j])
+                obj = extract_data.GetAnalysisData(self.FPGA_Silver_url_list[j])
+                if j == 0:
+                    date_string, url_list, header_list, cell_data_list, left_col_list_1, left_col_list_2 = obj.get_sw_data('SW Configuration', self.verificate_flag)
+                else:
+                    date_string, url_list, header_list, cell_data_list, left_col_list_1, left_col_list_2 = obj.get_sw_data('SW Configuration', True)
                 # Set up some formats to use.
                 self.worksheet_sw.conditional_format(1, self.canculate_head_num(9, j), 40, self.canculate_head_num(9, j, 1),
                                                              {'type': 'cell', 'criteria': '=', 'value': True, 'format': self.format1})
@@ -551,8 +630,8 @@ class InsertDataIntoExcel():
             except EOFError:
                 print '爬取第[ %d ]个[ %s ]对应的数据失败' % (j + 1, self.FPGA_Silver_url_list[j])
                 fail_url_list.append(self.FPGA_Silver_url_list[j])
-        print '失败的url列表:\t', fail_url_list
-        print '结束获取 SW Configuration 数据........\n'
+        # print '失败的url列表:\t', fail_url_list
+        # print '结束获取 SW Configuration 数据........\n'
 
     def insert_IFWI_data(self):
         print '开始获取 IFWI Configuration 数据........\n'
@@ -561,9 +640,13 @@ class InsertDataIntoExcel():
         self.get_formula_data('IFWI', self.worksheet_ifwi)
         for j in range(24):
             try:
-                print '开始插入第[ %d ]个[ %s ]对应的数据' % (j + 1, self.FPGA_Silver_url_list[j])
-                obj = get_word.GetAnalysisData(self.FPGA_Silver_url_list[j])
-                date_string, header_list, cell_data_list = obj.get_ifwi_data('IFWI Configuration')
+                # print '开始插入第[ %d ]个[ %s ]对应的数据' % (j + 1, self.FPGA_Silver_url_list[j])
+                obj = extract_data.GetAnalysisData(self.FPGA_Silver_url_list[j])
+                if j == 0:
+                    date_string, header_list, cell_data_list = obj.get_ifwi_data('IFWI Configuration',self.verificate_flag)
+                else:
+                    date_string, header_list, cell_data_list = obj.get_ifwi_data('IFWI Configuration', True)
+
                 # Set up some formats to use.
                 self.worksheet_ifwi.conditional_format(3, self.canculate_head_num(6, j), 50, self.canculate_head_num(6, j, 1),
                                                              {'type': 'cell', 'criteria': '=', 'value': True, 'format': self.format1})
@@ -591,8 +674,8 @@ class InsertDataIntoExcel():
             except ValueError:
                 print '爬取第[ %d ]个[ %s ]对应的数据失败' % (j + 1, self.FPGA_Silver_url_list[j])
                 fail_url_list.append(self.FPGA_Silver_url_list[j])
-        print '失败的url列表:\t', fail_url_list
-        print '结束获取 IFWI Configuration 数据........\n'
+        # print '失败的url列表:\t', fail_url_list
+        # print '结束获取 IFWI Configuration 数据........\n'
 
     def insert_Mapping(self):
         width = len(self.FPGA_Silver_url_list)
@@ -630,7 +713,7 @@ class InsertDataIntoExcel():
         for head in row_value_list:
             row_header_list.append(head)
             row_header_list.append(' ')
-        self.worksheet_mapping.write_row(4, 32, row_header_list, self.header_format)
+        self.worksheet_mapping.write_row(4, 4+width+4, row_header_list, self.header_format)
 
     def insert_CaseResult(self):
         print '开始获取 CaseResult 数据........\n'
@@ -639,25 +722,33 @@ class InsertDataIntoExcel():
         self.get_formula_data('CaseResult', self.worksheet_caseresult)
         for j in range(1):
             try:
-                print '开始插入第[ %d ]个[ %s ]对应的数据' % (j + 1, self.FPGA_Silver_url_list[j])
-                obj = get_word.GetAnalysisData(self.FPGA_Silver_url_list[j])
-                tip_string, header_list, cell_data_list = obj.get_caseresult_data('Platform Integration Validation Result')
+                # print '开始插入第[ %d ]个[ %s ]对应的数据' % (j + 1, self.FPGA_Silver_url_list[j])
+                obj = extract_data.GetAnalysisData(self.FPGA_Silver_url_list[j])
+                if j == 0:
+                    tip_string, header_list, cell_data_list = obj.get_caseresult_data('Platform Integration Validation Result', self.verificate_flag)
+                else:
+                    tip_string, header_list, cell_data_list = obj.get_caseresult_data('Platform Integration Validation Result', True)
+
                 # 标记True为红色
                 self.worksheet_caseresult.conditional_format(0, 0, 5000, 1000, {'type': 'cell', 'criteria': '=', 'value': True, 'format': self.format1})
             except:
                 print '爬取第[ %d ]个[ %s ]对应的数据失败' % (j + 1, self.FPGA_Silver_url_list[j])
                 fail_url_list.append(self.FPGA_Silver_url_list[j])
-        print '失败的url列表:\t', fail_url_list
-        print '结束获取 CaseResult 数据........\n'
+        # print '失败的url列表:\t', fail_url_list
+        # print '结束获取 CaseResult 数据........\n'
 
     def insert_Platform_data(self):
         print '开始获取 Platform Integration Validation Result 数据........\n'
         fail_url_list = []
         for j in range(24):
             try:
-                print '开始插入第[ %d ]个[ %s ]对应的数据' % (j + 1, self.FPGA_Silver_url_list[j])
-                obj = get_word.GetAnalysisData(self.FPGA_Silver_url_list[j])
-                date_string, url_list, header_list, cell_data_list = obj.get_platform_data('Platform Integration Validation Result')
+                # print '开始插入第[ %d ]个[ %s ]对应的数据' % (j + 1, self.FPGA_Silver_url_list[j])
+                obj = extract_data.GetAnalysisData(self.FPGA_Silver_url_list[j])
+                if j == 0:
+                    date_string, url_list, header_list, cell_data_list = obj.get_platform_data('Platform Integration Validation Result', self.verificate_flag)
+                else:
+                    date_string, url_list, header_list, cell_data_list = obj.get_platform_data('Platform Integration Validation Result', True)
+
                 # Set up some formats to use.
                 # 标记True为红色
                 self.worksheet_platform.conditional_format(2, self.canculate_head_num(12, j, 5), 20, self.canculate_head_num(12, j, 5),
@@ -699,8 +790,8 @@ class InsertDataIntoExcel():
             except:
                 print '爬取第[ %d ]个[ %s ]对应的数据失败' % (j + 1, self.FPGA_Silver_url_list[j])
                 fail_url_list.append(self.FPGA_Silver_url_list[j])
-        print '失败的url列表:\t', fail_url_list
-        print '结束获取 Platform Integration Validation Result 数据........\n'
+        # print '失败的url列表:\t', fail_url_list
+        # print '结束获取 Platform Integration Validation Result 数据........\n'
 
     def insert_save_miss_data(self):
         # 获取公式并插入指定位置
@@ -715,6 +806,9 @@ class InsertDataIntoExcel():
         self.worksheet_test_time.conditional_format(0, 0, 5000, 1000, {'type': 'cell', 'criteria': '=', 'value': True,
                                                                        'format': self.format1})
 
+    def return_name(self):
+        return self.__class__.__dict__
+
     def close_workbook(self):
         self.workbook.close()
 
@@ -722,14 +816,59 @@ class InsertDataIntoExcel():
 if __name__ == '__main__':
     start = time.time()
     obj = InsertDataIntoExcel()
+    # getattr(obj, 'insert_ExistingSi_data')()
+    func_name_list = obj.return_name().keys()
+    use_func_list = [ func for func in func_name_list if func.startswith('insert') ]
+    print use_func_list
+    # for func in use_func_list:
+    #     getattr(obj, func)()
+    # thread_list = []
+    # for func in use_func_list:
+    #     thread_list.append(threading.Thread(target=getattr(obj, func), args=()))
+    # for thread in thread_list:
+    #     thread.start()
+    # for thread in thread_list:
+    #     thread.join()
+    # import Queue, random
+    # def read(q, obj):
+    #     while True:
+    #         try:
+    #             value = q.get()
+    #             print('Get %s from queue.' % value)
+    #             getattr(obj, value)()
+    #             time.sleep(random.random())
+    #         finally:
+    #             q.task_done()
+    # def main():
+    #     q = Queue.Queue()
+    #     pw1 = threading.Thread(target=read, args=(q, obj))
+    #     # pw2 = threading.Thread(target=read, args=(q, obj))
+    #     # pw3 = threading.Thread(target=read, args=(q, obj))
+    #     # pw4 = threading.Thread(target=read, args=(q, obj))
+    #     # pw1.daemon = True
+    #     # pw2.daemon = True
+    #     # pw3.daemon = True
+    #     # pw4.daemon = True
+    #     pw1.start()
+    #     # pw2.start()
+    #     # pw3.start()
+    #     # pw4.start()
+    #     for func in use_func_list:
+    #         q.put(func)
+    #     try:
+    #         q.join()
+    #     except KeyboardInterrupt:
+    #         print("stopped by hand")
+    #
+    # main()
     # obj.insert_Newsi_data()
-    obj.insert_ExistingSi_data()
+    # obj.insert_ExistingSi_data()
     # obj.insert_ClosedSi_data()
     # obj.insert_Rework_data()
     # obj.insert_HW_data()
-    # obj.insert_SW_Original_data()
+    obj.insert_SW_Original_data()
     # obj.insert_IFWI_Orignal_data()
-    # obj.insert_SW_data()
+    obj.insert_SW_data()
     # obj.insert_IFWI_data()
     # obj.insert_Platform_data()
     # obj.insert_Mapping()
