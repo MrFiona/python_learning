@@ -1,2 +1,2 @@
 # python_learning
-Learn Python 3 by Sample Code   
+Learn Python 2.7 by Sample Code   
