@@ -1,227 +1,404 @@
-                <span class="sh2">  Existing Sightings </span>
+                <span class="sh2">  Platform Integration Validation Result </span>
                 <div class="FoldIcon">
-                    <div class="CollapseBtn not-collapsed collapsed" data-toggle="collapse" href="#collapseExistingSightings"></div>
+                    <div id="PlatformIntegrationValidationResultBtn" class="CollapseBtn not-collapsed collapsed" data-toggle="collapse" href="#collapsePlatformIntegrationValidationResult">
+</div>
                 </div>
             </div>
-            <div id="collapseExistingSightings" class="panel-collapse collapse ">
+            <div id="collapsePlatformIntegrationValidationResult" class="panel-collapse collapse ">
                 <div class="panel-body">
+                    <table class="MsoNormalTable" width="100%">
+                        <tbody><tr>
+                            <th rowspan="15" width="9%">Purley_FPGA Test Execution Status</th>
+                            <th width="9%">Domains</th>
+                            <th width="8%">Attempted</th>
+                            <th width="8%">Blocked</th>
+                            <th width="8%">No Run</th>
+                            <th width="8%">Failed</th>
+                            <th width="8%">Passed</th>
+                            <th width="8%">Total</th>
+                            <th width="8%">% Attempted</th>
+                            <th width="8%">Passed% (per attempted)</th>
+                            <th width="8%">Pass%</th>
+                            <th width="10%">Key Sightings</th>
+                        </tr>
+                        
+                        
+                        <tr>
+                            
+                             <td>Power Management</td>
+                            
+                             <td>8</td>
+                             <td>0</td>
+                             <td>0</td>
+                            
+                             <td>0</td>
+                            
+                             <td>8</td>
+                             <td>8</td>
+                             <td>100.00%</td>
+                             <td>8/8</td>
+                             <td>100.00%</td>
+                             <td>
+                                 
+                             </td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            
+                             <td>Networking</td>
+                            
+                             <td>16</td>
+                             <td>0</td>
+                             <td>0</td>
+                            
+                             <td>0</td>
+                            
+                             <td>16</td>
+                             <td>16</td>
+                             <td>100.00%</td>
+                             <td>16/16</td>
+                             <td>100.00%</td>
+                             <td>
+                                 
+                             </td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            
+                             <td>USB</td>
+                            
+                             <td>5</td>
+                             <td>0</td>
+                             <td>0</td>
+                            
+                             <td>0</td>
+                            
+                             <td>5</td>
+                             <td>5</td>
+                             <td>100.00%</td>
+                             <td>5/5</td>
+                             <td>100.00%</td>
+                             <td>
+                                 
+                             </td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            
+                             <td>FPGA</td>
+                            
+                             <td>6</td>
+                             <td>0</td>
+                             <td>0</td>
+                            
+                             <td>0</td>
+                            
+                             <td>6</td>
+                             <td>6</td>
+                             <td>100.00%</td>
+                             <td>6/6</td>
+                             <td>100.00%</td>
+                             <td>
+                                 
+                             </td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            
+                             <td>Video</td>
+                            
+                             <td>1</td>
+                             <td>0</td>
+                             <td>0</td>
+                            
+                             <td>0</td>
+                            
+                             <td>1</td>
+                             <td>1</td>
+                             <td>100.00%</td>
+                             <td>1/1</td>
+                             <td>100.00%</td>
+                             <td>
+                                 
+                             </td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            
+                             <td>Storage</td>
+                            
+                             <td>4</td>
+                             <td>0</td>
+                             <td>0</td>
+                            
+                             <td>0</td>
+                            
+                             <td>4</td>
+                             <td>4</td>
+                             <td>100.00%</td>
+                             <td>4/4</td>
+                             <td>100.00%</td>
+                             <td>
+                                 
+                             </td>
+                        </tr>
+                        
+                        
+                        
+                        
+                        
+                        <tr>
+                            
+                             <td>PCIe</td>
+                            
+                             <td>2</td>
+                             <td>0</td>
+                             <td>0</td>
+                            
+                             <td>0</td>
+                            
+                             <td>2</td>
+                             <td>2</td>
+                             <td>100.00%</td>
+                             <td>2/2</td>
+                             <td>100.00%</td>
+                             <td>
+                                 
+                             </td>
+                        </tr>
+                        
+                        
+                        
+                        
+                        
+                        <tr>
+                            
+                             <td>Manageability</td>
+                            
+                             <td>6</td>
+                             <td>1</td>
+                             <td>0</td>
+                            
+                            <td style="background:#ff6633">1</td>
+                            
+                             <td>5</td>
+                             <td>7</td>
+                             <td>85.71%</td>
+                             <td>5/6</td>
+                             <td>71.43%</td>
+                             <td>
+                                 
+                                     
+                                        <p><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345719" style="color:#0071c5">5345719</a></p>
+                                     
+                                 
+                             </td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            
+                             <td>Virtualization</td>
+                            
+                             <td>7</td>
+                             <td>0</td>
+                             <td>0</td>
+                            
+                            <td style="background:#ff6633">2</td>
+                            
+                             <td>5</td>
+                             <td>7</td>
+                             <td>100.00%</td>
+                             <td>5/7</td>
+                             <td>71.43%</td>
+                             <td>
+                                 
+                                     
+                                        <p><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345474" style="color:#0071c5">5345474</a></p>
+                                     
+                                 
+                                     
+                                        <p><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345608" style="color:#0071c5">5345608</a></p>
+                                     
+                                 
+                             </td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            
+                             <td>Memory</td>
+                            
+                             <td>2</td>
+                             <td>0</td>
+                             <td>0</td>
+                            
+                             <td>0</td>
+                            
+                             <td>2</td>
+                             <td>2</td>
+                             <td>100.00%</td>
+                             <td>2/2</td>
+                             <td>100.00%</td>
+                             <td>
+                                 
+                             </td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            
+                             <td>Stress & Stability</td>
+                            
+                             <td>7</td>
+                             <td>0</td>
+                             <td>0</td>
+                            
+                            <td style="background:#ff6633">1</td>
+                            
+                             <td>6</td>
+                             <td>7</td>
+                             <td>100.00%</td>
+                             <td>6/7</td>
+                             <td>85.71%</td>
+                             <td>
+                                 
+                                     
+                                        <p><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345509" style="color:#0071c5">5345509</a></p>
+                                     
+                                 
+                             </td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            
+                             <td>Security</td>
+                            
+                             <td>5</td>
+                             <td>6</td>
+                             <td>0</td>
+                            
+                             <td>0</td>
+                            
+                             <td>5</td>
+                             <td>11</td>
+                             <td>45.45%</td>
+                             <td>5/5</td>
+                             <td>45.45%</td>
+                             <td>
+                                 
+                                     
+                                        <p><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345514" style="color:#0071c5">5345514</a></p>
+                                     
+                                 
+                             </td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            
+                             <td>Processor</td>
+                            
+                             <td>1</td>
+                             <td>0</td>
+                             <td>0</td>
+                            
+                             <td>0</td>
+                            
+                             <td>1</td>
+                             <td>1</td>
+                             <td>100.00%</td>
+                             <td>1/1</td>
+                             <td>100.00%</td>
+                             <td>
+                                 
+                             </td>
+                        </tr>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <tr>
+                            
+                             <td>Summary</td>
+                            
+                             <td>70</td>
+                             <td>7</td>
+                             <td>0</td>
+                            
+                            <td style="background:#ff6633">4</td>
+                            
+                             <td>66</td>
+                             <td>77</td>
+                             <td>90.91%</td>
+                             <td>66/70</td>
+                             <td>85.71%</td>
+                             <td>
+                                 
+                             </td>
+                        </tr>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                    </tbody></table><br>
+                    <div class="stable">Detail case result could be found in this <a href="http://dcg-oss.intel.com/test_report/report_case/4929/BKC/Purley_FPGA" target="_blank" style="text-decoration: underline;">page</a></div>
+                    <div style="border:1px solid #000000">
+                        <div id="cases_domain_chart" style="width:70%;float:left;" data-highcharts-chart="0"><div class="highcharts-container" id="highcharts-0" style="position: relative; overflow-x: hidden; overflow-y: hidden; width: 427px; height: 400px; text-align: left; line-height: normal; z-index: 0; "><svg version="1.1" style="font-family:"Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;font-size:12px;" xmlns="http://www.w3.org/2000/svg" width="427" height="400"><desc>Created with Highcharts 4.1.7</desc><defs><clipPath id="highcharts-1"><rect x="0" y="0" width="350" height="196"></rect></clipPath></defs><rect x="0" y="0" width="427" height="400" strokeWidth="0" fill="#FFFFFF" class=" highcharts-background"></rect><g class="highcharts-grid" zIndex="1"></g><g class="highcharts-grid" zIndex="1"><path fill="none" d="M 67 264.5 L 417 264.5" stroke="#D8D8D8" stroke-width="1" zIndex="1" opacity="1"></path><path fill="none" d="M 67 215.5 L 417 215.5" stroke="#D8D8D8" stroke-width="1" zIndex="1" opacity="1"></path><path fill="none" d="M 67 166.5 L 417 166.5" stroke="#D8D8D8" stroke-width="1" zIndex="1" opacity="1"></path><path fill="none" d="M 67 117.5 L 417 117.5" stroke="#D8D8D8" stroke-width="1" zIndex="1" opacity="1"></path><path fill="none" d="M 67 67.5 L 417 67.5" stroke="#D8D8D8" stroke-width="1" zIndex="1" opacity="1"></path></g><g class="highcharts-axis" zIndex="2"><path fill="none" d="M 93.5 264 L 93.5 274" stroke="#C0D0E0" stroke-width="1" opacity="1"></path><path fill="none" d="M 120.5 264 L 120.5 274" stroke="#C0D0E0" stroke-width="1" opacity="1"></path><path fill="none" d="M 147.5 264 L 147.5 274" stroke="#C0D0E0" stroke-width="1" opacity="1"></path><path fill="none" d="M 174.5 264 L 174.5 274" stroke="#C0D0E0" stroke-width="1" opacity="1"></path><path fill="none" d="M 201.5 264 L 201.5 274" stroke="#C0D0E0" stroke-width="1" opacity="1"></path><path fill="none" d="M 228.5 264 L 228.5 274" stroke="#C0D0E0" stroke-width="1" opacity="1"></path><path fill="none" d="M 254.5 264 L 254.5 274" stroke="#C0D0E0" stroke-width="1" opacity="1"></path><path fill="none" d="M 281.5 264 L 281.5 274" stroke="#C0D0E0" stroke-width="1" opacity="1"></path><path fill="none" d="M 308.5 264 L 308.5 274" stroke="#C0D0E0" stroke-width="1" opacity="1"></path><path fill="none" d="M 335.5 264 L 335.5 274" stroke="#C0D0E0" stroke-width="1" opacity="1"></path><path fill="none" d="M 362.5 264 L 362.5 274" stroke="#C0D0E0" stroke-width="1" opacity="1"></path><path fill="none" d="M 389.5 264 L 389.5 274" stroke="#C0D0E0" stroke-width="1" opacity="1"></path><path fill="none" d="M 417.5 264 L 417.5 274" stroke="#C0D0E0" stroke-width="1" opacity="1"></path><path fill="none" d="M 66.5 264 L 66.5 274" stroke="#C0D0E0" stroke-width="1" opacity="1"></path><path fill="none" d="M 67 264.5 L 417 264.5" stroke="#C0D0E0" stroke-width="1" zIndex="7" visibility="visible"></path></g><g class="highcharts-axis" zIndex="2"><text x="24" zIndex="7" text-anchor="middle" transform="translate(0,0) rotate(270 24 166)" class=" highcharts-yaxis-title" style="color:#707070;fill:#707070;" visibility="visible" y="166"><tspan>Pass Rate</tspan></text></g><g class="highcharts-series-group" zIndex="3"><g class="highcharts-series highcharts-tracker" visibility="visible" zIndex="0.1" transform="translate(67,215.08884928534957) scale(1 0.2502971406323254)" style="" clip-path="url(#highcharts-1)"><rect x="6.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#717171" rx="0" ry="0"></rect><rect x="33.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#717171" rx="0" ry="0"></rect><rect x="60.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#717171" rx="0" ry="0"></rect><rect x="87.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#717171" rx="0" ry="0"></rect><rect x="114.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#717171" rx="0" ry="0"></rect><rect x="141.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#717171" rx="0" ry="0"></rect><rect x="168.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#717171" rx="0" ry="0"></rect><rect x="194.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#717171" rx="0" ry="0"></rect><rect x="221.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#717171" rx="0" ry="0"></rect><rect x="248.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#717171" rx="0" ry="0"></rect><rect x="275.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#717171" rx="0" ry="0"></rect><rect x="302.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#717171" rx="0" ry="0"></rect><rect x="329.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#717171" rx="0" ry="0"></rect></g><g class="highcharts-markers" visibility="visible" zIndex="0.1" transform="translate(67,68) scale(1 1)"></g><g class="highcharts-series highcharts-tracker" visibility="visible" zIndex="0.1" transform="translate(67,215.08884928534957) scale(1 0.2502971406323254)" style="" clip-path="url(#highcharts-1)"><rect x="6.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#ffae00" rx="0" ry="0"></rect><rect x="33.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#ffae00" rx="0" ry="0"></rect><rect x="60.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#ffae00" rx="0" ry="0"></rect><rect x="87.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#ffae00" rx="0" ry="0"></rect><rect x="114.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#ffae00" rx="0" ry="0"></rect><rect x="141.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#ffae00" rx="0" ry="0"></rect><rect x="168.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#ffae00" rx="0" ry="0"></rect><rect x="194.5" y="-0.5" width="13" height="29" stroke="#FFFFFF" stroke-width="1" fill="#ffae00" rx="0" ry="0"></rect><rect x="221.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#ffae00" rx="0" ry="0"></rect><rect x="248.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#ffae00" rx="0" ry="0"></rect><rect x="275.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#ffae00" rx="0" ry="0"></rect><rect x="302.5" y="-0.5" width="13" height="108" stroke="#FFFFFF" stroke-width="1" fill="#ffae00" rx="0" ry="0"></rect><rect x="329.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#ffae00" rx="0" ry="0"></rect></g><g class="highcharts-markers" visibility="visible" zIndex="0.1" transform="translate(67,68) scale(1 1)"></g><g class="highcharts-series highcharts-tracker" visibility="visible" zIndex="0.1" transform="translate(67,215.08884928534957) scale(1 0.2502971406323254)" style="" clip-path="url(#highcharts-1)"><rect x="6.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#fd4f02" rx="0" ry="0"></rect><rect x="33.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#fd4f02" rx="0" ry="0"></rect><rect x="60.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#fd4f02" rx="0" ry="0"></rect><rect x="87.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#fd4f02" rx="0" ry="0"></rect><rect x="114.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#fd4f02" rx="0" ry="0"></rect><rect x="141.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#fd4f02" rx="0" ry="0"></rect><rect x="168.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#fd4f02" rx="0" ry="0"></rect><rect x="194.5" y="28.5" width="13" height="28" stroke="#FFFFFF" stroke-width="1" fill="#fd4f02" rx="0" ry="0"></rect><rect x="221.5" y="-0.5" width="13" height="57" stroke="#FFFFFF" stroke-width="1" fill="#fd4f02" rx="0" ry="0"></rect><rect x="248.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#fd4f02" rx="0" ry="0"></rect><rect x="275.5" y="-0.5" width="13" height="29" stroke="#FFFFFF" stroke-width="1" fill="#fd4f02" rx="0" ry="0"></rect><rect x="302.5" y="107.5" width="13" height="0" stroke="#FFFFFF" stroke-width="1" fill="#fd4f02" rx="0" ry="0"></rect><rect x="329.5" y="-0.5" width="13" height="1" stroke="#FFFFFF" stroke-width="1" fill="#fd4f02" rx="0" ry="0"></rect></g><g class="highcharts-markers" visibility="visible" zIndex="0.1" transform="translate(67,68) scale(1 1)"></g><g class="highcharts-series highcharts-tracker" visibility="visible" zIndex="0.1" transform="translate(67,215.08884928534957) scale(1 0.2502971406323254)" style="" clip-path="url(#highcharts-1)"><rect x="6.5" y="-0.5" width="13" height="197" stroke="#FFFFFF" stroke-width="1" fill="#6fd007" rx="0" ry="0"></rect><rect x="33.5" y="-0.5" width="13" height="197" stroke="#FFFFFF" stroke-width="1" fill="#6fd007" rx="0" ry="0"></rect><rect x="60.5" y="-0.5" width="13" height="197" stroke="#FFFFFF" stroke-width="1" fill="#6fd007" rx="0" ry="0"></rect><rect x="87.5" y="-0.5" width="13" height="197" stroke="#FFFFFF" stroke-width="1" fill="#6fd007" rx="0" ry="0"></rect><rect x="114.5" y="-0.5" width="13" height="197" stroke="#FFFFFF" stroke-width="1" fill="#6fd007" rx="0" ry="0"></rect><rect x="141.5" y="-0.5" width="13" height="197" stroke="#FFFFFF" stroke-width="1" fill="#6fd007" rx="0" ry="0"></rect><rect x="168.5" y="-0.5" width="13" height="197" stroke="#FFFFFF" stroke-width="1" fill="#6fd007" rx="0" ry="0"></rect><rect x="194.5" y="56.5" width="13" height="140" stroke="#FFFFFF" stroke-width="1" fill="#6fd007" rx="0" ry="0"></rect><rect x="221.5" y="56.5" width="13" height="140" stroke="#FFFFFF" stroke-width="1" fill="#6fd007" rx="0" ry="0"></rect><rect x="248.5" y="-0.5" width="13" height="197" stroke="#FFFFFF" stroke-width="1" fill="#6fd007" rx="0" ry="0"></rect><rect x="275.5" y="28.5" width="13" height="168" stroke="#FFFFFF" stroke-width="1" fill="#6fd007" rx="0" ry="0"></rect><rect x="302.5" y="107.5" width="13" height="89" stroke="#FFFFFF" stroke-width="1" fill="#6fd007" rx="0" ry="0"></rect><rect x="329.5" y="-0.5" width="13" height="197" stroke="#FFFFFF" stroke-width="1" fill="#6fd007" rx="0" ry="0"></rect></g><g class="highcharts-markers" visibility="visible" zIndex="0.1" transform="translate(67,68) scale(1 1)"></g></g><text x="214" text-anchor="middle" class="highcharts-title" zIndex="4" style="color:#333333;font-size:18px;fill:#333333;width:363px;" y="24"><tspan>Purley-FPGA Server SKX/LBG B-Stepping BKC</tspan><tspan dy="21" x="214">Validation Result</tspan><title>Purley-FPGA Server SKX/LBG B-Stepping BKC Validation Result</title></text><g class="highcharts-legend" zIndex="7" transform="translate(74,360)"><g zIndex="1"><g><g class="highcharts-legend-item" zIndex="1" transform="translate(8,3)"><text x="21" style="color:#333333;font-size:12px;font-weight:bold;cursor:pointer;fill:#333333;" text-anchor="start" zIndex="2" y="15">NoRun</text><rect x="0" y="4" width="16" height="12" zIndex="3" fill="#717171"></rect></g><g class="highcharts-legend-item" zIndex="1" transform="translate(90,3)"><text x="21" y="15" style="color:#333333;font-size:12px;font-weight:bold;cursor:pointer;fill:#333333;" text-anchor="start" zIndex="2">Block</text><rect x="0" y="4" width="16" height="12" zIndex="3" fill="#ffae00"></rect></g><g class="highcharts-legend-item" zIndex="1" transform="translate(163,3)"><text x="21" y="15" style="color:#333333;font-size:12px;font-weight:bold;cursor:pointer;fill:#333333;" text-anchor="start" zIndex="2">Fail</text><rect x="0" y="4" width="16" height="12" zIndex="3" fill="#fd4f02"></rect></g><g class="highcharts-legend-item" zIndex="1" transform="translate(223,3)"><text x="21" y="15" style="color:#333333;font-size:12px;font-weight:bold;cursor:pointer;fill:#333333;" text-anchor="start" zIndex="2">Pass</text><rect x="0" y="4" width="16" height="12" zIndex="3" fill="#6fd007"></rect></g></g></g></g><g class="highcharts-axis-labels highcharts-xaxis-labels" zIndex="7"><text x="83.05426332588912" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:107;text-overflow:ellipsis;" text-anchor="end" transform="translate(0,0) rotate(-45 83.05426332588912 280)" y="280" opacity="1"><tspan>Power Management</tspan></text><text x="109.97734024896604" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:400px;text-overflow:ellipsis;" text-anchor="end" transform="translate(0,0) rotate(-45 109.97734024896604 280)" y="280" opacity="1"><tspan>Networking</tspan></text><text x="136.900417172043" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:400px;text-overflow:ellipsis;" text-anchor="end" transform="translate(0,0) rotate(-45 136.900417172043 280)" y="280" opacity="1"><tspan>USB</tspan></text><text x="163.8234940951199" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:400px;text-overflow:ellipsis;" text-anchor="end" transform="translate(0,0) rotate(-45 163.8234940951199 280)" y="280" opacity="1"><tspan>FPGA</tspan></text><text x="190.74657101819685" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:400px;text-overflow:ellipsis;" text-anchor="end" transform="translate(0,0) rotate(-45 190.74657101819685 280)" y="280" opacity="1"><tspan>Video</tspan></text><text x="217.66964794127375" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:400px;text-overflow:ellipsis;" text-anchor="end" transform="translate(0,0) rotate(-45 217.66964794127375 280)" y="280" opacity="1"><tspan>Storage</tspan></text><text x="244.59272486435066" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:400px;text-overflow:ellipsis;" text-anchor="end" transform="translate(0,0) rotate(-45 244.59272486435066 280)" y="280" opacity="1"><tspan>PCIe</tspan></text><text x="271.51580178742756" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:400px;text-overflow:ellipsis;" text-anchor="end" transform="translate(0,0) rotate(-45 271.51580178742756 280)" y="280" opacity="1"><tspan>Manageability</tspan></text><text x="298.43887871050447" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:400px;text-overflow:ellipsis;" text-anchor="end" transform="translate(0,0) rotate(-45 298.43887871050447 280)" y="280" opacity="1"><tspan>Virtualization</tspan></text><text x="325.36195563358143" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:400px;text-overflow:ellipsis;" text-anchor="end" transform="translate(0,0) rotate(-45 325.36195563358143 280)" y="280" opacity="1"><tspan>Memory</tspan></text><text x="352.28503255665834" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:400px;text-overflow:ellipsis;" text-anchor="end" transform="translate(0,0) rotate(-45 352.28503255665834 280)" y="280" opacity="1"><tspan>Stress and Stability</tspan></text><text x="379.2081094797353" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:400px;text-overflow:ellipsis;" text-anchor="end" transform="translate(0,0) rotate(-45 379.2081094797353 280)" y="280" opacity="1"><tspan>Security</tspan></text><text x="406.1311864028122" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:400px;text-overflow:ellipsis;" text-anchor="end" transform="translate(0,0) rotate(-45 406.1311864028122 280)" y="280" opacity="1"><tspan>Processor</tspan></text></g><g class="highcharts-axis-labels highcharts-yaxis-labels" zIndex="7"><text x="52" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:131px;text-overflow:clip;" text-anchor="end" transform="translate(0,0)" y="269" opacity="1">0</text><text x="52" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:131px;text-overflow:clip;" text-anchor="end" transform="translate(0,0)" y="220" opacity="1">25</text><text x="52" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:131px;text-overflow:clip;" text-anchor="end" transform="translate(0,0)" y="171" opacity="1">50</text><text x="52" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:131px;text-overflow:clip;" text-anchor="end" transform="translate(0,0)" y="122" opacity="1">75</text><text x="52" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:131px;text-overflow:clip;" text-anchor="end" transform="translate(0,0)" y="73" opacity="1">100</text></g><g class="highcharts-tooltip" zIndex="8" style="cursor:default;padding:0;white-space:nowrap;" transform="translate(0,-9999)"><path fill="none" d="M 3.5 0.5 L 13.5 0.5 C 16.5 0.5 16.5 0.5 16.5 3.5 L 16.5 13.5 C 16.5 16.5 16.5 16.5 13.5 16.5 L 3.5 16.5 C 0.5 16.5 0.5 16.5 0.5 13.5 L 0.5 3.5 C 0.5 0.5 0.5 0.5 3.5 0.5" isShadow="true" stroke="black" stroke-opacity="0.049999999999999996" stroke-width="5" transform="translate(1, 1)"></path><path fill="none" d="M 3.5 0.5 L 13.5 0.5 C 16.5 0.5 16.5 0.5 16.5 3.5 L 16.5 13.5 C 16.5 16.5 16.5 16.5 13.5 16.5 L 3.5 16.5 C 0.5 16.5 0.5 16.5 0.5 13.5 L 0.5 3.5 C 0.5 0.5 0.5 0.5 3.5 0.5" isShadow="true" stroke="black" stroke-opacity="0.09999999999999999" stroke-width="3" transform="translate(1, 1)"></path><path fill="none" d="M 3.5 0.5 L 13.5 0.5 C 16.5 0.5 16.5 0.5 16.5 3.5 L 16.5 13.5 C 16.5 16.5 16.5 16.5 13.5 16.5 L 3.5 16.5 C 0.5 16.5 0.5 16.5 0.5 13.5 L 0.5 3.5 C 0.5 0.5 0.5 0.5 3.5 0.5" isShadow="true" stroke="black" stroke-opacity="0.15" stroke-width="1" transform="translate(1, 1)"></path><path fill="rgba(249, 249, 249, .85)" d="M 3.5 0.5 L 13.5 0.5 C 16.5 0.5 16.5 0.5 16.5 3.5 L 16.5 13.5 C 16.5 16.5 16.5 16.5 13.5 16.5 L 3.5 16.5 C 0.5 16.5 0.5 16.5 0.5 13.5 L 0.5 3.5 C 0.5 0.5 0.5 0.5 3.5 0.5"></path><text x="8" zIndex="1" style="font-size:12px;color:#333333;fill:#333333;" y="20"></text></g></svg></div></div>
+                        <div id="cases_pie_chart" style="width:28%;float:right;border-left:1px solid #000000" data-highcharts-chart="1"><div class="highcharts-container" id="highcharts-2" style="position: relative; overflow-x: hidden; overflow-y: hidden; width: 170px; height: 400px; text-align: left; line-height: normal; z-index: 0; "><svg version="1.1" style="font-family:"Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;font-size:12px;" xmlns="http://www.w3.org/2000/svg" width="170" height="400"><desc>Created with Highcharts 4.1.7</desc><defs><clipPath id="highcharts-3"><rect x="0" y="0" width="150" height="147"></rect></clipPath></defs><rect x="0" y="0" width="170" height="400" strokeWidth="0" fill="#FFFFFF" class=" highcharts-background"></rect><g class="highcharts-series-group" zIndex="3"><g class="highcharts-series highcharts-tracker" visibility="visible" zIndex="0.1" transform="translate(10,173) scale(1 1)" style="cursor:pointer;"><path fill="#6fd007" d="M 74.99919460071268 57.65378537567014 A 15.84621464479746 15.84621464479746 0 0 1 90.43687747687257 69.92154609740213 L 75 73.5 A 0 0 0 0 0 75 73.5 Z" stroke="#FFFFFF" stroke-width="1" stroke-linejoin="round" transform="translate(4,9)"></path><path fill="#fd4f02" d="M 90.44044821174066 69.93698476153298 A 15.84621464479746 15.84621464479746 0 0 1 90.67661776434215 71.18782050011131 L 75 73.5 A 0 0 0 0 0 75 73.5 Z" stroke="#FFFFFF" stroke-width="1" stroke-linejoin="round" transform="translate(0,0)"></path><path fill="#ffae00" d="M 90.67892210514844 71.20349827135253 A 15.84621464479746 15.84621464479746 0 0 1 90.84609131766389 73.43748183263574 L 75 73.5 A 0 0 0 0 0 75 73.5 Z" stroke="#FFFFFF" stroke-width="1" stroke-linejoin="round" transform="translate(0,0)"></path><path fill="#717171" d="M 90.84614591277584 73.45332795257147 A 15.84621464479746 15.84621464479746 0 0 1 90.84609131766389 73.43748183263574 L 75 73.5 A 0 0 0 0 0 75 73.5 Z" stroke="#FFFFFF" stroke-width="1" stroke-linejoin="round" transform="translate(0,0)"></path></g><g class="highcharts-markers" visibility="visible" zIndex="0.1" transform="translate(10,173) scale(1 1)"></g></g><text x="85" text-anchor="middle" class="highcharts-title" zIndex="4" style="color:#333333;font-size:18px;fill:#333333;width:106px;" y="24"><tspan>Purley-FPGA</tspan><tspan dy="21" x="85">Server</tspan><tspan dy="21" x="85">SKX/LBG B-</tspan><tspan dy="21" x="85">Stepping</tspan><tspan dy="21" x="85">BKC</tspan><tspan dy="21" x="85">Validation</tspan><tspan dy="21" x="85">Status</tspan><title>Purley-FPGA Server SKX/LBG B-Stepping BKC Validation Status</title></text><g class="highcharts-legend" zIndex="7" transform="translate(23,332)"><g zIndex="1"><g><g class="highcharts-legend-item" zIndex="1" transform="translate(8,3)"><text x="21" style="color:#333333;font-size:12px;font-weight:bold;cursor:pointer;fill:#333333;" text-anchor="start" zIndex="2" y="15">Pass</text><rect x="0" y="4" width="16" height="12" zIndex="3" fill="#6fd007"></rect></g><g class="highcharts-legend-item" zIndex="1" transform="translate(76,3)"><text x="21" y="15" style="color:#333333;font-size:12px;font-weight:bold;cursor:pointer;fill:#333333;" text-anchor="start" zIndex="2">Fail</text><rect x="0" y="4" width="16" height="12" zIndex="3" fill="#fd4f02"></rect></g><g class="highcharts-legend-item" zIndex="1" transform="translate(8,17)"><text x="21" y="15" style="color:#333333;font-size:12px;font-weight:bold;cursor:pointer;fill:#333333;" text-anchor="start" zIndex="2">Block</text><rect x="0" y="4" width="16" height="12" zIndex="3" fill="#ffae00"></rect></g><g class="highcharts-legend-item" zIndex="1" transform="translate(8,31)"><text x="21" y="15" style="color:#333333;font-size:12px;font-weight:bold;cursor:pointer;fill:#333333;" text-anchor="start" zIndex="2">NoRun</text><rect x="0" y="4" width="16" height="12" zIndex="3" fill="#717171"></rect></g></g></g></g><g class="highcharts-tooltip" zIndex="8" style="cursor:default;padding:0;white-space:nowrap;" transform="translate(0,-9999)"><path fill="none" d="M 3.5 0.5 L 13.5 0.5 C 16.5 0.5 16.5 0.5 16.5 3.5 L 16.5 13.5 C 16.5 16.5 16.5 16.5 13.5 16.5 L 3.5 16.5 C 0.5 16.5 0.5 16.5 0.5 13.5 L 0.5 3.5 C 0.5 0.5 0.5 0.5 3.5 0.5" isShadow="true" stroke="black" stroke-opacity="0.049999999999999996" stroke-width="5" transform="translate(1, 1)"></path><path fill="none" d="M 3.5 0.5 L 13.5 0.5 C 16.5 0.5 16.5 0.5 16.5 3.5 L 16.5 13.5 C 16.5 16.5 16.5 16.5 13.5 16.5 L 3.5 16.5 C 0.5 16.5 0.5 16.5 0.5 13.5 L 0.5 3.5 C 0.5 0.5 0.5 0.5 3.5 0.5" isShadow="true" stroke="black" stroke-opacity="0.09999999999999999" stroke-width="3" transform="translate(1, 1)"></path><path fill="none" d="M 3.5 0.5 L 13.5 0.5 C 16.5 0.5 16.5 0.5 16.5 3.5 L 16.5 13.5 C 16.5 16.5 16.5 16.5 13.5 16.5 L 3.5 16.5 C 0.5 16.5 0.5 16.5 0.5 13.5 L 0.5 3.5 C 0.5 0.5 0.5 0.5 3.5 0.5" isShadow="true" stroke="black" stroke-opacity="0.15" stroke-width="1" transform="translate(1, 1)"></path><path fill="rgba(249, 249, 249, .85)" d="M 3.5 0.5 L 13.5 0.5 C 16.5 0.5 16.5 0.5 16.5 3.5 L 16.5 13.5 C 16.5 16.5 16.5 16.5 13.5 16.5 L 3.5 16.5 C 0.5 16.5 0.5 16.5 0.5 13.5 L 0.5 3.5 C 0.5 0.5 0.5 0.5 3.5 0.5"></path><text x="8" zIndex="1" style="font-size:12px;color:#333333;fill:#333333;" y="20"></text></g></svg></div></div>
+                        <div style="clear:both;"></div>
+                        <div style="border-top:1px solid #000000" id="cases_history_chart" data-highcharts-chart="2"><div class="highcharts-container" id="highcharts-4" style="position: relative; overflow-x: hidden; overflow-y: hidden; width: 611px; height: 400px; text-align: left; line-height: normal; z-index: 0; "><svg version="1.1" style="font-family:"Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;font-size:12px;" xmlns="http://www.w3.org/2000/svg" width="611" height="400"><desc>Created with Highcharts 4.1.7</desc><defs><clipPath id="highcharts-5"><rect x="0" y="0" width="520" height="242"></rect></clipPath><clipPath id="highcharts-6"><rect x="-99" y="-47" width="228.7642774062154" height="400"></rect></clipPath><clipPath id="highcharts-7"><rect x="0" y="0" width="129.7642774062154" height="242"></rect></clipPath></defs><rect x="0" y="0" width="611" height="400" strokeWidth="0" fill="#FFFFFF" class=" highcharts-background"></rect><g class="highcharts-grid" zIndex="1"></g><g class="highcharts-grid" zIndex="1"><path fill="none" d="M 81 289.5 L 601 289.5" stroke="#D8D8D8" stroke-width="1" zIndex="1" opacity="1"></path><path fill="none" d="M 81 229.5 L 601 229.5" stroke="#D8D8D8" stroke-width="1" zIndex="1" opacity="1"></path><path fill="none" d="M 81 168.5 L 601 168.5" stroke="#D8D8D8" stroke-width="1" zIndex="1" opacity="1"></path><path fill="none" d="M 81 108.5 L 601 108.5" stroke="#D8D8D8" stroke-width="1" zIndex="1" opacity="1"></path><path fill="none" d="M 81 46.5 L 601 46.5" stroke="#D8D8D8" stroke-width="1" zIndex="1" opacity="1"></path></g><g class="highcharts-axis" zIndex="2"><path fill="none" d="M 127.5 289 L 127.5 299" stroke="#C0D0E0" stroke-width="1" opacity="1"></path><path fill="none" d="M 175.5 289 L 175.5 299" stroke="#C0D0E0" stroke-width="1" opacity="1"></path><path fill="none" d="M 222.5 289 L 222.5 299" stroke="#C0D0E0" stroke-width="1" opacity="1"></path><path fill="none" d="M 269.5 289 L 269.5 299" stroke="#C0D0E0" stroke-width="1" opacity="1"></path><path fill="none" d="M 316.5 289 L 316.5 299" stroke="#C0D0E0" stroke-width="1" opacity="1"></path><path fill="none" d="M 364.5 289 L 364.5 299" stroke="#C0D0E0" stroke-width="1" opacity="1"></path><path fill="none" d="M 411.5 289 L 411.5 299" stroke="#C0D0E0" stroke-width="1" opacity="1"></path><path fill="none" d="M 458.5 289 L 458.5 299" stroke="#C0D0E0" stroke-width="1" opacity="1"></path><path fill="none" d="M 505.5 289 L 505.5 299" stroke="#C0D0E0" stroke-width="1" opacity="1"></path><path fill="none" d="M 553.5 289 L 553.5 299" stroke="#C0D0E0" stroke-width="1" opacity="1"></path><path fill="none" d="M 601.5 289 L 601.5 299" stroke="#C0D0E0" stroke-width="1" opacity="1"></path><path fill="none" d="M 80.5 289 L 80.5 299" stroke="#C0D0E0" stroke-width="1" opacity="1"></path><path fill="none" d="M 81 289.5 L 601 289.5" stroke="#C0D0E0" stroke-width="1" zIndex="7" visibility="visible"></path></g><g class="highcharts-axis" zIndex="2"><text x="24" zIndex="7" text-anchor="middle" transform="translate(0,0) rotate(270 24 168)" class=" highcharts-yaxis-title" style="color:#707070;fill:#707070;" visibility="visible" y="168"><tspan>Pass Rate</tspan></text></g><g class="highcharts-series-group" zIndex="3"><g class="highcharts-series" visibility="visible" zIndex="0.1" transform="translate(81,47) scale(1 1)" clip-path="url(#highcharts-7)"><path fill="none" d="M 23.636363636363637 138.2788 L 70.9090909090909 33.976800000000026 L 118.18181818181819 47.52880000000002 L 165.45454545454544 25.918199999999985 L 212.72727272727272 33.154000000000025 L 260 19.093800000000016 L 307.27272727272725 34.581800000000015 L 354.54545454545456 34.581800000000015 L 401.8181818181818 37.703599999999994 L 449.09090909090907 28.289800000000014 L 496.3636363636364 34.581800000000015" stroke="#7cb5ec" stroke-width="2" zIndex="1" stroke-linejoin="round" stroke-linecap="round"></path></g><g class="highcharts-markers" visibility="visible" zIndex="0.1" transform="translate(81,47) scale(1 1)" clip-path="url(#highcharts-6)"><path fill="#7cb5ec" d="M 496 30.581800000000015 C 501.328 30.581800000000015 501.328 38.581800000000015 496 38.581800000000015 C 490.672 38.581800000000015 490.672 30.581800000000015 496 30.581800000000015 Z"></path><path fill="#7cb5ec" d="M 449 24.289800000000014 C 454.328 24.289800000000014 454.328 32.289800000000014 449 32.289800000000014 C 443.672 32.289800000000014 443.672 24.289800000000014 449 24.289800000000014 Z"></path><path fill="#7cb5ec" d="M 401 33.703599999999994 C 406.328 33.703599999999994 406.328 41.703599999999994 401 41.703599999999994 C 395.672 41.703599999999994 395.672 33.703599999999994 401 33.703599999999994 Z"></path><path fill="#7cb5ec" d="M 354 30.581800000000015 C 359.328 30.581800000000015 359.328 38.581800000000015 354 38.581800000000015 C 348.672 38.581800000000015 348.672 30.581800000000015 354 30.581800000000015 Z"></path><path fill="#7cb5ec" d="M 307 30.581800000000015 C 312.328 30.581800000000015 312.328 38.581800000000015 307 38.581800000000015 C 301.672 38.581800000000015 301.672 30.581800000000015 307 30.581800000000015 Z"></path><path fill="#7cb5ec" d="M 260 15.093800000000016 C 265.328 15.093800000000016 265.328 23.093800000000016 260 23.093800000000016 C 254.672 23.093800000000016 254.672 15.093800000000016 260 15.093800000000016 Z"></path><path fill="#7cb5ec" d="M 212 29.154000000000025 C 217.328 29.154000000000025 217.328 37.154000000000025 212 37.154000000000025 C 206.672 37.154000000000025 206.672 29.154000000000025 212 29.154000000000025 Z"></path><path fill="#7cb5ec" d="M 165 21.918199999999985 C 170.328 21.918199999999985 170.328 29.918199999999985 165 29.918199999999985 C 159.672 29.918199999999985 159.672 21.918199999999985 165 21.918199999999985 Z"></path><path fill="#7cb5ec" d="M 118 43.52880000000002 C 123.328 43.52880000000002 123.328 51.52880000000002 118 51.52880000000002 C 112.672 51.52880000000002 112.672 43.52880000000002 118 43.52880000000002 Z"></path><path fill="#7cb5ec" d="M 70 29.976800000000026 C 75.328 29.976800000000026 75.328 37.976800000000026 70 37.976800000000026 C 64.672 37.976800000000026 64.672 29.976800000000026 70 29.976800000000026 Z"></path><path fill="#7cb5ec" d="M 23 134.2788 C 28.328 134.2788 28.328 142.2788 23 142.2788 C 17.672 142.2788 17.672 134.2788 23 134.2788 Z"></path></g></g><text x="306" text-anchor="middle" class="highcharts-title" zIndex="4" style="color:#333333;font-size:18px;fill:#333333;width:547px;" y="24"><tspan>Purley-FPGA Server SKX/LBG B-Stepping BKC Analysis PASS%</tspan></text><g class="highcharts-data-labels" visibility="visible" zIndex="6" transform="translate(81,47) scale(1 1)" opacity="0"><g zIndex="1" style="" transform="translate(3,115)"><text x="5" zIndex="1" style="font-size: 11px; font-weight: bold; color: rgb(0, 0, 0); fill: #000000; text-shadow: rgb(255, 255, 255) 0px 0px 6px, rgb(255, 255, 255) 0px 0px 3px; text-rendering: geometricprecision; " y="16"><tspan>42.86</tspan></text></g><g zIndex="1" style="" transform="translate(50,11)"><text x="5" zIndex="1" style="font-size: 11px; font-weight: bold; color: rgb(0, 0, 0); fill: #000000; text-shadow: rgb(255, 255, 255) 0px 0px 6px, rgb(255, 255, 255) 0px 0px 3px; text-rendering: geometricprecision; " y="16"><tspan>85.96</tspan></text></g><g zIndex="1" style="" transform="translate(98,25)"><text x="5" zIndex="1" style="font-size: 11px; font-weight: bold; color: rgb(0, 0, 0); fill: #000000; text-shadow: rgb(255, 255, 255) 0px 0px 6px, rgb(255, 255, 255) 0px 0px 3px; text-rendering: geometricprecision; " y="16"><tspan>80.36</tspan></text></g><g zIndex="1" style="" transform="translate(145,3)"><text x="5" zIndex="1" style="font-size: 11px; font-weight: bold; color: rgb(0, 0, 0); fill: #000000; text-shadow: rgb(255, 255, 255) 0px 0px 6px, rgb(255, 255, 255) 0px 0px 3px; text-rendering: geometricprecision; " y="16"><tspan>89.29</tspan></text></g><g zIndex="1" style="" transform="translate(196,10)"><text x="5" zIndex="1" style="font-size: 11px; font-weight: bold; color: rgb(0, 0, 0); fill: #000000; text-shadow: rgb(255, 255, 255) 0px 0px 6px, rgb(255, 255, 255) 0px 0px 3px; text-rendering: geometricprecision; " y="16"><tspan>86.3</tspan></text></g><g zIndex="1" style="" transform="translate(240,-4)"><text x="5" zIndex="1" style="font-size: 11px; font-weight: bold; color: rgb(0, 0, 0); fill: #000000; text-shadow: rgb(255, 255, 255) 0px 0px 6px, rgb(255, 255, 255) 0px 0px 3px; text-rendering: geometricprecision; " y="16"><tspan>92.11</tspan></text></g><g zIndex="1" style="" transform="translate(287,12)"><text x="5" zIndex="1" style="font-size: 11px; font-weight: bold; color: rgb(0, 0, 0); fill: #000000; text-shadow: rgb(255, 255, 255) 0px 0px 6px, rgb(255, 255, 255) 0px 0px 3px; text-rendering: geometricprecision; " y="16"><tspan>85.71</tspan></text></g><g zIndex="1" style="" transform="translate(334,12)"><text x="5" zIndex="1" style="font-size: 11px; font-weight: bold; color: rgb(0, 0, 0); fill: #000000; text-shadow: rgb(255, 255, 255) 0px 0px 6px, rgb(255, 255, 255) 0px 0px 3px; text-rendering: geometricprecision; " y="16"><tspan>85.71</tspan></text></g><g zIndex="1" style="" transform="translate(381,15)"><text x="5" zIndex="1" style="font-size: 11px; font-weight: bold; color: rgb(0, 0, 0); fill: #000000; text-shadow: rgb(255, 255, 255) 0px 0px 6px, rgb(255, 255, 255) 0px 0px 3px; text-rendering: geometricprecision; " y="16"><tspan>84.42</tspan></text></g><g zIndex="1" style="" transform="translate(429,5)"><text x="5" zIndex="1" style="font-size: 11px; font-weight: bold; color: rgb(0, 0, 0); fill: #000000; text-shadow: rgb(255, 255, 255) 0px 0px 6px, rgb(255, 255, 255) 0px 0px 3px; text-rendering: geometricprecision; " y="16"><tspan>88.31</tspan></text></g><g zIndex="1" style="" transform="translate(476,12)"><text x="5" zIndex="1" style="font-size: 11px; font-weight: bold; color: rgb(0, 0, 0); fill: #000000; text-shadow: rgb(255, 255, 255) 0px 0px 6px, rgb(255, 255, 255) 0px 0px 3px; text-rendering: geometricprecision; " y="16"><tspan>85.71</tspan></text></g></g><g class="highcharts-legend" zIndex="7" transform="translate(275,360)"><g zIndex="1"><g><g class="highcharts-legend-item" zIndex="1" transform="translate(8,3)"><path fill="none" d="M 0 11 L 16 11" stroke="#7cb5ec" stroke-width="2"></path><path fill="#7cb5ec" d="M 8 7 C 13.328 7 13.328 15 8 15 C 2.6719999999999997 15 2.6719999999999997 7 8 7 Z"></path><text x="21" style="color:#333333;font-size:12px;font-weight:bold;cursor:pointer;fill:#333333;" text-anchor="start" zIndex="2" y="15">BKC</text></g></g></g></g><g class="highcharts-axis-labels highcharts-xaxis-labels" zIndex="7"><text x="107.22908850071433" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:400px;text-overflow:ellipsis;" text-anchor="end" transform="translate(0,0) rotate(-45 107.22908850071433 305)" y="305" opacity="1"><tspan>2016 WW40</tspan></text><text x="154.50181577344162" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:400px;text-overflow:ellipsis;" text-anchor="end" transform="translate(0,0) rotate(-45 154.50181577344162 305)" y="305" opacity="1"><tspan>2016 WW42</tspan></text><text x="201.77454304616887" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:400px;text-overflow:ellipsis;" text-anchor="end" transform="translate(0,0) rotate(-45 201.77454304616887 305)" y="305" opacity="1"><tspan>2016 WW43</tspan></text><text x="249.04727031889615" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:400px;text-overflow:ellipsis;" text-anchor="end" transform="translate(0,0) rotate(-45 249.04727031889615 305)" y="305" opacity="1"><tspan>2016 WW44</tspan></text><text x="296.3199975916234" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:400px;text-overflow:ellipsis;" text-anchor="end" transform="translate(0,0) rotate(-45 296.3199975916234 305)" y="305" opacity="1"><tspan>2016 WW45</tspan></text><text x="343.59272486435066" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:400px;text-overflow:ellipsis;" text-anchor="end" transform="translate(0,0) rotate(-45 343.59272486435066 305)" y="305" opacity="1"><tspan>2016 WW46</tspan></text><text x="390.8654521370779" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:400px;text-overflow:ellipsis;" text-anchor="end" transform="translate(0,0) rotate(-45 390.8654521370779 305)" y="305" opacity="1"><tspan>2016 WW47</tspan></text><text x="438.1381794098052" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:400px;text-overflow:ellipsis;" text-anchor="end" transform="translate(0,0) rotate(-45 438.1381794098052 305)" y="305" opacity="1"><tspan>2016 WW48</tspan></text><text x="485.41090668253247" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:400px;text-overflow:ellipsis;" text-anchor="end" transform="translate(0,0) rotate(-45 485.41090668253247 305)" y="305" opacity="1"><tspan>2016 WW49</tspan></text><text x="532.6836339552598" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:400px;text-overflow:ellipsis;" text-anchor="end" transform="translate(0,0) rotate(-45 532.6836339552598 305)" y="305" opacity="1"><tspan>2016 WW50</tspan></text><text x="579.956361227987" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:400px;text-overflow:ellipsis;" text-anchor="end" transform="translate(0,0) rotate(-45 579.956361227987 305)" y="305" opacity="1"><tspan>2016 WW51</tspan></text></g><g class="highcharts-axis-labels highcharts-yaxis-labels" zIndex="7"><text x="66" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:192px;text-overflow:clip;" text-anchor="end" transform="translate(0,0)" y="294" opacity="1"><tspan>0 %</tspan></text><text x="66" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:192px;text-overflow:clip;" text-anchor="end" transform="translate(0,0)" y="233" opacity="1"><tspan>25 %</tspan></text><text x="66" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:192px;text-overflow:clip;" text-anchor="end" transform="translate(0,0)" y="173" opacity="1"><tspan>50 %</tspan></text><text x="66" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:192px;text-overflow:clip;" text-anchor="end" transform="translate(0,0)" y="112" opacity="1"><tspan>75 %</tspan></text><text x="66" style="color:#606060;cursor:default;font-size:11px;fill:#606060;width:192px;text-overflow:clip;" text-anchor="end" transform="translate(0,0)" y="52" opacity="1"><tspan>100 %</tspan></text></g><g class="highcharts-tooltip" zIndex="8" style="cursor:default;padding:0;white-space:nowrap;" transform="translate(0,-9999)"><path fill="none" d="M 3.5 0.5 L 13.5 0.5 C 16.5 0.5 16.5 0.5 16.5 3.5 L 16.5 13.5 C 16.5 16.5 16.5 16.5 13.5 16.5 L 3.5 16.5 C 0.5 16.5 0.5 16.5 0.5 13.5 L 0.5 3.5 C 0.5 0.5 0.5 0.5 3.5 0.5" isShadow="true" stroke="black" stroke-opacity="0.049999999999999996" stroke-width="5" transform="translate(1, 1)"></path><path fill="none" d="M 3.5 0.5 L 13.5 0.5 C 16.5 0.5 16.5 0.5 16.5 3.5 L 16.5 13.5 C 16.5 16.5 16.5 16.5 13.5 16.5 L 3.5 16.5 C 0.5 16.5 0.5 16.5 0.5 13.5 L 0.5 3.5 C 0.5 0.5 0.5 0.5 3.5 0.5" isShadow="true" stroke="black" stroke-opacity="0.09999999999999999" stroke-width="3" transform="translate(1, 1)"></path><path fill="none" d="M 3.5 0.5 L 13.5 0.5 C 16.5 0.5 16.5 0.5 16.5 3.5 L 16.5 13.5 C 16.5 16.5 16.5 16.5 13.5 16.5 L 3.5 16.5 C 0.5 16.5 0.5 16.5 0.5 13.5 L 0.5 3.5 C 0.5 0.5 0.5 0.5 3.5 0.5" isShadow="true" stroke="black" stroke-opacity="0.15" stroke-width="1" transform="translate(1, 1)"></path><path fill="rgba(249, 249, 249, .85)" d="M 3.5 0.5 L 13.5 0.5 C 16.5 0.5 16.5 0.5 16.5 3.5 L 16.5 13.5 C 16.5 16.5 16.5 16.5 13.5 16.5 L 3.5 16.5 C 0.5 16.5 0.5 16.5 0.5 13.5 L 0.5 3.5 C 0.5 0.5 0.5 0.5 3.5 0.5"></path><text x="8" zIndex="1" style="font-size:12px;color:#333333;fill:#333333;" y="20"></text></g></svg></div></div>
+                    </div>
+                <br>
                 
-                <table class="MsoNormalTable" width="100%">
-                    <tbody><tr>
-                         <th width="5%">ID</th>
-                        <th width="45%">Title</th>
-                        <th width="7%">Priority</th>
-                        <th width="7%">Severity</th>
-                        <th width="7%">Owner</th>
-                        <th width="7%">Status</th>
-                        <th width="10%">Subsystem</th>
-                        <th width="12%">Promoted ID</th>
-                    </tr>
-                      
-                        
-                            <tr style="background-color:#ff6633">
-                        
-                        
-                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345474">5345474</a></td>
-                        
-                         <td style="text-align:left;">[2016_WW43 BKC][BIOS:105_D11][Neon city FPGA] There would be a caterr and then reset when running the reboot stress test.</td>
-                         <td>P2</td>
-                         <td>2 High</td>
-                         <td>erikamor</td>
-                         <td>Assigned</td>
-                         <td>PMC FW</td>
-                         <td>
-                                    
-                                
-                                    
-                                                
-                                                    <p> <a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345486">5345486</a></p>
-                                                
-                                            
-                                        
-                                    
-                        </td>
-                     </tr>
-                     
-                        
-                            <tr style="background-color:#ff6633">
-                        
-                        
-                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345509">5345509</a></td>
-                        
-                         <td style="text-align:left;">[2016_WW44 BKC][BIOS:106_D11][Neon city FPGA]Occasionally cat error and hang at code 'A9' during warmboot cycling tests</td>
-                         <td>P2</td>
-                         <td>2 High</td>
-                         <td>pdle1</td>
-                         <td>Assigned</td>
-                         <td></td>
-                         <td>
-                                    
-                                
-                                            <p>N/A</p>
-                                        
-                                    
-                        </td>
-                     </tr>
-                     
-                        
-                            <tr style="background-color:#ff6633">
-                        
-                        
-                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345514">5345514</a></td>
-                        
-                         <td style="text-align:left;">[2016_WW44 BKC][BIOS:106_D11][Neon city FPGA]PTT support option is gray and can't be enable in BIOS setup.</td>
-                         <td>P2</td>
-                         <td>3 Medium</td>
-                         <td>mdelgado</td>
-                         <td>Assigned</td>
-                         <td>SPS FW</td>
-                         <td>
-                                    
-                                
-                                            <p>N/A</p>
-                                        
-                                    
-                        </td>
-                     </tr>
-                     
-                        
-                            <tr>
-                        
-                        
-                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345552">5345552</a></td>
-                        
-                         <td style="text-align:left;">[2016_WW46 BKC][BIOS 108.D11][P&P][Neon City FPGA] Mlc Local all read memory peak Bandwidth decreased 13.74% (from 182.9 GB/s to 157.6 GB/s )</td>
-                         <td>P2</td>
-                         <td>3 Medium</td>
-                         <td>jvoelz7</td>
-                         <td>Assigned</td>
-                         <td></td>
-                         <td>
-                                    
-                                
-                                            <p>N/A</p>
-                                        
-                                    
-                        </td>
-                     </tr>
-                     
-                        
-                            <tr>
-                        
-                        
-                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345719">5345719</a></td>
-                        
-                         <td style="text-align:left;">[2016_WW50 BKC][BIOS:112_D10][Neon city FPGA]After run CPU workload by PTU ,QL66 CPU frequency and consumption are less than normal.</td>
-                         <td>P2</td>
-                         <td>3 Medium</td>
-                         <td>kdakdemi</td>
-                         <td>Assigned</td>
-                         <td>Silicon</td>
-                         <td>
-                                    
-                                
-                                            <p>N/A</p>
-                                        
-                                    
-                        </td>
-                     </tr>
-                     
-                        
-                            <tr>
-                        
-                        
-                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345546">5345546</a></td>
-                        
-                         <td style="text-align:left;">[2016_WW45 BKC][BIOS:107_D07][Neon city FPGA]WOL function is still working when disabled in BIOS.</td>
-                         <td>P3</td>
-                         <td>3 Medium</td>
-                         <td>yanghe1</td>
-                         <td>Assigned</td>
-                         <td></td>
-                         <td>
-                                    
-                                
-                                    
-                                                
-                                                    <p> <a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345499">5345499</a></p>
-                                                
-                                            
-                                        
-                                    
-                        </td>
-                     </tr>
-                     
-                        
-                            <tr>
-                        
-                        
-                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345608">5345608</a></td>
-                        
-                         <td style="text-align:left;">[2016_WW47 BKC][BIOS:109_D12][Neon city FPGA]SUT will hang when add new boot option.</td>
-                         <td>P3</td>
-                         <td>3 Medium</td>
-                         <td>junyuton</td>
-                         <td>Assigned</td>
-                         <td>BIOS</td>
-                         <td>
-                                    
-                                
-                                    
-                                                
-                                                    <p> <a href="https://vthsd.png.intel.com/hsd/bios_purley/sighting/default.aspx?sighting_id=5372828">bios_purley_5372828</a></p>
-                                                
-                                            
-                                        
-                                    
-                        </td>
-                     </tr>
-                     
-                        
-                            <tr>
-                        
-                        
-                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345420">5345420</a></td>
-                        
-                         <td style="text-align:left;">[2016_WW40 BKC][BIOS:102_D12][Neon city FPGA]CPLD 1 version show‘F.F’ after flash CPLD 0x11_0x22</td>
-                         <td>P3</td>
-                         <td>4 Low</td>
-                         <td>jdbolano</td>
-                         <td>Assigned</td>
-                         <td></td>
-                         <td>
-                                    
-                                
-                                            <p>N/A</p>
-                                        
-                                    
-                        </td>
-                     </tr>
-                     
-                        
-                            <tr>
-                        
-                        
-                         <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345493">5345493</a></td>
-                        
-                         <td style="text-align:left;">[2016_WW43 BKC][BIOS:105_D11][Neon city FPGA] Entering "Platform Configuration -> PCH Configuration" resets other saved change.</td>
-                         <td>P3</td>
-                         <td>4 Low</td>
-                         <td>dbu</td>
-                         <td>Assigned</td>
-                         <td>BIOS</td>
-                         <td>
-                                    
-                                
-                                            <p>N/A</p>
-                                        
-                                    
-                        </td>
-                     </tr>
-                     
-                 
-                </tbody></table><br>
                 </div>
             </div>
+            
+            
+            
         </div>
+    
+        
         <div class="panel collapse-report-panel">
