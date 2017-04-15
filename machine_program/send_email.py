@@ -84,13 +84,20 @@ class SendEmail:
             print "         \033[37mtext: %s\033[0m" % IMAGE
             print "\033[36m**********************************\033[0m"
 
+        html_string = ''
+        with open(r'C:\Users\pengzh5x\PycharmProjects\personal_program\machine_program\report_html\Purley-FPGA\Silver\2017_20WW15\5846_Silver_html', 'r') as f:
+            html_data = f.readlines()
+        for i in range(len(html_data)):
+            html_data[i] = html_data[i].strip()
+            html_string += html_data[i]
         # 邮件对象:
         msg = MIMEMultipart()
         # 邮件正文是MIMEText:
         msg['From'] = self._format_addr(from_addr)
         msg.attach(MIMEText('This is a test message written by python...', 'plain', 'utf-8'))
+        msg.attach(MIMEText(html_string, 'html', 'utf-8'))
         # 添加附件就是加上一个MIMEBase，从本地读取一个图片:
-        with open('C:\Users\pengzh5x\Desktop\ITF_Skylake_FPGA_BKC_TestCase_WW12_v1.5.6.xlsx', 'rb') as f:
+        with open('C:\Users\pengzh5x\Desktop\ITF_Skylake_FPGA_BKC_TestCase_WW13_v1.5.8.xlsx', 'rb') as f:
             # 设置附件的MIME和文件名，这里是png类型:
             mime = MIMEBase('file', 'xlsx', filename='ITF_Skylake_FPGA_BKC_TestCase_WW12_v1.5.6.xlsx')
             # 加上必要的头信息:
@@ -104,19 +111,18 @@ class SendEmail:
             # 添加到MIMEMultipart:
             msg.attach(mime)
 
-        address_set = set()
+        address_list = []
         for address in to_addr.split(','):
             if len(address) == 0:
                 continue
-            address_set.add(address)
+            address_list.append(address)
 
-        for address in address_set:
-            msg['To'] = self._format_addr(address)
-            msg['Subject'] = Header(u'This is ITF result verification……', 'utf-8').encode()
-            server = smtplib.SMTP(smtp_server, 25)
-            server.set_debuglevel(1)
-            server.sendmail(from_addr, [address], msg.as_string())
-            server.quit()
+        msg['To'] = ','.join(address_list)
+        msg['Subject'] = Header(u'This is ITF result verification……', 'utf-8').encode()
+        server = smtplib.SMTP(smtp_server, 25)
+        server.set_debuglevel(1)
+        server.sendmail(from_addr, address_list, msg.as_string())
+        server.quit()
 
 if __name__ == '__main__':
     send = SendEmail()

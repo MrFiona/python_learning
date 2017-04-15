@@ -18,15 +18,27 @@ import collections
 import HTMLParser
 import htmlentitydefs
 from bs4 import BeautifulSoup
+from cache_mechanism import DiskCache
 
 # socket.setdefaulttimeout(5)
 
 #https://dcg-oss.intel.com/ossreport/auto/Purley-FPGA/Silver/2017%20WW10/5658_Silver.html
 class GetAnalysisData(object):
-    def __init__(self, data_url, get_info_not_save_flag=False):
+    def __init__(self, data_url, get_info_not_save_flag=False, cache=None):
         self.data_url = data_url
-        self.get_info_not_save_flag = get_info_not_save_flag
+        self.cache = cache
         try:
+            result = None
+            if self.cache:
+                try:
+                    result = self.cache[self.data_url]
+                except KeyError:
+                    pass
+
+            if result is None:
+                result = urllib2.urlopen(self.data_url).read()
+                if self.cache:
+                    self.cache[self.data_url] = result
             # print 'data_url:\t', self.data_url
             self.save_file_name = os.path.split(self.data_url)[-1].split('.')[0] + '_html'
             temp_path = self.data_url.split('auto')[1].strip('/').split('/')[:-1] #去掉最后一个html文件名
@@ -36,10 +48,11 @@ class GetAnalysisData(object):
             self.save_file_path = os.getcwd() + os.sep + 'report_html' + os.sep +'%s' % os.sep.join([ self.grandfather_path, self.father_path, self.son_path ])
             url_split_list = self.data_url.split('/')[-2]
             self.date_string = url_split_list[-4:]
-            print self.date_string
         except IndexError, e:
             raise UserWarning('请检查url: [ %s ] 是否输入完整!!!' %self.data_url)
-        self.save_html()
+        #保存文件标记开启，将html代码保存为文件
+        if get_info_not_save_flag:
+            self.save_html()
 
     #获取url详细信息
     def get_info_detail(self):
@@ -100,13 +113,16 @@ class GetAnalysisData(object):
             cell_data_list = []
         # print data_type, bkc_flag
         if not os.path.exists(self.save_file_path):
-            raise UserWarning('文件不存在!!!')
+            raise UserWarning('%s 目录不存在!!!' % self.save_file_path)
         #BKC标记开启，自动更换为文件BKC地址
         if bkc_flag:
             # print self.save_file_path
             self.save_file_path = self.save_file_path.replace('Silver', 'BKC')
             # print self.save_file_path
             # if os.path.exists(self.save_file_path):
+            if not os.path.exists(self.save_file_path):
+                # raise UserWarning('%s 目录不存在!!!' % self.save_file_path)
+                return [], [], []
             search_file_list = os.listdir(self.save_file_path)
             # print search_file_list
             bkc_file_name = ''
@@ -116,13 +132,14 @@ class GetAnalysisData(object):
                     bkc_file_name = file
             if len(bkc_file_name) == 0:
                 print 'BKC文件不存在'
-                return []
+                return [], [], []
             self.save_file_name = bkc_file_name
 
         # 读取文本中的html代码
-        with codecs.open(self.save_file_path + os.sep + self.save_file_name, 'r', encoding='utf-8') as f:
-            data = f.readlines()
-        data = ''.join(data)
+        # with codecs.open(self.save_file_path + os.sep + self.save_file_name, 'r', encoding='utf-8') as f:
+        #     data = f.readlines()
+        # data = ''.join(data)
+        data = self.cache[self.data_url]
         # 提取HW Configuration部分的代码
         regex = re.compile(r'<span class="sh2">&nbsp; %s </span>(.*?)<div class="panel-heading">' % data_type,
                            re.S | re.M)
@@ -236,7 +253,7 @@ class GetAnalysisData(object):
         tr_list, header_list, cell_data_list = self._common_regex(data_type, bkc_flag)
         # print tr_list, len(tr_list)
         if not tr_list:
-            return None, None, None, None
+            return self.date_string, [], [], []
         # 循环处理tr中的代码，提取出excel表头信息，存放在表头列表header_list
         effective_header_list = []
         for t in tr_list:
@@ -306,13 +323,15 @@ class GetAnalysisData(object):
         # print effective_header_list, len(effective_header_list)
         # 列坐标列表
         # print header_list
-        print '\033[31mheader_list:\t\033[0m', header_list
-        print '\033[36mcell_data_list:\t\033[0m', cell_data_list
-        print '\033[32meffective_header_list:\t\033[0m', effective_header_list
+        # print '\033[31mheader_list:\t\033[0m', header_list, len(header_list)
+        # print '\033[36mcell_data_list:\t\033[0m', cell_data_list, len(cell_data_list)
+        # print '\033[32meffective_header_list:\t\033[0m', effective_header_list, len(effective_header_list)
         return self.date_string, effective_header_list, header_list, cell_data_list
 
     def get_sw_data(self, data_type, bkc_flag=True):
         tr_list, header_list, cell_data_list = self._common_regex(data_type, bkc_flag)
+        if not tr_list:
+            return self.date_string, [], [], [], [], []
         soup_header = BeautifulSoup(str(tr_list[0]), 'html.parser')
         header_list = list(soup_header.strings)
         num = header_list.count('\n')
@@ -395,12 +414,14 @@ class GetAnalysisData(object):
                     temp.append(ele)
                 temp.append(qstring)
             #添加每一行的url列表
+            # print temp
             url_list.append(temp_url_list)
             left_col_list_1.append(head_constant)
             left_col_list_2.append(head_constant_1)
             num = temp.count('')
             for ele in range(num):
                 temp.remove('')
+            # print temp
             if temp[1] == temp[-2]:
                 temp.remove(temp[-2])
             #消除特殊字符带来的影响
@@ -413,15 +434,21 @@ class GetAnalysisData(object):
         for i in range(len(left_col_list_2)):
             left_col_list_2[i] = left_col_list_2[i].replace(' ', '')
             left_col_list_2[i] = left_col_list_2[i].replace('\n', '')
-        print '\033[31mheader_list:\t\033[0m', header_list
-        print '\033[36mcell_data_list:\t\033[0m', cell_data_list
-        print '\033[32mleft_col_list_1:\t\033[0m', left_col_list_1
-        print '\033[32mleft_col_list_2:\t\033[0m', left_col_list_2
+        #第40周特殊
+        if len(header_list) > len(cell_data_list[0]):
+            header_list = header_list[ -len(cell_data_list[0]): ]
+        # print '\033[31mheader_list:\t\033[0m', header_list
+        # print '\033[36mcell_data_list:\t\033[0m', cell_data_list, len(cell_data_list)
+        # print '\033[32mleft_col_list_1:\t\033[0m', left_col_list_1
+        # print '\033[32mleft_col_list_2:\t\033[0m', left_col_list_2
+        # print '\033[31murl_list:\t\033[0m', url_list, len(url_list)
         return self.date_string, url_list, header_list, cell_data_list, left_col_list_1, left_col_list_2
         #返回表头列表，行单元格信息列表，左边两列信息列表
 
     def get_ifwi_data(self, data_type, bkc_flag=True):
         tr_list, header_list, cell_data_list = self._common_regex(data_type, bkc_flag)
+        if not tr_list:
+            return self.date_string, [], []
         for tr in tr_list:
             soup = BeautifulSoup(str(tr), 'html.parser')
             th_list = soup.find_all('th')
@@ -435,13 +462,17 @@ class GetAnalysisData(object):
                 num = td_string_list.count('\n')
                 for j in range(num):
                     td_string_list.remove('\n')
+                #去掉首位字符串开头的空格,排除空格的影响 后续会排序
+                td_string_list[0] = td_string_list[0].lstrip(' ')
                 cell_data_list.append(td_string_list)
-        print '\033[31mheader_list:\t\033[0m', header_list
-        print '\033[36mcell_data_list:\t\033[0m', cell_data_list
+        # print '\033[31mheader_list:\t\033[0m', header_list
+        # print '\033[36mcell_data_list:\t\033[0m', cell_data_list
         return self.date_string, header_list, cell_data_list
 
     def get_platform_data(self, data_type, bkc_flag=True):
         tr_list, header_list, cell_data_list = self._common_regex(data_type, bkc_flag=True)
+        if not tr_list:
+            return self.date_string, [], [], []
         effective_url_list = []
         for tr in tr_list:
             temp = []
@@ -484,13 +515,15 @@ class GetAnalysisData(object):
                         temp.append(k)
                 cell_data_list.append(temp)
         header_list = header_list[1:]
-        print '\033[31mheader_list:\t\033[0m', header_list, len(header_list)
-        print '\033[36mcell_data_list:\t\033[0m', cell_data_list, len(cell_data_list)
-        print '\033[32meffective_url_list:\t\033[0m', effective_url_list, len(effective_url_list)
+        # print '\033[31mheader_list:\t\033[0m', header_list, len(header_list)
+        # print '\033[36mcell_data_list:\t\033[0m', cell_data_list, len(cell_data_list)
+        # print '\033[32meffective_url_list:\t\033[0m', effective_url_list, len(effective_url_list)
         return self.date_string, effective_url_list, header_list, cell_data_list
 
     def get_rework_data(self, data_type, bkc_flag=True):
         tr_list, header_list, cell_data_list = self._common_regex(data_type, bkc_flag)
+        if not tr_list:
+            return [], self.date_string
         object_string_list = []
         for tr in tr_list:
             soup = BeautifulSoup(str(tr), 'html.parser')
@@ -539,11 +572,13 @@ class GetAnalysisData(object):
         #             object_string_list[key] = object_string_list[key].replace(ele, '')
         # 对提取的字符串列表进行清洗，统一组合格式：空格分隔  Mon Apr 10 14:00:27 2017
         object_string_list = self._remove_non_alphanumeric_characters(object_string_list)
-        print object_string_list, len(object_string_list)
+        # print object_string_list, len(object_string_list)
         return object_string_list, self.date_string
 
     def get_existing_sighting_data(self, data_type, bkc_flag=True):
         tr_list, header_list, cell_data_list = self._common_regex(data_type, bkc_flag)
+        if not tr_list:
+            return [], [], [], self.date_string
         #获取链接地址
         cell_last_data = []
         effective_url_list = []
@@ -611,6 +646,9 @@ class GetAnalysisData(object):
                     temp.append('')
 
             cell_last_data.append(strings)
+            #去除多余的换行符和空格，防止插入excel表格时报 255 characters since it exceeds Excel's limit for URLS 长度超过限定长度
+            for k in range(len(url_list)):
+                url_list[k] = re.sub('[\s]', '', url_list[k])
             effective_url_list.append(url_list)
             #移除非字母数字字符
             temp = self._remove_non_alphanumeric_characters(temp)
@@ -628,6 +666,8 @@ class GetAnalysisData(object):
 
     def get_new_sightings_data(self, data_type, bkc_flag=True):
         tr_list, header_list, cell_data_list = self._common_regex(data_type, bkc_flag)
+        if not tr_list:
+            return self.date_string, [], [], []
         effective_url_list = []
         for tr in tr_list:
             url_list = []
@@ -672,13 +712,15 @@ class GetAnalysisData(object):
         # deal_url_list = [ [ re.sub('[\n| ]', '', url) for url in url_first] for url_first in effective_url_list ]
         # if len(deal_url_list) <= len(effective_url_list):
         #     effective_url_list = copy.deepcopy(deal_url_list)
-        print '\033[31mheader_list:\t\033[0m', header_list
-        print '\033[36mcell_data_list:\t\033[0m', cell_data_list
-        print '\033[32meffective_url_list:\t\033[0m', effective_url_list
+        # print '\033[31mheader_list:\t\033[0m', header_list
+        # print '\033[36mcell_data_list:\t\033[0m', cell_data_list
+        # print '\033[32meffective_url_list:\t\033[0m', effective_url_list
         return self.date_string, effective_url_list, header_list, cell_data_list
 
     def get_closed_sightings_data(self, data_type, bkc_flag=True):
         tr_list, header_list, cell_data_list = self._common_regex(data_type, bkc_flag)
+        if not tr_list:
+            return self.date_string, [], [], []
         # print tr_list
         effective_url_list = []
         for tr in tr_list:
@@ -716,9 +758,9 @@ class GetAnalysisData(object):
                     temp.append(temp_list[0])
                 temp = self._remove_non_alphanumeric_characters(temp)
                 cell_data_list.append(temp)
-        print '\033[31mheader_list:\t\033[0m', header_list
-        print '\033[36mcell_data_list:\t\033[0m', cell_data_list
-        print '\033[32meffective_url_list:\t\033[0m', effective_url_list
+        # print '\033[31mheader_list:\t\033[0m', header_list
+        # print '\033[36mcell_data_list:\t\033[0m', cell_data_list
+        # print '\033[32meffective_url_list:\t\033[0m', effective_url_list
         return self.date_string, effective_url_list, header_list, cell_data_list
 
     def get_caseresult_data(self, data_type, bkc_flag=True):
@@ -748,6 +790,8 @@ class GetAnalysisData(object):
 
         header_list = []
         cell_data_list = []
+        if not tr_list:
+            return self.date_string, [], [], []
         #获取表列名
         for tr in tr_list:
             temp = []
@@ -775,25 +819,26 @@ class GetAnalysisData(object):
                         continue
                     temp.append(temp_list[0])
                 cell_data_list.append(temp)
-        print '\033[31mheader_list:\t\033[0m', header_list, len(header_list)
-        print '\033[36mcell_data_list:\t\033[0m', cell_data_list, len(cell_data_list)
-        print '\033[32mtip_string:\t\033[0m', tip_string, len(tip_string)
-        for cell in cell_data_list:
-            print cell
-        return tip_string, header_list, cell_data_list
+        # print '\033[31mheader_list:\t\033[0m', header_list, len(header_list)
+        # print '\033[36mcell_data_list:\t\033[0m', cell_data_list, len(cell_data_list)
+        # print '\033[32mtip_string:\t\033[0m', tip_string, len(tip_string)
+        # for cell in cell_data_list:
+        #     print cell
+        return self.date_string, tip_string, header_list, cell_data_list
 
 if __name__ == '__main__':
     import time
     start = time.time()
-    url = 'https://dcg-oss.intel.com/ossreport/auto/Purley-FPGA/Silver/2016%20WW43/4146_Silver.html'
-    obj = GetAnalysisData(url)
+    url = 'https://dcg-oss.intel.com/ossreport/auto/Purley-FPGA/Silver/2016%20WW40/4064_Silver.html'
+    cache = DiskCache()
+    obj = GetAnalysisData(url, get_info_not_save_flag=False, cache=cache)
     # obj.save_html()
-    obj.get_sw_data('SW Configuration')
+    # obj.get_sw_data('SW Configuration')
     # obj.get_hw_data('HW Configuration')
     # obj.get_ifwi_data('IFWI Configuration')
     # obj.get_platform_data('Platform Integration Validation Result')
     # obj.get_rework_data('HW Rework', True)
-    # obj.get_existing_sighting_data('Existing Sightings')
+    obj.get_existing_sighting_data('Existing Sightings')
     # obj.get_new_sightings_data('New Sightings')
     # obj.get_closed_sightings_data('Closed Sightings')
     # obj.get_caseresult_data('Platform Integration Validation Result')

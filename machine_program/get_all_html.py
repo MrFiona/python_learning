@@ -16,6 +16,7 @@ import threading
 import collections
 from bs4 import BeautifulSoup
 from extract_data import GetAnalysisData
+from cache_mechanism import DiskCache
 
 #'https://dcg-oss.intel.com/ossreport/auto'
 class GetUrlFromHtml(object):
@@ -59,10 +60,10 @@ class GetUrlFromHtml(object):
             raise UserWarning('请检查 [ %s ] 目录是否存在!!!' % os.path.split(file_path)[0])
 
     #提取Html中指定的tag信息列表
-    def _get_html_tag(self, html, tag):
+    def _get_html_tag(self, html, tag_name):
         # print 'html', html
         soup = BeautifulSoup(html, 'html.parser')
-        tag = soup.find_all(re.compile(tag))
+        tag = soup.find_all(re.compile(tag_name))
         # print 'tag', tag
         # 去除Parent Directory这个无效选项
         tag.pop(0)
@@ -171,8 +172,9 @@ class GetUrlFromHtml(object):
 
     def write_html_by_multi_thread(self):
         thread_list = []
+        cache = DiskCache()
         for url in self.url_info_list:
-            thread = threading.Thread(target=GetAnalysisData, args=(url, ))
+            thread = threading.Thread(target=GetAnalysisData, args=(url, True, cache))
             thread_list.append(thread)
         for t in thread_list:
             t.start()
@@ -183,7 +185,7 @@ class GetUrlFromHtml(object):
             f.write('\n'.join(self.url_info_list))
 
     #获取所有的类型的数据
-    def get_all_type_data(self, get_info_not_save_flag=False):
+    def get_all_type_data(self):
         #获取部门列表
         self.department_list = self.get_department_html_info()
         if not self.department_list:
@@ -226,7 +228,7 @@ if __name__ == '__main__':
     object.get_all_type_data()
     #多线程写文件
     object.write_html_by_multi_thread()
-    object.get_department_stage_date_list()
+    # object.get_department_stage_date_list()
     print '用时: [ %d ]' %(time.time() - start)
     # hw = object.get_hw_configuration_info('BasinFalls', 'Gold111', '')
     # object.get_department_html_info()
