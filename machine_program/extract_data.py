@@ -20,6 +20,9 @@ import htmlentitydefs
 from bs4 import BeautifulSoup
 from cache_mechanism import DiskCache
 
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
 # socket.setdefaulttimeout(5)
 
 #https://dcg-oss.intel.com/ossreport/auto/Purley-FPGA/Silver/2017%20WW10/5658_Silver.html
@@ -99,7 +102,7 @@ class GetAnalysisData(object):
         # 对提取的字符串列表进行清洗，统一组合格式：空格分隔  Mon Apr 10 14:00:27 2017
         for ele in range(len(object_string_list)):
             object_string_list[ele] = re.sub('[\s]', 'MrFiona', object_string_list[ele])
-            object_string_list[ele] = re.sub('[^\w\"\'\.\_\-\>\[\]\(\)\@\~]', '', object_string_list[ele])
+            object_string_list[ele] = re.sub('[^\w\"\'\.\_\-\>\[\]\(\)\@\~\/\*]', '', object_string_list[ele])
             temp_ele_list = re.split('MrFiona', object_string_list[ele])
             ele_list = [effective for effective in temp_ele_list if len(effective) != 0]
             object_string_list[ele] = ' '.join(ele_list)
@@ -116,15 +119,13 @@ class GetAnalysisData(object):
             raise UserWarning('%s 目录不存在!!!' % self.save_file_path)
         #BKC标记开启，自动更换为文件BKC地址
         if bkc_flag:
-            # print self.save_file_path
             self.save_file_path = self.save_file_path.replace('Silver', 'BKC')
-            # print self.save_file_path
-            # if os.path.exists(self.save_file_path):
+            self.data_url = self.data_url.replace('Silver', 'BKC')
+            # print self.data_url
             if not os.path.exists(self.save_file_path):
                 # raise UserWarning('%s 目录不存在!!!' % self.save_file_path)
                 return [], [], []
             search_file_list = os.listdir(self.save_file_path)
-            # print search_file_list
             bkc_file_name = ''
             for file in search_file_list:
                 match = re.match(r'\d+', file)
@@ -141,8 +142,7 @@ class GetAnalysisData(object):
         # data = ''.join(data)
         data = self.cache[self.data_url]
         # 提取HW Configuration部分的代码
-        regex = re.compile(r'<span class="sh2">&nbsp; %s </span>(.*?)<div class="panel-heading">' % data_type,
-                           re.S | re.M)
+        regex = re.compile(r'<span class="sh2">&nbsp; %s </span>(.*?)<div class="panel-heading">' % data_type, re.S | re.M)
         header = re.findall(regex, data)
         string_data = ''.join(header)
         # 提取所有的tr部分
@@ -153,7 +153,6 @@ class GetAnalysisData(object):
         if not tr_list:
             # print '提取的tr_list为空!开始通过文本提取匹配内容......'
             file_path = self.save_file_path + os.sep + self.save_file_name
-            # print file_path
             if bkc_flag:
                 print '\033[43mBKC链接:\t\033[0m', self.data_url.replace('Silver', 'BKC')
             fread = codecs.open(self.save_file_path + os.sep + self.save_file_name, 'r', 'utf-8')
@@ -176,7 +175,6 @@ class GetAnalysisData(object):
                 lines = f.readlines()
 
             lines = ''.join(lines)
-            # print lines, type(lines), chardet.detect(lines.encode('utf-8'))
             soup = BeautifulSoup(lines, 'html.parser')
             tr_list = soup.find_all('tr')
             # print '文本提取匹配内容结束......'
@@ -233,6 +231,7 @@ class GetAnalysisData(object):
     def _insert_numers_to_cell_data_list(self, cell_data_list):
         try:
             effective_header_list, effective_num_list = self._get_hw_effective_header_list(cell_data_list[0])
+            # print effective_num_list
             for node_list in effective_num_list:
                 left_half_section = node_list[0]
                 try:
@@ -294,6 +293,7 @@ class GetAnalysisData(object):
                         effective_header_list.append(td_data)
                         effective_header_list, effective_num_list = self._get_hw_effective_header_list(effective_header_list)
             if temp:
+                temp = self._remove_non_alphanumeric_characters(temp)
                 cell_data_list.append(temp[1:])
             #适配html表列名对应行中含有标签不含有td标签
             if t == tr_list[0]:
@@ -312,6 +312,7 @@ class GetAnalysisData(object):
                 effective_header_list, effective_num_list = self._get_hw_effective_header_list(effective_header_list)
 
         cell_data_list = self._insert_numers_to_cell_data_list(cell_data_list)
+        header_list = self._remove_non_alphanumeric_characters(header_list)
         if cell_data_list:
             cell_data_list[0] = effective_header_list
         header_cell_data_info = collections.OrderedDict()
@@ -340,9 +341,9 @@ class GetAnalysisData(object):
         for i in range(len(header_list)):
             header_list[i] = header_list[i].replace('\n', '')
         #排除部分周会有更多的列
+        header_length = len(header_list)
         header_list = header_list[:4]
         difference_length = len(header_list) - len(header_list[:4])
-        header_length = len(header_list)
         #左边的第一列
         left_col_list_1 = []
         #左边的第二列
@@ -442,7 +443,7 @@ class GetAnalysisData(object):
         # print '\033[32mleft_col_list_1:\t\033[0m', left_col_list_1
         # print '\033[32mleft_col_list_2:\t\033[0m', left_col_list_2
         # print '\033[31murl_list:\t\033[0m', url_list, len(url_list)
-        return self.date_string, url_list, header_list, cell_data_list, left_col_list_1, left_col_list_2
+        return header_length, self.date_string, url_list, header_list, cell_data_list, left_col_list_1, left_col_list_2
         #返回表头列表，行单元格信息列表，左边两列信息列表
 
     def get_ifwi_data(self, data_type, bkc_flag=True):
@@ -470,7 +471,7 @@ class GetAnalysisData(object):
         return self.date_string, header_list, cell_data_list
 
     def get_platform_data(self, data_type, bkc_flag=True):
-        tr_list, header_list, cell_data_list = self._common_regex(data_type, bkc_flag=True)
+        tr_list, header_list, cell_data_list = self._common_regex(data_type, bkc_flag)
         if not tr_list:
             return self.date_string, [], [], []
         effective_url_list = []
@@ -564,12 +565,6 @@ class GetAnalysisData(object):
                     if len(object_string_list) == 2:
                         object_string_list.append('')
                     object_string_list.append(temp_string)
-        #\xb7:点 \xa0:空格
-        # unicode_character_list = [u'\xb7', u'\xa0']
-        # for key in xrange(len(object_string_list)):
-        #     for ele in unicode_character_list:
-        #         if ele in object_string_list[key]:
-        #             object_string_list[key] = object_string_list[key].replace(ele, '')
         # 对提取的字符串列表进行清洗，统一组合格式：空格分隔  Mon Apr 10 14:00:27 2017
         object_string_list = self._remove_non_alphanumeric_characters(object_string_list)
         # print object_string_list, len(object_string_list)
@@ -659,9 +654,9 @@ class GetAnalysisData(object):
             if len(cell_last_data[k]) >= 2:
                 for e in cell_last_data[k][1:]:
                     cell_data_list[k].append(e)
-        print '\033[31mheader_list:\t\033[0m', header_list, len(header_list)
-        print '\033[36mcell_data_list:\t\033[0m', cell_data_list, len(cell_data_list)
-        print '\033[32meffective_link_address_list:\t\033[0m', effective_url_list, len(effective_url_list)
+        # print '\033[31mheader_list:\t\033[0m', header_list, len(header_list)
+        # print '\033[36mcell_data_list:\t\033[0m', cell_data_list, len(cell_data_list)
+        # print '\033[32meffective_link_address_list:\t\033[0m', effective_url_list, len(effective_url_list)
         return effective_url_list, header_list, cell_data_list, self.date_string
 
     def get_new_sightings_data(self, data_type, bkc_flag=True):
@@ -770,7 +765,6 @@ class GetAnalysisData(object):
         if not bkc_flag:
             bkc_case_result_url = 'http://dcg-oss.intel.com/test_report/report_case/' + key_num_string + '/Silver/' + self.grandfather_path
 
-        print bkc_case_result_url
         html = urllib2.urlopen(bkc_case_result_url).read()
         soup = BeautifulSoup(str(html), 'html.parser')
         #获取数据部分头部的标记字符串  Purley-FPGA WW12
@@ -829,16 +823,28 @@ class GetAnalysisData(object):
 if __name__ == '__main__':
     import time
     start = time.time()
-    url = 'https://dcg-oss.intel.com/ossreport/auto/Purley-FPGA/Silver/2016%20WW40/4064_Silver.html'
+    key_url_list = []
+    f = open(os.getcwd() + os.sep + 'report_html' + os.sep + 'url_info.txt')
+    for line in f:
+        if 'Purley-FPGA' in line and 'Silver' in line:
+            key_url_list.append(line.strip('\n'))
     cache = DiskCache()
-    obj = GetAnalysisData(url, get_info_not_save_flag=False, cache=cache)
-    # obj.save_html()
-    # obj.get_sw_data('SW Configuration')
+    # key_url_list = ['https://dcg-oss.intel.com/ossreport/auto/Purley-FPGA/BKC/2017%20WW15/5846_BKC.html',]
+    #                 ]
+    for url in key_url_list:
+        print '\033[31m开始提取 %s 数据\033[0m' % url
+    # url = 'https://dcg-oss.intel.com/ossreport/auto/Purley-FPGA/Silver/2017%20WW11/5691_Silver.html'
+        obj = GetAnalysisData(url, get_info_not_save_flag=True, cache=cache)
+        # obj.save_html()
+        obj.get_caseresult_data('Platform Integration Validation Result')
+        # obj.get_platform_data('Platform Integration Validation Result')
+        # obj.get_hw_data('HW Configuration')
+        # obj.get_sw_data('SW Configuration')
     # obj.get_hw_data('HW Configuration')
     # obj.get_ifwi_data('IFWI Configuration')
     # obj.get_platform_data('Platform Integration Validation Result')
     # obj.get_rework_data('HW Rework', True)
-    obj.get_existing_sighting_data('Existing Sightings')
+    # obj.get_existing_sighting_data('Existing Sightings')
     # obj.get_new_sightings_data('New Sightings')
     # obj.get_closed_sightings_data('Closed Sightings')
     # obj.get_caseresult_data('Platform Integration Validation Result')
