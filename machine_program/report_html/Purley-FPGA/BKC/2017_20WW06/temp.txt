@@ -1,86 +1,15 @@
-                <span class="sh2">  Closed Sightings </span>
+                <span class="sh2">  New Sightings </span>
                 <div class="FoldIcon">
-                    <div class="CollapseBtn not-collapsed collapsed" data-toggle="collapse" href="#collapseClosedSightings"></div>
+                    <div class="CollapseBtn not-collapsed collapsed" data-toggle="collapse" href="#collapseNewSightings"></div>
                 </div>
             </div>
-            <div id="collapseClosedSightings" class="panel-collapse collapse ">
+            <div id="collapseNewSightings" class="panel-collapse collapse ">
                 <div class="panel-body">
                     
-                    <table class="MsoNormalTable" width="100%">
-                        <tbody><tr>
-                            <th width="5%">ID</th>
-                            <th width="45%">Title</th>
-                            <th width="7%">Priority</th>
-                            <th width="7%">Severity</th>
-                            <th width="6%">Owner</th>
-                            <th width="8%">Closed Reason</th>
-                            <th width="5%">Status</th>
-                            <th width="5%">Subsystem</th>
-                            <th width="12%">Promoted ID</th>
-                        </tr>
-                          
-                        <tr>
-                            
-                             <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345546">5345546</a></td>
-                            
-                             <td style="text-align:left;">[2016_WW45 BKC][BIOS:107_D07][Neon city FPGA]WOL function is still working when disabled in BIOS.</td>
-                             <td>P3</td>
-                             <td>3 Medium</td>
-                             <td>yanghe1</td>
-                             <td>Documentation</td>
-                             <td>Closed</td>
-                             <td>BIOS</td>
-                             <td>
-                                        
-                                    
-                                        
-                                                    
-                                                        <p> <a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345499">5345499</a></p>
-                                                    
-                                                
-                                            
-                                        
-                            </td>
-                         </tr>
-                         
-                        <tr>
-                            
-                             <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345493">5345493</a></td>
-                            
-                             <td style="text-align:left;">[2016_WW43 BKC][BIOS:105_D11][Neon city FPGA] Entering "Platform Configuration -> PCH Configuration" resets other saved change.</td>
-                             <td>P3</td>
-                             <td>4 Low</td>
-                             <td>dbu</td>
-                             <td>Documentation</td>
-                             <td>Closed</td>
-                             <td>BIOS</td>
-                             <td>
-                                        
-                                    
-                                        
-                                                    
-                                                        <p> <a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5344902">5344902</a></p>
-                                                    
-                                                
-                                            
-                                        
-                                    
-                                        
-                                                    
-                                                        <p> <a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345638">5345638</a></p>
-                                                    
-                                                
-                                            
-                                        
-                            </td>
-                         </tr>
-                         
-                     
-                    </tbody></table><br>
-                
+                    <p>  N/A</p>
+                    
+                    <br>
                 </div>
             </div>
         </div>
-        <br>
-        
         <div class="panel collapse-report-panel">

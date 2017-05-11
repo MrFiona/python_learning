@@ -5,10 +5,10 @@
 # File    : send_email.py
 # Software: PyCharm Community Edition
 
-DEBUG_FLAG=True
 
 import os
 import smtplib
+import glob
 from email import encoders
 from email.header import Header
 from email.mime.base import MIMEBase
@@ -16,6 +16,8 @@ from email.mime.text import MIMEText
 from email.utils import parseaddr, formataddr
 from email.mime.multipart import MIMEMultipart
 from machine_config import MachineConfig
+from setting_gloab_variable import DEBUG_FLAG, lastest_week_string
+
 
 class SendEmail:
     def __init__(self):
@@ -85,31 +87,34 @@ class SendEmail:
             print "\033[36m**********************************\033[0m"
 
         html_string = ''
-        with open(r'C:\Users\pengzh5x\PycharmProjects\personal_program\machine_program\report_html\Purley-FPGA\Silver\2017_20WW15\5846_Silver_html', 'r') as f:
-            html_data = f.readlines()
-        for i in range(len(html_data)):
-            html_data[i] = html_data[i].strip()
-            html_string += html_data[i]
+
+        if os.path.exists(os.getcwd() + os.sep + 'html_result'):
+            for file in glob.glob(os.getcwd() + os.sep + 'html_result' + os.sep + '*.html'):
+                with open(file, 'r') as f:
+                    html_data = f.readlines()
+                for i in range(len(html_data)):
+                    html_data[i] = html_data[i].strip()
+                    html_string += html_data[i]
         # 邮件对象:
-        msg = MIMEMultipart()
+        # msg = MIMEMultipart()
         # 邮件正文是MIMEText:
+        # msg.attach(MIMEText('This is a test message written by python...', 'plain', 'utf-8'))
+        msg = MIMEText(html_string, 'html', 'utf-8')
         msg['From'] = self._format_addr(from_addr)
-        msg.attach(MIMEText('This is a test message written by python...', 'plain', 'utf-8'))
-        msg.attach(MIMEText(html_string, 'html', 'utf-8'))
-        # 添加附件就是加上一个MIMEBase，从本地读取一个图片:
-        with open('C:\Users\pengzh5x\Desktop\ITF_Skylake_FPGA_BKC_TestCase_WW13_v1.5.8.xlsx', 'rb') as f:
-            # 设置附件的MIME和文件名，这里是png类型:
-            mime = MIMEBase('file', 'xlsx', filename='ITF_Skylake_FPGA_BKC_TestCase_WW12_v1.5.6.xlsx')
-            # 加上必要的头信息:
-            mime.add_header('Content-Disposition', 'attachment', filename='ITF_Skylake_FPGA_BKC_TestCase_WW12_v1.5.6.xlsx')
-            mime.add_header('Content-ID', '<0>')
-            mime.add_header('X-Attachment-Id', '0')
-            # 把附件的内容读进来:
-            mime.set_payload(f.read())
-            # 用Base64编码:
-            encoders.encode_base64(mime)
-            # 添加到MIMEMultipart:
-            msg.attach(mime)
+        # 添加附件就是加上一个MIMEBase
+        # with open(r'C:\Users\pengzh5x\PycharmProjects\personal_program\machine_program\excel_dir\report_result.xlsx', 'rb') as f:
+        #     # 设置附件的MIME和文件名，这里是png类型:
+        #     mime = MIMEBase('file', 'xlsx', filename='report_result.xlsx')
+        #     # 加上必要的头信息:
+        #     mime.add_header('Content-Disposition', 'attachment', filename='report_result.xlsx')
+        #     mime.add_header('Content-ID', '<0>')
+        #     mime.add_header('X-Attachment-Id', '0')
+        #     # 把附件的内容读进来:
+        #     mime.set_payload(f.read())
+        #     # 用Base64编码:
+        #     encoders.encode_base64(mime)
+        #     # 添加到MIMEMultipart:
+        #     msg.attach(mime)
 
         address_list = []
         for address in to_addr.split(','):
@@ -118,7 +123,7 @@ class SendEmail:
             address_list.append(address)
 
         msg['To'] = ','.join(address_list)
-        msg['Subject'] = Header(u'This is ITF result verification……', 'utf-8').encode()
+        msg['Subject'] = Header(u'BKC ITF Test Plan of Purley-FPGA %s……' % lastest_week_string, 'utf-8').encode()
         server = smtplib.SMTP(smtp_server, 25)
         server.set_debuglevel(1)
         server.sendmail(from_addr, address_list, msg.as_string())

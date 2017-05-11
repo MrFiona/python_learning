@@ -211,7 +211,7 @@ class GetUrlFromHtml(object):
                     # GetAnalysisData(self.html_url_pre + html_suffix)
                     #将url添加到url列表
                     self.url_info_list.append(self.html_url_pre + html_suffix)
-                    print 'vvv', self.html_url_pre + html_suffix
+                    print self.html_url_pre + html_suffix
                     #将源码写进文件
                     # object.save_html()
         #将url列表信息写进文件

@@ -1,50 +1,15 @@
-                <span class="sh2">  Closed Sightings </span>
+                <span class="sh2">  New Sightings </span>
                 <div class="FoldIcon">
-                    <div class="CollapseBtn not-collapsed collapsed" data-toggle="collapse" href="#collapseClosedSightings"></div>
+                    <div class="CollapseBtn not-collapsed collapsed" data-toggle="collapse" href="#collapseNewSightings"></div>
                 </div>
             </div>
-            <div id="collapseClosedSightings" class="panel-collapse collapse ">
+            <div id="collapseNewSightings" class="panel-collapse collapse ">
                 <div class="panel-body">
                     
-                    <table class="MsoNormalTable" width="100%">
-                        <tbody><tr>
-                            <th width="5%">ID</th>
-                            <th width="45%">Title</th>
-                            <th width="7%">Priority</th>
-                            <th width="7%">Severity</th>
-                            <th width="6%">Owner</th>
-                            <th width="8%">Closed Reason</th>
-                            <th width="5%">Status</th>
-                            <th width="5%">Subsystem</th>
-                            <th width="12%">Promoted ID</th>
-                        </tr>
-                          
-                        <tr>
-                            
-                             <td><a href="https://vthsd.png.intel.com/hsd/bkc/sighting/default.aspx?sighting_id=5345770">5345770</a></td>
-                            
-                             <td style="text-align:left;">[2016_WW52 BKC][BIOS:114_R09][Neon city FPGA] System can’t boot to RHEL after plug  an NVMe card into  a PCIe slot and  config VMD 'enabled' in BOIS.</td>
-                             <td>P2</td>
-                             <td>3 Medium</td>
-                             <td>arejment</td>
-                             <td>Not a bug</td>
-                             <td>Closed</td>
-                             <td>OS/Driver</td>
-                             <td>
-                                        
-                                    
-                                                <p>N/A</p>
-                                            
-                                        
-                            </td>
-                         </tr>
-                         
-                     
-                    </tbody></table><br>
-                
+                    <p>  N/A</p>
+                    
+                    <br>
                 </div>
             </div>
         </div>
-        <br>
-        
         <div class="panel collapse-report-panel">

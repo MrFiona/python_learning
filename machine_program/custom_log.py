@@ -11,6 +11,7 @@ import os.path
 import logging
 from logging import NOTSET, DEBUG, INFO, WARNING, ERROR, CRITICAL
 from machine_config import MachineConfig
+CONFIG_FILE_PATH = os.getcwd() + os.sep + 'machineConfig' + os.sep + 'machine.conf'
 
 class WorkLogger():
     def __init__(self, log_filename=None, log_level=logging.INFO):
@@ -23,7 +24,7 @@ class WorkLogger():
         '''
     def print_message(self, msg=''):
         #读取配置文件日志、时间设置
-        conf = MachineConfig()
+        conf = MachineConfig(CONFIG_FILE_PATH)
         time_format = conf.get_node_info('logFormat', 'time_format')
         log_format = conf.get_node_info('logFormat', 'log_format')
 

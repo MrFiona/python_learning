@@ -4,7 +4,7 @@
 # and XlsxWriter.
 #
 # Copyright 2013-2016, John McNamara, jmcnamara@cpan.org
-#
+
 import xlsxwriter
 
 workbook = xlsxwriter.Workbook('chartsheet.xlsx')
@@ -61,3 +61,37 @@ chart1.set_style(11)
 chartsheet.set_chart(chart1)
 
 workbook.close()
+
+import cProfile
+import pstats
+import os
+def do_cprofile(filename):
+    """
+    Decorator for function profiling.
+    """
+    def wrapper(func):
+        def profiled_func(*args, **kwargs):
+            # Flag for do profiling or not.
+            DO_PROF = os.getenv("PROFILING", True)
+            if DO_PROF:
+                profile = cProfile.Profile()
+                profile.enable()
+                result = func(*args, **kwargs)
+                profile.disable()
+                # Sort stat by internal time.
+                sortby = "tottime"
+                ps = pstats.Stats(profile).sort_stats(sortby)
+                ps.dump_stats(filename)
+            else:
+                result = func(*args, **kwargs)
+            return result
+        return profiled_func
+    return wrapper
+
+class MicroKineticModel():
+    @do_cprofile("./mkm_run.prof")
+    def run(self, **kwargs):
+        print 'hello world!'
+
+m = MicroKineticModel()
+m.run()
