@@ -16,8 +16,8 @@ import xlsxwriter
 reload(sys)
 sys.setdefaultencoding('utf-8')
 from cache_mechanism import DiskCache
-from public_use_function import verify_validity_url, hidden_data_by_column
-from setting_gloab_variable import get_url_list_by_keyword
+from setting_gloab_variable import PURL_BAK_STRING
+from public_use_function import verify_validity_url, hidden_data_by_column, get_url_list_by_keyword, get_week_num_config
 
 class InsertDataIntoExcel(object):
     def __init__(self, silver_url_list, verificate_flag=False, purl_bak_string='Purley-FPGA', cache=None):
@@ -27,6 +27,8 @@ class InsertDataIntoExcel(object):
         self.verificate_flag = verificate_flag
         #url列表初始化
         self.Silver_url_list = silver_url_list
+        #周数控制参数
+        self.__WEEK_NUM = get_week_num_config()
 
         excel_dir = os.getcwd() + os.sep + 'excel_dir'
         if not os.path.exists(excel_dir):
@@ -725,7 +727,8 @@ class InsertDataIntoExcel(object):
         # print '结束获取 Platform Integration Validation Result 数据........\n'
 
     def insert_Mapping(self, purl_bak_string, k):
-        height = 50 - len(self.Silver_url_list) + 5
+        height = self.__WEEK_NUM - len(self.Silver_url_list) + 5
+        # height = 50 - len(self.Silver_url_list) + 5
         for row in range(height - 5):
             self.worksheet_mapping.set_row(row=row + 6, options={'hidden':True})
 
@@ -738,8 +741,10 @@ class InsertDataIntoExcel(object):
         # third_value_list = ['Considering SW Ingredient adding as change?'] + ['FALSE']*100
         # fourth_value_list = third_value_list
         # 标记True为红色
-        self.worksheet_mapping.conditional_format(57, 5, 200, 56, {'type': 'cell', 'criteria': '=', 'value': True, 'format': self.format1})
-        self.worksheet_mapping.conditional_format(57, 57, 200, 91, {'type': 'cell', 'criteria': '=', 'value': 1, 'format': self.format1})
+        self.worksheet_mapping.conditional_format(self.__WEEK_NUM + 7, 5, 200, self.__WEEK_NUM + 6, {'type': 'cell', 'criteria': '=', 'value': True, 'format': self.format1})
+        # self.worksheet_mapping.conditional_format(57, 5, 200, 56, {'type': 'cell', 'criteria': '=', 'value': True, 'format': self.format1})
+        self.worksheet_mapping.conditional_format(self.__WEEK_NUM + 7, self.__WEEK_NUM + 7, 200, self.__WEEK_NUM + 41, {'type': 'cell', 'criteria': '=', 'value': 1, 'format': self.format1})
+        # self.worksheet_mapping.conditional_format(57, 57, 200, 91, {'type': 'cell', 'criteria': '=', 'value': 1, 'format': self.format1})
         # self.worksheet_mapping.write_row(0, 4, first_value_list, self.mapping_flag_style)
         # self.worksheet_mapping.write_row(1, 4, second_value_list, self.mapping_flag_style)
         # self.worksheet_mapping.write_row(2, 4, third_value_list, self.mapping_flag_style)
@@ -750,8 +755,10 @@ class InsertDataIntoExcel(object):
             split_string_list = str(url).split('/')
             object_string = split_string_list[-2][-4:]
             insert_date_list.append(object_string)
-        self.worksheet_mapping.write_row(56, 56 - len(self.Silver_url_list) - 1, insert_date_list + ['EXX_WW10', 'changed?\Test?'], self.header_format)
-        self.worksheet_mapping.write_column(56 - len(self.Silver_url_list) - 1, 56, insert_date_list, self.header_format)
+        self.worksheet_mapping.write_row(self.__WEEK_NUM + 6, self.__WEEK_NUM + 6 - len(self.Silver_url_list) - 1, insert_date_list + ['EXX_WW10', 'changed?\Test?'], self.header_format)
+        # self.worksheet_mapping.write_row(56, 56 - len(self.Silver_url_list) - 1, insert_date_list + ['EXX_WW10', 'changed?\Test?'], self.header_format)
+        self.worksheet_mapping.write_column(self.__WEEK_NUM + 6 - len(self.Silver_url_list) - 1, self.__WEEK_NUM + 6, insert_date_list, self.header_format)
+        # self.worksheet_mapping.write_column(56 - len(self.Silver_url_list) - 1, 56, insert_date_list, self.header_format)
 
         row_header_list = []
         row_value_list = ['Power Management', 'Networking', 'USB', 'FPGA', 'Video', 'Storage', 'PCIe', 'Manageability',
@@ -762,13 +769,15 @@ class InsertDataIntoExcel(object):
             if head == 'RAS' or head == 'Summary':
                 continue
             row_header_list.append(' ')
-        self.worksheet_mapping.write_row(5, 58, row_header_list, self.header_format)
+        self.worksheet_mapping.write_row(5, self.__WEEK_NUM + 8, row_header_list, self.header_format)
+        # self.worksheet_mapping.write_row(5, 58, row_header_list, self.header_format)
 
     def insert_CaseResult(self, purl_bak_string, k):
         print '开始获取 CaseResult 数据........\n'
         fail_url_list = []
 
-        self.worksheet_caseresult.set_column(firstcol=10, lastcol=41 * (50 - len(self.Silver_url_list)) + 10, options={'hidden': True})
+        self.worksheet_caseresult.set_column(firstcol=10, lastcol=41 * (self.__WEEK_NUM - len(self.Silver_url_list)) + 10, options={'hidden': True})
+        # self.worksheet_caseresult.set_column(firstcol=10, lastcol=41 * (50 - len(self.Silver_url_list)) + 10, options={'hidden': True})
 
         # 获取公式并插入指定位置
         self.get_formula_data('CaseResult', self.worksheet_caseresult)
@@ -852,13 +861,15 @@ class InsertDataIntoExcel(object):
         # print '结束获取 CaseResult 数据........\n'
 
     def insert_save_miss_data(self, purl_bak_string, k):
-        self.worksheet_save_miss.set_column(firstcol=2, lastcol=50 - len(self.Silver_url_list) + 1, options={'hidden': True})
+        self.worksheet_save_miss.set_column(firstcol=2, lastcol=self.__WEEK_NUM - len(self.Silver_url_list) + 1, options={'hidden': True})
+        # self.worksheet_save_miss.set_column(firstcol=2, lastcol=50 - len(self.Silver_url_list) + 1, options={'hidden': True})
         # 获取公式并插入指定位置
         yellow_header_format = self.workbook.add_format({'bg_color': '#FFFF66'})
         first_string_list = ["Save Test Case based on this week's Test case pool", "Miss Sightings in test plan comparing to test result (%)?",
                              "Miss Sightings in test plan comparing to test result?", "Total Sighting", "Save Effort"]
         self.get_formula_data('Save-Miss', self.worksheet_save_miss)
-        self.worksheet_save_miss.write_row(2, 52 - len(self.Silver_url_list), self.date_string_list, self.format1)
+        self.worksheet_save_miss.write_row(2, self.__WEEK_NUM + 2 - len(self.Silver_url_list), self.date_string_list, self.format1)
+        # self.worksheet_save_miss.write_row(2, 52 - len(self.Silver_url_list), self.date_string_list, self.format1)
         for i in range(len(first_string_list)):
             self.worksheet_save_miss.write_rich_string(3 + i, 0, first_string_list[i], yellow_header_format)
         # for i in range(1, 101):
@@ -878,7 +889,7 @@ class InsertDataIntoExcel(object):
 
 
 if __name__ == '__main__':
-    from public_use_function import Silver_url_list
+    Silver_url_list = get_url_list_by_keyword(PURL_BAK_STRING, 'Silver')
     start = time.time()
     cache = DiskCache()
     obj = InsertDataIntoExcel(verificate_flag=False, cache=cache, silver_url_list=Silver_url_list)

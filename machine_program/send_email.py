@@ -16,12 +16,14 @@ from email.mime.text import MIMEText
 from email.utils import parseaddr, formataddr
 from email.mime.multipart import MIMEMultipart
 from machine_config import MachineConfig
-from setting_gloab_variable import DEBUG_FLAG, lastest_week_string
+from setting_gloab_variable import DEBUG_FLAG, PURL_BAK_STRING
+from public_use_function import deal_html_data, get_url_list_by_keyword
 
 
 class SendEmail:
     def __init__(self):
         self.config_file_path = os.getcwd() + os.sep + 'machineConfig' + os.sep + 'email.conf'
+        deal_html_data()
         self.send()
 
     def send_mail(self):
@@ -68,23 +70,20 @@ class SendEmail:
         from_addr = conf.get_node_info('from_address', 'address')
         to_addr = conf.get_node_info('receive_address', 'address')
         smtp_server = conf.get_node_info('server', 'server_address')
-        SUBJECT = conf.get_node_info('mail_format', 'subject')
-        TEXT = conf.get_node_info('mail_format', 'text')
-        FILE = conf.get_node_info('mail_format', 'file')
-        IMAGE = conf.get_node_info('mail_format', 'image')
-        HTML = conf.get_node_info('mail_format', 'html')
+
+        Silver_url_list = get_url_list_by_keyword(PURL_BAK_STRING, 'Silver')
+        lastest_week_string = Silver_url_list[0]
+        lastest_week_string = 'WW' + lastest_week_string.split('/')[-2].split('%')[-1].split('WW')[-1]
+
+        SUBJECT = u'BKC ITF Test Plan of Purley-FPGA %s……' % lastest_week_string
 
         if DEBUG_FLAG:
             print '\033[31mfrom address:\033[0m \033[32m%s\033[0m' % from_addr
             print '\033[31mto address:\033[0m \033[32m%s\033[0m' % to_addr
             print '\033[31mserver address:\033[0m \033[32m %s\033[0m' % smtp_server
-            print "\033[36m********** Message body **********\033[0m"
+            print "\033[36m***************************** Message body *****************************\033[0m"
             print "         \033[37msubject: %s\033[0m" % SUBJECT
-            print "         \033[37mtext: %s\033[0m" % TEXT
-            print "         \033[37mtext: %s\033[0m" % FILE
-            print "         \033[37mtext: %s\033[0m" % HTML
-            print "         \033[37mtext: %s\033[0m" % IMAGE
-            print "\033[36m**********************************\033[0m"
+            print "\033[36m************************************************************************\033[0m"
 
         html_string = ''
 

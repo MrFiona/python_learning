@@ -14,20 +14,31 @@ import shutil
 import pstats
 import urllib2
 import cProfile
+import HTMLParser
 import win32com.client
-from setting_gloab_variable import DO_PROF, SRC_EXCEL_DIR, BACKUP_EXCEL_DIR, PURL_BAK_STRING, Silver_url_list
+from machine_config import MachineConfig
+from setting_gloab_variable import DO_PROF, SRC_EXCEL_DIR, BACKUP_EXCEL_DIR, PURL_BAK_STRING, CONFIG_FILE_PATH
 
 
-# def get_url_list_by_keyword(pre_keyword, back_keyword, key_url_list=None):
-#     if not key_url_list:
-#         key_url_list = []
-#
-#     f = open(os.getcwd() + os.sep + 'report_html' + os.sep + 'url_info.txt')
-#     for line in f:
-#         if pre_keyword in line and back_keyword in line:
-#             key_url_list.append(line.strip('\n'))
-#     # print key_url_list, len(key_url_list)
-#     return key_url_list
+def get_week_num_config():
+    # 读取配置文件周数配置
+    conf = MachineConfig(CONFIG_FILE_PATH)
+    week_num = conf.get_node_info('week_config', 'week_num')
+    print week_num
+    return week_num
+
+
+def get_url_list_by_keyword(pre_keyword, back_keyword, key_url_list=None, reserve_url_num=50):
+    if not key_url_list:
+        key_url_list = []
+
+    f = open(os.getcwd() + os.sep + 'report_html' + os.sep + 'url_info.txt')
+    for line in f:
+        if pre_keyword in line and back_keyword in line:
+            key_url_list.append(line.strip('\n'))
+    key_url_list = key_url_list[:reserve_url_num]
+    # print key_url_list, len(key_url_list)
+    return key_url_list
 
 
 def remove_line_break(object_string_list):
@@ -154,7 +165,8 @@ def canculate_head_num(self, multiple, num, add_num=0):
 
 
 def hidden_data_by_column(sheet_name, url_list, multiple):
-    hidden_length = 50 - len(url_list)
+    hidden_length = get_week_num_config() - len(url_list)
+    # hidden_length = 50 - len(url_list)
     sheet_name.set_column(0, multiple * hidden_length - 1, options={'hidden': True})
 
 
@@ -187,6 +199,10 @@ def backup_excel_file(src_dir=SRC_EXCEL_DIR, backup_dir=BACKUP_EXCEL_DIR, reserv
     backup_name = backup_dir + os.sep + 'backup_excel_' + time.strftime('%Y_%m_%d_%H_%M_%S', time.localtime(time.time()))
     #check excel file num default max=20
     orignal_file_list = glob.glob(src_dir + os.sep + '*.xlsx')
+
+    #原始备份目录不存在则跳过备份
+    if not os.path.exists(src_dir):
+        return
 
     if os.path.exists(src_dir):
         if not os.path.exists(backup_dir):
@@ -288,7 +304,7 @@ class FilterTag():
         htmlStr = htmlStr.strip()
         htmlStr = htmlStr.strip("\n")
         result = []
-        parser = HTMLParser()
+        parser = HTMLParser.HTMLParser()
         parser.handle_data = result.append
         parser.feed(htmlStr)
         parser.close()
@@ -361,10 +377,12 @@ class easyExcel:
 
 
 def get_report_data(sheet_name, purl_bak_string='Purley-FPGA', cell_data_list=None):
+    WEEK_NUM = get_week_num_config()
+    Silver_url_list = get_url_list_by_keyword(PURL_BAK_STRING, 'Silver')
     if cell_data_list is None:
         cell_data_list = []
 
-    win_book = easyExcel(os.getcwd() + os.sep + 'excel_dir' + os.sep + purl_bak_string + '_report_result_%s.xlsx' % sheet_name)
+    win_book = easyExcel(os.getcwd() + os.sep + 'excel_dir' + os.sep + purl_bak_string + '_report_result.xlsx')
 
     if sheet_name == 'Save-Miss':
         for i in range(1, 8):
@@ -383,12 +401,15 @@ def get_report_data(sheet_name, purl_bak_string='Purley-FPGA', cell_data_list=No
 
                 temp_cell_list.append(data)
 
-            for k in range(53 - len(Silver_url_list), 53):
+            for k in range(WEEK_NUM + 3 - len(Silver_url_list), WEEK_NUM + 4):
+            # for k in range(53 - len(Silver_url_list), 54):
                 data = win_book.getCell(sheet=sheet_name, row=i, col=k)
                 if i in (1, 2, 6, 7) and isinstance(data, float):
                     data = int(data)
                 elif i in (4, 5) and isinstance(data, float):
                     data = '%.f%%' %(data*100)
+                elif data is None:
+                    data = ''
 
                 temp_cell_list.append(data)
 
@@ -399,9 +420,11 @@ def get_report_data(sheet_name, purl_bak_string='Purley-FPGA', cell_data_list=No
         for i in range(3, 200):
             temp_cell_list = []
             #NewSi和existingSi用上一周的
-            for j in range((50 - len(Silver_url_list) + 1)*13 + 3, (50 - len(Silver_url_list) + 1)*13 + 1 + 13):
+            for j in range((WEEK_NUM - len(Silver_url_list) + 1)*13 + 3, (WEEK_NUM - len(Silver_url_list) + 1)*13 + 1 + 13):
+            # for j in range((50 - len(Silver_url_list) + 1)*13 + 3, (50 - len(Silver_url_list) + 1)*13 + 1 + 13):
                 data = win_book.getCell(sheet=sheet_name, row=i, col=j)
-                if j == ((50 - len(Silver_url_list) + 1)*13 + 1 + 1) and not data:
+                if j == ((WEEK_NUM - len(Silver_url_list) + 1)*13 + 1 + 1) and not data:
+                # if j == ((50 - len(Silver_url_list) + 1)*13 + 1 + 1) and not data:
                     fstop_flag = True
 
                 if data is None:
@@ -423,7 +446,8 @@ def get_report_data(sheet_name, purl_bak_string='Purley-FPGA', cell_data_list=No
 
     else:
         fstop_flag = False
-        m = (50 - len(Silver_url_list)) * 41 + 35 + 10 + 2
+        m = (WEEK_NUM - len(Silver_url_list)) * 41 + 35 + 10 + 2
+        # m = (50 - len(Silver_url_list)) * 41 + 35 + 10 + 2
         for i in range(7, 400):
             temp_cell_list = []
             for j in range(m, m + 4):
@@ -447,10 +471,37 @@ def get_report_data(sheet_name, purl_bak_string='Purley-FPGA', cell_data_list=No
     return cell_data_list
 
 
+#进一步处理html文件，增加表格样式
+def deal_html_data():
+    object_path = os.getcwd() + os.sep + 'html_result'
+    read_file_list = glob.glob(object_path + os.sep + '*.html')
+
+    for file in read_file_list:
+        read_file = open(file, 'r')
+        write_file = open(object_path + os.sep + 'temp.html', 'w')
+
+        line = read_file.readline()
+        write_file.write(line)
+        while len(line) != 0:
+            line = read_file.readline()
+            if '</head>' == line.strip('\n'):
+                if 'Save-Miss' in file:
+                    write_file.write('<style type="text/css">\n\ttd{word-break:break-all;word-wrap:break-word;max-width:200px;font-family:Calibri;font-size:14px}\n</style>\n</head>\n')
+                else:
+                    write_file.write('<style type="text/css">\n\ttd{word-break:break-all;word-wrap:break-word;max-width:400px;font-family:Calibri;font-size:14px}\n</style>\n</head>\n')
+                continue
+            write_file.write(line)
+        read_file.close()
+        write_file.close()
+        os.remove(file)
+        shutil.copy(object_path + os.sep + 'temp.html', file)
+        os.remove(object_path + os.sep + 'temp.html')
+
 if __name__ == '__main__':
     start = time.time()
     # backup_excel_file()
-    cell_data_list = get_report_data('CaseResult', purl_bak_string='Purley-FPGA')
+    # cell_data_list = get_report_data('CaseResult', purl_bak_string='Purley-FPGA')
     # cell_data_list = get_report_data('ExistingSi', purl_bak_string='Purley-FPGA')
     # cell_data_list = get_report_data('Save-Miss', purl_bak_string='Purley-FPGA')
+    get_week_num_config()
     print time.time() - start
